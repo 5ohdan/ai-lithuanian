@@ -4,47 +4,42 @@ import { useState } from "react";
 import { experimental_useObject as useObject } from "ai/react";
 import { toast } from "sonner";
 import { wordSetSchema } from "~/lib/schemas";
-import { z } from "zod";
-import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
+import type { z } from "zod";
+// import { Word } from "~/components/word";
+import { GenerationForm } from "~/components/generation-form";
+import { CardStack } from "~/components/card-stack";
 
 export default function HomePage() {
-  const [aiResponse, setAiResponse] = useState<z.infer<typeof wordSetSchema>>(
-    [],
-  );
-  const { submit, object, isLoading } = useObject({
+  const [words, setWords] = useState<z.infer<typeof wordSetSchema>>([]);
+  const {
+    submit,
+    object: partialCards,
+    isLoading,
+  } = useObject({
     api: "/api/generate-word-set",
     schema: wordSetSchema,
     initialValue: undefined,
     onError: (error) => {
-      toast.error("Failed to generate quiz. Please try again.");
+      toast.error("Failed to generate quiz. Please try again." + error.message);
     },
     onFinish: ({ object }) => {
-      setAiResponse(object ?? []);
+      toast.success("Successfully generated a word set.");
+      setWords(object ?? []);
     },
   });
 
   return (
-    <>
-      <h1>Hello words:</h1>
-      <form>
-        <Input />
-        <Button onClick={async () => submit("")}>Generate a word set</Button>
-      </form>
-      {aiResponse.map((word) => (
-        <div
-          className="flex flex-col rounded-md border border-neutral-700/50 p-2"
-          key={word.original}
-        >
-          <h2 className="text-underline text-2xl font-medium">
-            {word.original}
-          </h2>
-          <p>{word.translation}</p>
-          <p>{word.transcription}</p>
-          <p>{word.context}</p>
-          <p>{word.example}</p>
+    <main className="flex flex-col gap-3 p-4">
+      <h1 className="text-2xl font-semibold">Learn Words</h1>
+      <GenerationForm isLoading={isLoading} submit={submit} />
+      {words.length > 0 && (
+        <div className="grid">
+          <CardStack words={words} />
+          {/* {words.map((word) => (
+          <Word key={word.original} {...word} />
+        ))} */}
         </div>
-      ))}
-    </>
+      )}
+    </main>
   );
 }

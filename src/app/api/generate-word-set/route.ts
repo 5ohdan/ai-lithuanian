@@ -1,11 +1,19 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamObject } from "ai";
 import { cookies } from "next/headers";
-import { wordSchema, wordSetSchema } from "~/lib/schemas";
+import { type UserData, wordSchema, wordSetSchema } from "~/lib/schemas";
 
 export const maxDuration = 60;
 
-export async function POST() {
+export type RequestData = {
+  topic: string;
+  difficulty: UserData["difficulty"];
+  count: number;
+};
+
+export async function POST(req: Request) {
+  const context = (await req.json()) as RequestData;
+  console.log({ context });
   const apiKey = (await cookies()).get("openai-api-key")?.value;
   if (!apiKey) {
     return new Response("Unauthorized", { status: 401 });
@@ -19,15 +27,14 @@ export async function POST() {
     messages: [
       {
         role: "system",
-        content:
-          "You are a teacher specialized in teaching Lithuanian. Provide the user with Lithuanian vocabulary words for beginners.",
+        content: `You are a teacher specialized in teaching Lithuanian. Provide the user with Lithuanian vocabulary words for ${context.difficulty} users.`,
       },
       {
         role: "user",
         content: [
           {
             type: "text",
-            text: "Generate 5 intermediate-level Lithuanian words suitable for everyday conversations.",
+            text: `Generate ${context.count} ${context.difficulty}-level Lithuanian words suitable for ${context.topic}.`,
           },
         ],
       },
