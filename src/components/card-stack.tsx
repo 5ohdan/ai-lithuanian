@@ -8,17 +8,17 @@ export function CardStack({ words }: { words: Word[] }) {
   const [shownCard, setShownCard] = useState(0);
 
   const handleNext = useCallback(() => {
-    if (!(shownCard === words.length - 1)) {
-      setShownCard(shownCard + 1);
+    if (shownCard === words.length - 1) {
+      return;
     }
-    return;
+    setShownCard(shownCard + 1);
   }, [shownCard, words]);
 
   const handlePrevious = useCallback(() => {
-    if (!(shownCard === 0)) {
-      setShownCard(shownCard - 1);
+    if (shownCard === 0) {
+      return;
     }
-    return;
+    setShownCard(shownCard - 1);
   }, [shownCard]);
 
   return (
