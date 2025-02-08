@@ -10,7 +10,6 @@ export function CardStack({ words }: { words: Word[] }) {
   const handleNext = useCallback(() => {
     if (!(shownCard === words.length - 1)) {
       setShownCard(shownCard + 1);
-      return;
     }
     return;
   }, [shownCard, words]);
@@ -18,7 +17,6 @@ export function CardStack({ words }: { words: Word[] }) {
   const handlePrevious = useCallback(() => {
     if (!(shownCard === 0)) {
       setShownCard(shownCard - 1);
-      return;
     }
     return;
   }, [shownCard]);
