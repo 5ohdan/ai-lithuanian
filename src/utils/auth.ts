@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
+import { cache } from "react";
 
-export const validateApiKey = async (token: string) => {
+export const validateApiKey = cache(async (token: string) => {
   try {
     const response = await fetch("https://api.openai.com/v1/models", {
       headers: {
@@ -12,15 +13,16 @@ export const validateApiKey = async (token: string) => {
     }
     return { success: false, error: "Invalid API key" };
   } catch (error) {
-    return { error: error.message };
+    return { success: false, error: (error as Error).message };
   }
-};
+});
 
 export const validateExistingToken = async (): Promise<boolean> => {
   const cookieStore = await cookies();
   const openaiApiKey = cookieStore.get("openai-api-key")?.value;
-  if (!openaiApiKey) {
-    return false;
-  }
-  return true;
+
+  if (!openaiApiKey) return false;
+
+  const tokenIsValid = await validateApiKey(openaiApiKey);
+  return tokenIsValid.success;
 };
