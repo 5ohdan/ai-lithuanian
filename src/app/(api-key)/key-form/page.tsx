@@ -3,15 +3,16 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { validateApiKey, validateExistingToken } from "~/utils/auth";
 
 export default async function KeyFormPage() {
-  const isValid = await validateExistingToken();
+  const isValidExistingToken = await validateExistingToken();
   return (
     <main className="flex h-screen items-center justify-center">
-      {!isValid ? (
+      {!isValidExistingToken ? (
         <form
-          className="flex flex-col gap-2 rounded-md border border-neutral-700 p-4"
+          className="flex flex-col space-y-2 rounded-md border border-neutral-700 p-4"
           action={async (formData: FormData) => {
             "use server";
             const apiKey = formData.get("api-key") as string;
@@ -30,8 +31,9 @@ export default async function KeyFormPage() {
             });
           }}
         >
-          <label htmlFor="api-key">API Key</label>
-          <Input id="api-key" name="api-key" type="text" />
+          <Label htmlFor="api-key">API Key</Label>
+          <Input id="api-key" name="api-key" type="text" required />
+          <Button type="submit">Validate the key</Button>
         </form>
       ) : (
         <div className="flex gap-2">

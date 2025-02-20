@@ -12,10 +12,14 @@ export function Word({
   word,
   nextCard,
   previousCard,
+  nextAvailable,
+  prevAvailable,
 }: {
   word: Word;
   nextCard: () => void;
   previousCard: () => void;
+  nextAvailable: boolean;
+  prevAvailable: boolean;
 }) {
   return (
     <Card key={word.original}>
@@ -30,10 +34,14 @@ export function Word({
         <p>Translation sentence example: {word.exampleTranslation}</p>
       </CardContent>
       <CardFooter className="justify-between">
-        <Button onClick={previousCard} className="w-24">
+        <Button
+          onClick={previousCard}
+          disabled={!prevAvailable}
+          className="w-24"
+        >
           Previous
         </Button>
-        <Button onClick={nextCard} className="w-24">
+        <Button onClick={nextCard} disabled={!nextAvailable} className="w-24">
           Next
         </Button>
       </CardFooter>

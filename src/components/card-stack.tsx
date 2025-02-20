@@ -7,6 +7,9 @@ import { Word as WordCard } from "./word";
 export function CardStack({ words }: { words: Word[] }) {
   const [shownCard, setShownCard] = useState(0);
 
+  const prevAvailable = shownCard > 0;
+  const nextAvailable = shownCard < words.length - 1;
+
   const handleNext = useCallback(() => {
     if (shownCard === words.length - 1) {
       return;
@@ -21,14 +24,22 @@ export function CardStack({ words }: { words: Word[] }) {
     setShownCard(shownCard - 1);
   }, [shownCard]);
 
+  if (words.length === 0) {
+    return null;
+  }
+
   return (
-    words[shownCard] && (
-      <WordCard
-        key={words[shownCard].original}
-        nextCard={handleNext}
-        previousCard={handlePrevious}
-        word={words[shownCard]}
-      />
-    )
+    <div className="pt-10">
+      {words[shownCard] && (
+        <WordCard
+          key={words[shownCard].original}
+          nextCard={handleNext}
+          previousCard={handlePrevious}
+          word={words[shownCard]}
+          nextAvailable={nextAvailable}
+          prevAvailable={prevAvailable}
+        />
+      )}
+    </div>
   );
 }

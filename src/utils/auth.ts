@@ -1,21 +1,55 @@
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-export const validateApiKey = cache(async (token: string) => {
-  try {
-    const response = await fetch("https://api.openai.com/v1/models", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      return { success: true };
+type ValidationError = {
+  code: "INVALID_KEY" | "NETWORK_ERROR" | "SERVER_ERROR";
+  message: string;
+};
+
+type ValidationResult = {
+  success: boolean;
+  error?: ValidationError;
+};
+
+export const validateApiKey = cache(
+  async (token: string): Promise<ValidationResult> => {
+    try {
+      const response = await fetch("https://api.openai.com/v1/models", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) return { success: true };
+
+      if (response.status === 401) {
+        return {
+          success: false,
+          error: {
+            code: "INVALID_KEY",
+            message: "Invalid API key",
+          },
+        };
+      }
+
+      return {
+        success: false,
+        error: {
+          code: "SERVER_ERROR",
+          message: `Server error: ${response.status}`,
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: {
+          code: "NETWORK_ERROR",
+          message: (error as Error).message,
+        },
+      };
     }
-    return { success: false, error: "Invalid API key" };
-  } catch (error) {
-    return { success: false, error: (error as Error).message };
-  }
-});
+  },
+);
 
 export const validateExistingToken = async (): Promise<boolean> => {
   const cookieStore = await cookies();

@@ -3,8 +3,7 @@
 import { toast } from "sonner";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import type { RequestData } from "~/app/api/generate-word-set/route";
-import type { UserData } from "~/lib/schemas";
+import type { CreateWordSet, UserData } from "~/lib/schemas";
 import {
   Select,
   SelectContent,
@@ -18,7 +17,7 @@ export function GenerationForm({
   submit,
 }: {
   isLoading: boolean;
-  submit: (data: RequestData) => void;
+  submit: (data: CreateWordSet) => void;
 }) {
   return (
     <form

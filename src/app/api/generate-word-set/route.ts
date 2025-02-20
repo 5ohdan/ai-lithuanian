@@ -1,22 +1,33 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamObject } from "ai";
 import { cookies } from "next/headers";
-import { type UserData, wordSchema, wordSetSchema } from "~/lib/schemas";
+import {
+  type CreateWordSet,
+  createWordSetSchema,
+  wordSchema,
+  wordSetSchema,
+} from "~/lib/schemas";
+import { validateApiKey } from "~/utils/auth";
 
 export const maxDuration = 60;
 
-export type RequestData = {
-  topic: string;
-  difficulty: UserData["difficulty"];
-  count: number;
-};
-
 export async function POST(req: Request) {
-  const context = (await req.json()) as RequestData;
-  console.log({ context });
+  const context = (await req.json()) as CreateWordSet;
+  const parsedContext = createWordSetSchema.safeParse(context);
+  if (!parsedContext.success) {
+    return new Response(
+      parsedContext.error.errors.map((e) => e.message).join("\n"),
+      { status: 400 },
+    );
+  }
   const apiKey = (await cookies()).get("openai-api-key")?.value;
   if (!apiKey) {
     return new Response("Unauthorized", { status: 401 });
+  }
+
+  const tokenIsValid = await validateApiKey(apiKey);
+  if (!tokenIsValid.success) {
+    return new Response("Token is NOT valid", { status: 401 });
   }
   const openai = createOpenAI({
     apiKey,
@@ -34,7 +45,7 @@ export async function POST(req: Request) {
         content: [
           {
             type: "text",
-            text: `Generate ${context.count} ${context.difficulty}-level Lithuanian words suitable for ${context.topic}.`,
+            text: `Generate ${context.count} ${context.difficulty}-level Lithuanian words suitable for '${context.topic}' topic.`,
           },
         ],
       },
