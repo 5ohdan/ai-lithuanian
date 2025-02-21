@@ -1,6 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamObject } from "ai";
 import { cookies } from "next/headers";
+import { DEFAULT_SYSTEM_PROMPT } from "~/costants";
 import {
   type CreateWordSet,
   createWordSetSchema,
@@ -38,7 +39,7 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: `You are a teacher specialized in teaching Lithuanian. Provide the user with Lithuanian vocabulary words for ${context.difficulty} users.`,
+        content: DEFAULT_SYSTEM_PROMPT,
       },
       {
         role: "user",

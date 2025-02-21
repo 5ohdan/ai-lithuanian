@@ -26,7 +26,37 @@ export const UserDataSchema = z.object({
   knownWords: z.string().array(),
 });
 
+export const StoredWordSchema = z.object({
+  word: z.custom<Word>(),
+  id: z.string().uuid(),
+  setIds: z.array(z.string().uuid()),
+  createdAt: z.string().datetime(),
+  // lastReviewed: z.string().datetime().optional(),
+  // timesReviewed: z.number().default(0),
+});
+
+export const StoredWordSetSchema = z.object({
+  set: z.custom<WordSet>(),
+  id: z.string().uuid(),
+  topic: z.string(),
+  difficulty: z.string(),
+  wordIds: z.array(z.string().uuid()),
+  createdAt: z.string().datetime(),
+});
+
+export const StorageSchema = z.object({
+  words: z.array(StoredWordSchema),
+  wordSets: z.array(StoredWordSetSchema),
+});
+
+export type StoredWord = z.infer<typeof StoredWordSchema>;
+export type StoredWordSet = z.infer<typeof StoredWordSetSchema>;
+export type Storage = z.infer<typeof StorageSchema>;
+
 export const wordSetSchema = z.array(wordSchema);
+export const wordSetsSchema = z.array(wordSetSchema);
+
+export type WordSets = z.infer<typeof wordSetsSchema>;
 
 export type CreateWordSet = z.infer<typeof createWordSetSchema>;
 

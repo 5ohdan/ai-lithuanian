@@ -37,7 +37,7 @@ export default async function KeyFormPage() {
         </form>
       ) : (
         <div className="flex gap-2">
-          <Link href={"/"}>
+          <Link href={"/new-set"}>
             <Button>Go to home page →</Button>
           </Link>
         </div>
