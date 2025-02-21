@@ -1,7 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamObject } from "ai";
 import { cookies } from "next/headers";
-import { DEFAULT_SYSTEM_PROMPT } from "~/costants";
+import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import {
   type CreateWordSet,
   createWordSetSchema,
