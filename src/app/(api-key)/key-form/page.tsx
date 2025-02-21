@@ -7,18 +7,17 @@ import { Label } from "~/components/ui/label";
 import { validateApiKey, validateExistingToken } from "~/utils/auth";
 
 export default async function KeyFormPage() {
-  const isValidExistingToken = await validateExistingToken();
+  const { success, error } = await validateExistingToken();
   return (
     <main className="flex h-screen items-center justify-center">
-      {!isValidExistingToken ? (
+      {!success ? (
         <form
-          className="flex flex-col space-y-2 rounded-md border border-neutral-700 p-4"
+          className="flex w-2/3 flex-col space-y-2 rounded-md border border-neutral-500/40 p-4 md:p-10"
           action={async (formData: FormData) => {
             "use server";
             const apiKey = formData.get("api-key") as string;
             const isValid = await validateApiKey(apiKey);
             if (!isValid.success || isValid.error) {
-              toast.error(`Invalid API key: ${isValid.error?.message}`);
               return;
             }
             const cookieStore = await cookies();
@@ -31,6 +30,11 @@ export default async function KeyFormPage() {
             });
           }}
         >
+          {error && (
+            <span className="rounded-md bg-red-200 p-2 text-red-500">
+              {error.message}
+            </span>
+          )}
           <Label htmlFor="api-key">API Key</Label>
           <Input id="api-key" name="api-key" type="text" required />
           <Button type="submit">Validate the key</Button>
