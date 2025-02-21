@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-type ValidationError = {
+export type ValidationError = {
   code: "INVALID_KEY" | "NETWORK_ERROR" | "SERVER_ERROR";
   message: string;
 };

@@ -18,7 +18,7 @@ export default async function KeyFormPage() {
             const apiKey = formData.get("api-key") as string;
             const isValid = await validateApiKey(apiKey);
             if (!isValid.success || isValid.error) {
-              toast.error("Invalid API key");
+              toast.error(`Invalid API key: ${isValid.error?.message}`);
               return;
             }
             const cookieStore = await cookies();
