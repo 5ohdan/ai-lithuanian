@@ -22,18 +22,40 @@ export function Word({
   prevAvailable: boolean;
 }) {
   return (
-    <Card key={word.original}>
+    <Card className="grid h-full" key={word.original}>
       <CardHeader>
-        <CardTitle>{word.original}</CardTitle>
+        <CardTitle className="text-4xl underline underline-offset-2">
+          {word.original}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <p>Translation: {word.translation}</p>
-        <p>Transcription: {word.transcription}</p>
-        <p>Usage context: {word.context}</p>
-        <p>Original sentence example: {word.example}</p>
-        <p>Translation sentence example: {word.exampleTranslation}</p>
+      <CardContent className="space-y-4">
+        <div className="flex flex-col space-y-1">
+          <span className="text-sm font-medium text-neutral-400">
+            Translation:
+          </span>
+          <p className="text-lg text-neutral-800">{word.translation}</p>
+        </div>
+        <div className="flex flex-col space-y-1">
+          <span className="text-sm font-medium text-neutral-400">
+            Transcription:
+          </span>
+          <p className="text-lg text-neutral-800">{word.transcription}</p>
+        </div>
+        <div className="flex flex-col space-y-1">
+          <span className="text-sm font-medium text-neutral-400">
+            Usage context:
+          </span>
+          <p className="text-lg text-neutral-800">{word.context}</p>
+        </div>
+        <div className="mt-4 flex flex-col space-y-1 rounded-lg bg-neutral-300/50 p-4">
+          <span className="text-sm">Example:</span>
+          <p className="text-lg font-semibold">{word.example}</p>
+          <p className="text-neutral-500 opacity-40 hover:text-neutral-800 hover:opacity-100">
+            {word.exampleTranslation}
+          </p>
+        </div>
       </CardContent>
-      <CardFooter className="justify-between">
+      <CardFooter className="items-end justify-between">
         <Button
           onClick={previousCard}
           disabled={!prevAvailable}

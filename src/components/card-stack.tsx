@@ -29,7 +29,7 @@ export function CardStack({ words }: { words: Word[] }) {
   }
 
   return (
-    <div className="pt-10">
+    <div className="h-full">
       {words[shownCard] && (
         <WordCard
           key={words[shownCard].original}

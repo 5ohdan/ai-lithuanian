@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { experimental_useObject as useObject } from "ai/react";
 import { toast } from "sonner";
-import { type CreateWordSet, wordSetSchema } from "~/lib/schemas";
-import type { z } from "zod";
+import { type CreateWordSet, type WordSet, wordSetSchema } from "~/lib/schemas";
 import { GenerationForm } from "~/components/generation-form";
 import { CardStack } from "~/components/card-stack";
 import { redirect } from "next/navigation";
@@ -14,7 +13,7 @@ import Link from "next/link";
 const storage = getStorage();
 
 export default function HomePage() {
-  const [words, setWords] = useState<z.infer<typeof wordSetSchema>>([]);
+  const [words, setWords] = useState<WordSet>([]);
   const [currentTopic, setCurrentTopic] = useState("");
   const [currentDifficulty, setCurrentDifficulty] = useState("Beginner");
 
@@ -48,7 +47,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="container mx-auto flex flex-col space-y-4 py-8">
+    <main className="container mx-auto flex h-screen flex-col space-y-4 py-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Learn Words</h1>
         <Link
