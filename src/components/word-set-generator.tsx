@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { experimental_useObject as useObject } from "ai/react";
 import { toast } from "sonner";
 import { type CreateWordSet, type WordSet, wordSetSchema } from "~/lib/schemas";
@@ -13,8 +13,7 @@ const storage = getStorage();
 
 export function WordSetGenerator() {
   const [words, setWords] = useState<WordSet>([]);
-  const [currentTopic, setCurrentTopic] = useState("");
-  const [currentDifficulty, setCurrentDifficulty] = useState("Beginner");
+  const requestData = useRef<CreateWordSet | null>(null);
 
   const { submit, isLoading } = useObject({
     api: "/api/generate-word-set",
@@ -33,15 +32,17 @@ export function WordSetGenerator() {
     },
     onFinish: ({ object }) => {
       toast.success("Successfully generated a word set.");
-      storage.addWordSet(object!, currentTopic, currentDifficulty);
+      const { topic, difficulty } = requestData.current ?? {}; // i know it will not be null
+      if (topic && difficulty) {
+        storage.addWordSet(object!, topic, difficulty);
+      }
       setWords(object ?? []);
     },
   });
 
   const handleSubmit = (data: CreateWordSet) => {
     const { topic, difficulty, count } = data;
-    setCurrentTopic(topic);
-    setCurrentDifficulty(difficulty);
+    requestData.current = data;
     submit({ topic, difficulty, count });
   };
 
