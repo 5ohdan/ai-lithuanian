@@ -47,7 +47,7 @@ export default async function KeyFormPage() {
             {error.message}
           </span>
         )}
-        <Label htmlFor="api-key">API Key</Label>
+        <Label htmlFor="api-key">OpenAI API Key</Label>
         <Input id="api-key" name="api-key" type="text" required />
         <Button type="submit">Validate the key</Button>
       </form>
