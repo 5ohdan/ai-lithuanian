@@ -13,10 +13,17 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
   const [wordset, setWordset] = useState<StoredWordSet | undefined>(undefined);
   const [activeWordIndex, setActiveWordIndex] = useState(0);
   const [isCardHovered, setIsCardHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const wordset = storage.getWordSetById(wordsetId);
-    setWordset(wordset);
+    const fetchWordset = async () => {
+      setIsLoading(true);
+      const fetchedWordset = storage.getWordSetById(wordsetId);
+      setWordset(fetchedWordset);
+      setIsLoading(false);
+    };
+
+    void fetchWordset();
   }, [wordsetId]);
 
   // Define navigation functions with useCallback
@@ -52,8 +59,38 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
     };
   }, [handlePrevious, handleNext]);
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4 h-6 w-6 animate-spin rounded-full border-b-2 border-t-2 border-zinc-900"></div>
+          <p className="text-zinc-600">Loading wordset...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!wordset) {
-    return <div>Wordset not found</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="rounded-lg bg-zinc-50 p-8 text-center shadow-sm">
+          <h2 className="mb-2 text-xl font-semibold text-zinc-900">
+            Wordset Not Found
+          </h2>
+          <p className="mb-4 text-zinc-600">
+            The wordset you&apos;re looking for doesn&apos;t exist or may have
+            been deleted.
+          </p>
+          <Link
+            href="/wordsets"
+            className="inline-flex items-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Wordsets
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   const activeWord = wordset.set[activeWordIndex];
