@@ -81,7 +81,6 @@ export class StorageManager {
       id: crypto.randomUUID(),
       setIds: [id],
       createdAt: new Date().toISOString(),
-      // timesReviewed: 0,
     };
     this.storage.words.push(storedWord);
     return storedWord;
@@ -89,6 +88,10 @@ export class StorageManager {
 
   getWordSets(): StoredWordSet[] {
     return this.storage.wordSets;
+  }
+
+  getWordSetById(setId: string): StoredWordSet | undefined {
+    return this.storage.wordSets.find((s) => s.id === setId);
   }
 
   getWordsBySetId(setId: string): StoredWord[] {
@@ -103,7 +106,6 @@ export class StorageManager {
     const index = this.storage.wordSets.findIndex((s) => s.id === id);
     if (index !== -1) {
       const set = this.storage.wordSets[index]!;
-      // Remove words that are only in this set
       set.wordIds.forEach((wordId) => {
         const word = this.storage.words.find((w) => w.id === wordId);
         if (word && word.setIds.length === 1) {

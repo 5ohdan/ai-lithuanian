@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { WordSetGenerator } from "~/components/word-set-generator";
+import { WordSetGenerator } from "~/components/wordset-generator";
 
 export default async function HomePage() {
   return (

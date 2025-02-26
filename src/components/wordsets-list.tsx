@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "~/components/ui/card";
 import type { Storage } from "~/lib/schemas";
@@ -9,6 +10,7 @@ const storage = getStorage();
 
 export function WordSetsList() {
   const [wordsets, setWordsets] = useState<Storage["wordSets"]>();
+  const router = useRouter();
 
   useEffect(() => {
     const storedWordsets = storage.getWordSets();
@@ -26,7 +28,11 @@ export function WordSetsList() {
   return (
     <div className="grid gap-4">
       {wordsets.map((wordSet) => (
-        <Card key={wordSet.id}>
+        <Card
+          className="cursor-pointer"
+          key={wordSet.id}
+          onClick={() => router.push(`/wordsets/${wordSet.id}`)}
+        >
           <CardContent className="p-4">
             <h2 className="mb-2 text-xl font-semibold">{wordSet.topic}</h2>
             <p className="mb-2 text-sm text-gray-500">

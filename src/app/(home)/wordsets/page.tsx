@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { WordSetsList } from "~/components/word-sets-list";
+import { WordSetsList } from "~/components/wordsets-list";
 
 export default async function WordSetsPage() {
   return (
