@@ -26,7 +26,6 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
     void fetchWordset();
   }, [wordsetId]);
 
-  // Define navigation functions with useCallback
   const handlePrevious = useCallback(() => {
     if (!wordset) return;
     setActiveWordIndex((prev) =>
@@ -41,7 +40,6 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
     );
   }, [wordset]);
 
-  // Add keyboard navigation using up and down arrows
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowUp") {
@@ -53,7 +51,6 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
 
     window.addEventListener("keydown", handleKeyDown);
 
-    // Clean up event listener on component unmount
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
@@ -83,7 +80,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
           </p>
           <Link
             href="/wordsets"
-            className="inline-flex items-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700"
+            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Wordsets
@@ -116,14 +113,14 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
           <div className="flex gap-4">
             <Link
               href="/wordsets"
-              className="group flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-medium text-zinc-900 shadow-sm transition-all duration-300 hover:shadow-md"
+              className="group flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
               <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Back to List
             </Link>
             <Link
               href="/new-set"
-              className="group flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-medium text-zinc-900 shadow-sm transition-all duration-300 hover:shadow-md"
+              className="group flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
               <Plus className="mr-2 h-4 w-4" />
               New Wordset
@@ -132,7 +129,6 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
         </motion.div>
 
         <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[250px,1fr]">
-          {/* Word List Sidebar */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -166,7 +162,6 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
             </div>
           </motion.div>
 
-          {/* Word Card */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeWord.original}

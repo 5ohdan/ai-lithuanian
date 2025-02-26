@@ -8,6 +8,7 @@ import { GenerationForm } from "~/components/generation-form";
 import { CardStack } from "~/components/card-stack";
 import { redirect } from "next/navigation";
 import { getStorage } from "~/lib/storage";
+import { motion, AnimatePresence } from "motion/react";
 
 const storage = getStorage();
 
@@ -47,9 +48,34 @@ export function WordSetGenerator() {
   };
 
   return (
-    <>
-      <GenerationForm isLoading={isLoading} submit={handleSubmit} />
-      {words.length > 0 && <CardStack words={words} />}
-    </>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="flex h-full flex-col"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <GenerationForm isLoading={isLoading} submit={handleSubmit} />
+      </motion.div>
+
+      <AnimatePresence>
+        {words.length > 0 && (
+          <motion.div
+            key="card-stack"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="min-h-0 flex-1 overflow-hidden pt-4"
+          >
+            <CardStack words={words} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
