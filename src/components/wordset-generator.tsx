@@ -9,7 +9,7 @@ import { CardStack } from "~/components/card-stack";
 import { redirect } from "next/navigation";
 import { getStorage } from "~/lib/storage";
 import { motion, AnimatePresence } from "motion/react";
-
+import type { ValidationError, ValidationErrorResponse } from "~/utils/auth";
 const storage = getStorage();
 
 export function WordSetGenerator() {
@@ -21,12 +21,31 @@ export function WordSetGenerator() {
     schema: wordSetSchema,
     initialValue: [],
     onError: (error) => {
-      toast.error(
-        "Failed to generate quiz. Please try again. " + error.message,
-      );
+      try {
+        const errorData = JSON.parse(error.message) as ValidationErrorResponse;
+        if (errorData.keyRemoved) {
+          toast.error("Your API key was removed because it's invalid", {
+            description: errorData.message,
+            action: {
+              label: "Add New Key",
+              onClick: () => redirect("/key-form"),
+            },
+          });
+        } else {
+          toast.error(
+            "Failed to generate quiz. Please try again. " +
+              (errorData.message ?? error.message),
+          );
+        }
+      } catch {
+        toast.error(
+          "Failed to generate quiz. Please try again. " + error.message,
+        );
+      }
+
       if (
-        error.message === "Token is NOT valid" ||
-        error.message === "Unauthorized"
+        error.message.includes("Token is NOT valid") ||
+        error.message.includes("Unauthorized")
       ) {
         redirect("/key-form");
       }

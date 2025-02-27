@@ -1,14 +1,14 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamObject } from "ai";
-import { cookies } from "next/headers";
-import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
+import { API_KEY_COOKIE_NAME, DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import {
   type CreateWordSet,
   createWordSetSchema,
   wordSchema,
   wordSetSchema,
 } from "~/lib/schemas";
-import { validateApiKey } from "~/utils/auth";
+import { validateApiKey, type ValidationErrorResponse } from "~/utils/auth";
+import { getCookie } from "~/utils/cookies";
 
 export const maxDuration = 60;
 
@@ -21,14 +21,25 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  const apiKey = (await cookies()).get("openai-api-key")?.value;
+  const apiKey = await getCookie(API_KEY_COOKIE_NAME);
   if (!apiKey) {
     return new Response("Unauthorized", { status: 401 });
   }
 
   const tokenIsValid = await validateApiKey(apiKey);
   if (!tokenIsValid.success) {
-    return new Response("Token is NOT valid", { status: 401 });
+    const errorResponse: ValidationErrorResponse = {
+      error: tokenIsValid.error?.code ?? "INVALID_KEY",
+      message: tokenIsValid.error?.message ?? "Invalid API key",
+      keyRemoved: tokenIsValid.keyRemoved ?? false,
+    };
+
+    return new Response(JSON.stringify(errorResponse), {
+      status: 401,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
   const openai = createOpenAI({
     apiKey,

@@ -1,6 +1,6 @@
-import { cookies } from "next/headers";
 import { API_KEY_COOKIE_NAME } from "~/constants";
 import { validateApiKey } from "~/utils/auth";
+import { setSecureCookie } from "~/utils/cookies";
 
 export async function submitApiKey(formData: FormData) {
   "use server";
@@ -9,13 +9,6 @@ export async function submitApiKey(formData: FormData) {
   if (!isValid.success || isValid.error) {
     return;
   }
-  const cookieStore = await cookies();
-  cookieStore.set(API_KEY_COOKIE_NAME, apiKey, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-  });
+  await setSecureCookie(API_KEY_COOKIE_NAME, apiKey);
   return;
 }
