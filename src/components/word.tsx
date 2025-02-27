@@ -23,7 +23,6 @@ export function Word({
   nextAvailable: boolean;
   prevAvailable: boolean;
 }) {
-  // Add keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowRight" && nextAvailable) {
@@ -35,7 +34,6 @@ export function Word({
 
     window.addEventListener("keydown", handleKeyDown);
 
-    // Clean up the event listener when component unmounts
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };

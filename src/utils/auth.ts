@@ -7,7 +7,6 @@ export type ValidationError = {
   message: string;
 };
 
-// Extended interface for API responses that includes keyRemoved
 export interface ValidationErrorResponse {
   error: ValidationError["code"];
   message: string;
