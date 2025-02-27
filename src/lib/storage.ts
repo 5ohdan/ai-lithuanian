@@ -1,11 +1,13 @@
-import {
-  type StoredWord,
-  type StoredWordSet,
-  type Storage,
-  StorageSchema,
-  type WordSet,
-  type Word,
+import type {
+  StoredWord,
+  StoredWordSet,
+  Storage,
+  WordSet,
+  Word,
+  Difficulty,
 } from "./schemas";
+
+import { storageSchema } from "./schemas";
 
 const STORAGE_KEY = "wordLearningStorage";
 
@@ -26,7 +28,7 @@ export class StorageManager {
     try {
       const data = localStorage.getItem(STORAGE_KEY);
       if (data) {
-        const parsed = StorageSchema.parse(JSON.parse(data));
+        const parsed = storageSchema.parse(JSON.parse(data));
         return parsed;
       }
     } catch (error) {
@@ -45,7 +47,7 @@ export class StorageManager {
     }
   }
 
-  addWordSet(wordSet: WordSet, topic: string, difficulty: string): void {
+  addWordSet(wordSet: WordSet, topic: string, difficulty: Difficulty): void {
     const wordSetId = crypto.randomUUID();
     const storedSet: StoredWordSet = {
       set: wordSet,
@@ -61,7 +63,7 @@ export class StorageManager {
 
   findExistingWordSet(
     topic: string,
-    difficulty: string,
+    difficulty: Difficulty,
   ): StoredWordSet | undefined {
     return this.storage.wordSets.find(
       (set) => set.topic === topic && set.difficulty === difficulty,
