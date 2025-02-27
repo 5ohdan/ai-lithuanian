@@ -17,7 +17,7 @@ export function KeyForm({ error }: { error?: ValidationError }) {
         </span>
       )}
       <Label htmlFor="api-key">OpenAI API Key</Label>
-      <Input id="api-key" name="api-key" type="text" required />
+      <Input id="api-key" name="api-key" type="password" required />
       <Button type="submit">Validate the key</Button>
     </form>
   );
