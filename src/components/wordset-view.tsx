@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { ArrowLeft, List, Plus, Volume2 } from "lucide-react";
+import { ArrowLeft, List, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { StoredWordSet } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
@@ -179,13 +179,6 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                     className="group flex cursor-pointer items-center text-2xl font-semibold tracking-tight text-zinc-900 hover:text-zinc-600"
                   >
                     {activeWord.original}
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="ml-2 p-1 opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100"
-                    >
-                      <Volume2 className="h-5 w-5 text-zinc-500" />
-                    </motion.button>
                   </motion.h2>
 
                   <div className="text-sm text-zinc-500">
