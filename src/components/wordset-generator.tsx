@@ -9,7 +9,7 @@ import { CardStack } from "~/components/card-stack";
 import { redirect } from "next/navigation";
 import { getStorage } from "~/lib/storage";
 import { motion, AnimatePresence } from "motion/react";
-import type { ValidationError, ValidationErrorResponse } from "~/utils/auth";
+import type { ValidationErrorResponse } from "~/utils/auth";
 const storage = getStorage();
 
 export function WordSetGenerator() {
