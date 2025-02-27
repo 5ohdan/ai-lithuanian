@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 export default function HomePage() {
   return (
     <motion.main
-      className="container mx-auto flex h-screen flex-col space-y-4 overflow-hidden py-8"
+      className="container mx-auto flex h-screen flex-col space-y-4 py-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -28,7 +28,7 @@ export default function HomePage() {
           </Link>
         </motion.div>
       </motion.div>
-      <div className="min-h-0 flex-1 overflow-hidden">
+      <div className="min-h-0 flex-1">
         <WordSetGenerator />
       </div>
     </motion.main>
