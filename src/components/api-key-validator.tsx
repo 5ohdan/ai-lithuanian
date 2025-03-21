@@ -28,6 +28,5 @@ export function ApiKeyValidator({ keyRemoved, error }: ApiKeyValidatorProps) {
     }
   }, [keyRemoved, error, router]);
 
-  // This component doesn't render anything visible
   return null;
 }

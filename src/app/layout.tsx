@@ -1,6 +1,6 @@
 import "~/styles/globals.css";
 import { Toaster } from "~/components/ui/sonner";
-
+import { Header } from "~/components/header";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
@@ -13,9 +13,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body className="flex max-h-screen min-h-screen w-full flex-col justify-self-center md:w-3/4 lg:w-2/3 xl:w-1/2">
+      <body className="flex h-screen w-full justify-self-center px-10 py-10">
         <Toaster richColors />
-        {children}
+        <main className="relative flex h-full w-full flex-col justify-self-center rounded-3xl bg-neutral-900">
+          <Header />
+          {children}
+        </main>
       </body>
     </html>
   );
