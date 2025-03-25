@@ -47,7 +47,7 @@ export class StorageManager {
     }
   }
 
-  addWordSet(wordSet: WordSet, topic: string, difficulty: Difficulty): void {
+  addWordSet(wordSet: WordSet, topic: string, difficulty: Difficulty): string {
     const wordSetId = crypto.randomUUID();
     const storedSet: StoredWordSet = {
       set: wordSet,
@@ -59,6 +59,7 @@ export class StorageManager {
     };
     this.storage.wordSets.push(storedSet);
     this.saveStorage();
+    return wordSetId;
   }
 
   findExistingWordSet(

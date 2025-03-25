@@ -98,7 +98,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto grid min-h-screen max-w-3xl grid-rows-[auto,1fr] p-6 md:p-8">
+      <div className="grid min-h-screen max-w-3xl grid-rows-[auto,1fr] p-6 md:p-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -188,7 +188,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
 
                 <motion.div
                   layout
-                  className="mx-auto mt-6 flex w-full max-w-xl flex-1 flex-col justify-center space-y-6"
+                  className="mt-6 flex w-full max-w-xl flex-1 flex-col justify-center space-y-6"
                 >
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-zinc-500">

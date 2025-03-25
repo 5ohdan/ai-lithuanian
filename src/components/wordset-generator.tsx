@@ -13,7 +13,6 @@ import type { ValidationErrorResponse } from "~/utils/auth";
 const storage = getStorage();
 
 export function WordSetGenerator() {
-  const [words, setWords] = useState<WordSet>([]);
   const requestData = useRef<CreateWordSet | null>(null);
 
   const { submit, isLoading } = useObject({
@@ -54,9 +53,10 @@ export function WordSetGenerator() {
       toast.success("Successfully generated a word set.");
       const { topic, difficulty } = requestData.current ?? {}; // i know it will not be null
       if (topic && difficulty) {
-        storage.addWordSet(object!, topic, difficulty);
+        const wordSetId = storage.addWordSet(object!, topic, difficulty);
+        // redirect(`/wordsets/${wordSetId}`);
+        console.log(wordSetId);
       }
-      setWords(object ?? []);
     },
   });
 
@@ -68,33 +68,26 @@ export function WordSetGenerator() {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      className="flex max-h-[500px] w-full max-w-[640px] flex-col items-center justify-between space-y-6 rounded-3xl bg-white px-16 pb-16 pt-12"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex h-full w-full flex-col"
     >
+      <h1 className="text-4xl font-semibold">Generate new wordset</h1>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
+        className="flex h-full w-full flex-col"
       >
-        <GenerationForm isLoading={isLoading} submit={handleSubmit} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <GenerationForm isLoading={isLoading} submit={handleSubmit} />
+        </motion.div>
       </motion.div>
-
-      <AnimatePresence>
-        {words.length > 0 && (
-          <motion.div
-            key="card-stack"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="min-h-0 flex-1 overflow-hidden pt-4"
-          >
-            <CardStack words={words} />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 }

@@ -13,12 +13,16 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body className="flex h-screen w-full justify-self-center px-10 py-10">
-        <Toaster richColors />
-        <main className="relative flex h-full w-full flex-col justify-self-center rounded-3xl bg-neutral-900">
-          <Header />
-          {children}
-        </main>
+      <body>
+        <div className="flex h-screen w-full justify-self-center px-10 py-10">
+          <Toaster richColors />
+          <main className="relative flex h-full w-full flex-col justify-self-center rounded-3xl bg-neutral-900">
+            <Header />
+            <div className="flex h-full items-center justify-center">
+              {children}
+            </div>
+          </main>
+        </div>
       </body>
     </html>
   );

@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 export default function WordSetsPage() {
   return (
     <motion.main
-      className="container mx-auto space-y-4 py-8"
+      className="space-y-4 py-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
