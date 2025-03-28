@@ -1,5 +1,5 @@
 import { WordSetGenerator } from "~/components/wordset-generator";
 
-export default async function HomePage() {
+export default function NewSetPage() {
   return <WordSetGenerator />;
 }

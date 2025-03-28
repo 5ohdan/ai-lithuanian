@@ -34,7 +34,7 @@ export function CardStack({ words }: { words: Word[] }) {
       className="flex h-full w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.2 }}
     >
       <AnimatePresence mode="wait">
         {words[shownCard] && (

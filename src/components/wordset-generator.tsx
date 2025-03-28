@@ -1,25 +1,27 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { experimental_useObject as useObject } from "ai/react";
 import { toast } from "sonner";
-import { type CreateWordSet, type WordSet, wordSetSchema } from "~/lib/schemas";
+import { type CreateWordSet, wordSetSchema } from "~/lib/schemas";
 import { GenerationForm } from "~/components/generation-form";
-import { CardStack } from "~/components/card-stack";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { getStorage } from "~/lib/storage";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import type { ValidationErrorResponse } from "~/utils/auth";
 const storage = getStorage();
 
 export function WordSetGenerator() {
   const requestData = useRef<CreateWordSet | null>(null);
 
+  const router = useRouter();
+
   const { submit, isLoading } = useObject({
     api: "/api/generate-word-set",
     schema: wordSetSchema,
     initialValue: [],
     onError: (error) => {
+      console.log("error", error);
       try {
         const errorData = JSON.parse(error.message) as ValidationErrorResponse;
         if (errorData.keyRemoved) {
@@ -27,7 +29,7 @@ export function WordSetGenerator() {
             description: errorData.message,
             action: {
               label: "Add New Key",
-              onClick: () => redirect("/key-form"),
+              onClick: () => router.push("/key-form"),
             },
           });
         } else {
@@ -46,7 +48,7 @@ export function WordSetGenerator() {
         error.message.includes("Token is NOT valid") ||
         error.message.includes("Unauthorized")
       ) {
-        redirect("/key-form");
+        router.push("/key-form");
       }
     },
     onFinish: ({ object }) => {
@@ -54,8 +56,8 @@ export function WordSetGenerator() {
       const { topic, difficulty } = requestData.current ?? {}; // i know it will not be null
       if (topic && difficulty) {
         const wordSetId = storage.addWordSet(object!, topic, difficulty);
-        // redirect(`/wordsets/${wordSetId}`);
-        console.log(wordSetId);
+        console.log("wordSetId", wordSetId);
+        router.push(`/cards/${wordSetId}`);
       }
     },
   });
@@ -71,19 +73,19 @@ export function WordSetGenerator() {
       className="flex max-h-[500px] w-full max-w-[640px] flex-col items-center justify-between space-y-6 rounded-3xl bg-white px-16 pb-16 pt-12"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.2 }}
     >
       <h1 className="text-4xl font-semibold">Generate new wordset</h1>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.2 }}
         className="flex h-full w-full flex-col"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.2 }}
         >
           <GenerationForm isLoading={isLoading} submit={handleSubmit} />
         </motion.div>
