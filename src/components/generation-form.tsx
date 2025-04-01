@@ -32,9 +32,7 @@ export function GenerationForm({
         const inputDifficulty = formData.get(
           "difficulty",
         ) as CreateWordSet["difficulty"];
-        const inputCount = formData.get(
-          "count",
-        ) as unknown as CreateWordSet["count"];
+        const inputCount = formData.get("count") as string;
 
         if (!inputTopic) {
           toast.error("Please enter a topic.");
@@ -54,7 +52,7 @@ export function GenerationForm({
         submit({
           topic: inputTopic,
           difficulty: inputDifficulty,
-          count: inputCount,
+          count: parseInt(inputCount),
         });
       }}
     >

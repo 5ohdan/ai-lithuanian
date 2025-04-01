@@ -16,7 +16,7 @@ export default function RootLayout({
       <body>
         <Toaster richColors />
         <div className="flex h-screen w-full justify-self-center px-10 py-10">
-          <main className="relative flex h-full w-full flex-col justify-self-center rounded-3xl bg-[url('/bg_smol.jpg')] bg-cover bg-center">
+          <main className="relative flex h-full w-full flex-col justify-self-center rounded-3xl bg-neutral-900 bg-[url('/bg_smol.jpg')] bg-cover bg-center">
             <Header />
             <div className="flex h-full items-center justify-center">
               {children}
