@@ -9,18 +9,16 @@ export default async function KeyFormPage() {
 
   if (success) {
     return (
-      <main className="flex h-screen items-center justify-center">
-        <Link href={"/new-set"}>
-          <Button>Go to home page →</Button>
-        </Link>
-      </main>
+      <Link href={"/new-set"}>
+        <Button>Go to home page →</Button>
+      </Link>
     );
   }
 
   return (
-    <main className="flex h-screen items-center justify-center">
+    <>
       {keyRemoved && <ApiKeyValidator keyRemoved={keyRemoved} error={error} />}
       <KeyForm error={error} />
-    </main>
+    </>
   );
 }

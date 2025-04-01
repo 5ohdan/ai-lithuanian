@@ -36,7 +36,7 @@ export function WordSetsList() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="grid gap-4"
+      className="grid h-full w-full gap-4"
     >
       {wordsets.map((wordSet, index) => (
         <motion.div

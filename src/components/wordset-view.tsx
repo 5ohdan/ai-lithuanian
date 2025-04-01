@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { ArrowLeft, List, Plus } from "lucide-react";
+import { ArrowLeft, List } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { StoredWordSet } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
@@ -97,147 +97,123 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
   }
 
   return (
-    <main className="min-h-screen">
-      <div className="grid min-h-screen max-w-3xl grid-rows-[auto,1fr] p-6 md:p-8">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
-              {wordset.topic}
-            </h1>
-          </div>
+    <div className="grid max-w-3xl grid-rows-[auto,1fr] rounded-xl bg-white p-6">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h1 className="text-2xl font-semibold text-zinc-900">
+          {wordset.topic}
+        </h1>
+      </motion.div>
 
-          <div className="flex gap-4">
-            <Link
-              href="/wordsets"
-              className="group flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-              Back to List
-            </Link>
-            <Link
-              href="/new-set"
-              className="group flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              New Wordset
-            </Link>
+      <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[250px,1fr]">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="h-fit overflow-auto rounded-xl border border-zinc-200 bg-white p-4 md:h-full"
+        >
+          <h2 className="mb-3 flex items-center text-lg font-semibold">
+            <List className="mr-2 h-4 w-4" />
+            Words
+          </h2>
+          <div className="space-y-2">
+            {wordset.set.map((word, index) => (
+              <motion.div
+                key={word.original}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                onClick={() => setActiveWordIndex(index)}
+                className={`cursor-pointer rounded-lg p-3 transition-colors ${
+                  index === activeWordIndex
+                    ? "bg-zinc-900 text-white"
+                    : "bg-zinc-50 hover:bg-zinc-100"
+                }`}
+              >
+                <div className="font-medium">{word.original}</div>
+                <div
+                  className={`text-sm ${index === activeWordIndex ? "text-zinc-300" : "text-zinc-500"}`}
+                >
+                  {word.translation}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
 
-        <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[250px,1fr]">
+        <AnimatePresence mode="wait">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="h-fit overflow-auto rounded-xl border border-zinc-200 bg-white p-4 md:h-full"
+            key={activeWord.original}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="relative flex h-full flex-col rounded-xl border border-zinc-200 bg-white transition-all duration-300 hover:shadow-lg"
+            onMouseEnter={() => setIsCardHovered(true)}
+            onMouseLeave={() => setIsCardHovered(false)}
           >
-            <h2 className="mb-3 flex items-center text-lg font-semibold">
-              <List className="mr-2 h-4 w-4" />
-              Words
-            </h2>
-            <div className="space-y-2">
-              {wordset.set.map((word, index) => (
-                <motion.div
-                  key={word.original}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  onClick={() => setActiveWordIndex(index)}
-                  className={`cursor-pointer rounded-lg p-3 transition-colors ${
-                    index === activeWordIndex
-                      ? "bg-zinc-900 text-white"
-                      : "bg-zinc-50 hover:bg-zinc-100"
-                  }`}
-                >
-                  <div className="font-medium">{word.original}</div>
-                  <div
-                    className={`text-sm ${index === activeWordIndex ? "text-zinc-300" : "text-zinc-500"}`}
-                  >
-                    {word.translation}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeWord.original}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="relative flex h-full flex-col rounded-xl border border-zinc-200 bg-white transition-all duration-300 hover:shadow-lg"
-              onMouseEnter={() => setIsCardHovered(true)}
-              onMouseLeave={() => setIsCardHovered(false)}
-            >
-              <div className="flex flex-1 flex-col p-6">
-                <div className="flex items-center justify-between">
-                  <motion.h2
-                    layout
-                    className="group flex cursor-pointer items-center text-2xl font-semibold tracking-tight text-zinc-900 hover:text-zinc-600"
-                  >
-                    {activeWord.original}
-                  </motion.h2>
-
-                  <div className="text-sm text-zinc-500">
-                    {activeWordIndex + 1} of {wordset.set.length}
-                  </div>
-                </div>
-
-                <motion.div
+            <div className="flex flex-1 flex-col p-6">
+              <div className="flex items-center justify-between">
+                <motion.h2
                   layout
-                  className="mt-6 flex w-full max-w-xl flex-1 flex-col justify-center space-y-6"
+                  className="group flex cursor-pointer items-center text-2xl font-semibold tracking-tight text-zinc-900 hover:text-zinc-600"
                 >
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-zinc-500">
-                      Translation:
-                    </p>
-                    <p className="text-lg text-zinc-900">
-                      {activeWord.translation}
-                    </p>
-                  </div>
+                  {activeWord.original}
+                </motion.h2>
 
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-zinc-500">
-                      Transcription:
-                    </p>
-                    <p className="font-mono text-lg text-zinc-700">
-                      {activeWord.transcription}
-                    </p>
-                  </div>
-
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-zinc-500">
-                      Usage context:
-                    </p>
-                    <p className="text-zinc-700">{activeWord.context}</p>
-                  </div>
-
-                  <motion.div layout className="rounded-lg bg-zinc-50 p-4">
-                    <p className="text-sm font-medium text-zinc-500">
-                      Example:
-                    </p>
-                    <p className="mt-2 text-lg font-medium text-zinc-900">
-                      {activeWord.example}
-                    </p>
-                    <p className="mt-1 text-zinc-600">
-                      {activeWord.exampleTranslation}
-                    </p>
-                  </motion.div>
-                </motion.div>
+                <div className="text-sm text-zinc-500">
+                  {activeWordIndex + 1} of {wordset.set.length}
+                </div>
               </div>
 
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isCardHovered ? 1 : 0 }}
-                className="absolute inset-0 rounded-xl bg-gradient-to-r from-zinc-500/5 to-transparent"
-              />
-            </motion.div>
-          </AnimatePresence>
-        </div>
+                layout
+                className="mt-6 flex w-full max-w-xl flex-1 flex-col justify-center space-y-6"
+              >
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-zinc-500">
+                    Translation:
+                  </p>
+                  <p className="text-lg text-zinc-900">
+                    {activeWord.translation}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-zinc-500">
+                    Transcription:
+                  </p>
+                  <p className="font-mono text-lg text-zinc-700">
+                    {activeWord.transcription}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-zinc-500">
+                    Usage context:
+                  </p>
+                  <p className="text-zinc-700">{activeWord.context}</p>
+                </div>
+
+                <motion.div layout className="rounded-lg bg-zinc-50 p-4">
+                  <p className="text-sm font-medium text-zinc-500">Example:</p>
+                  <p className="mt-2 text-lg font-medium text-zinc-900">
+                    {activeWord.example}
+                  </p>
+                  <p className="mt-1 text-zinc-600">
+                    {activeWord.exampleTranslation}
+                  </p>
+                </motion.div>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isCardHovered ? 1 : 0 }}
+              className="absolute inset-0 rounded-xl bg-gradient-to-r from-zinc-500/5 to-transparent"
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
-    </main>
+    </div>
   );
 }

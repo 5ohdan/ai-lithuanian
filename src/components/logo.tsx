@@ -1,5 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
-import logo from "~/assets/logo.svg";
+import logo from "public/logo.svg";
 
 export function Logo() {
   return (
