@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { StoredWordSet } from "~/lib/schemas";
+import type { StoredWordSet } from "~/lib/schemas";
 import { CardContent, Card } from "./ui/card";
 import { useRouter } from "next/navigation";
 

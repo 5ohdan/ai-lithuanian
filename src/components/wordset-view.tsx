@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { ArrowLeft, List } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { StoredWordSet } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
