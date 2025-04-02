@@ -1,22 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "~/components/ui/card";
 import type { Storage } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import { motion } from "motion/react";
+import { LoadingScreen } from "./loading-screen";
+import { WordSetsListItem } from "./wordsets-list-item";
 
 const storage = getStorage();
 
 export function WordSetsList() {
-  const [wordsets, setWordsets] = useState<Storage["wordSets"]>();
-  const router = useRouter();
+  const [wordsets, setWordsets] = useState<Storage["wordSets"]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedWordsets = storage.getWordSets();
     setWordsets(storedWordsets);
+    setIsLoading(false);
   }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   if (!wordsets || wordsets.length === 0) {
     return (
@@ -26,53 +31,37 @@ export function WordSetsList() {
         transition={{ duration: 0.5 }}
         className="text-center text-gray-500"
       >
-        No word sets found. Generate some words to get started!
+        No word sets found. Create some words to get started!
       </motion.p>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="grid h-full w-full gap-4"
-    >
-      {wordsets.map((wordSet, index) => (
-        <motion.div
-          key={wordSet.id}
+    <div className="h-full w-full flex-col items-center justify-center px-10 pb-9 pt-28 xl:w-5/6">
+      <div className="flex max-h-full w-full flex-col gap-4 rounded-2xl bg-white px-8 py-6">
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1, duration: 0.3 }}
-          whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-          whileTap={{ scale: 0.98 }}
+          transition={{ duration: 0.5 }}
+          className="text-3xl font-bold"
         >
-          <Card
-            className="cursor-pointer"
-            onClick={() => router.push(`/wordsets/${wordSet.id}`)}
-          >
-            <CardContent className="p-4">
-              <h2 className="mb-2 text-xl font-semibold">{wordSet.topic}</h2>
-              <p className="mb-2 text-sm text-gray-500">
-                Created: {new Date(wordSet.createdAt).toLocaleDateString()}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {wordSet.set.map((word, index) => (
-                  <motion.span
-                    key={index}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 + index * 0.05, duration: 0.2 }}
-                    className="rounded-md bg-gray-100 px-2 py-1 text-sm"
-                  >
-                    {word.original}
-                  </motion.span>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          Your wordsets
+        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative flex h-fit w-full flex-col gap-4 overflow-y-scroll rounded-xl border border-neutral-300/50 p-6"
+        >
+          {wordsets.map((wordSet, index) => (
+            <WordSetsListItem
+              key={wordSet.id}
+              wordSet={wordSet}
+              index={index}
+            />
+          ))}
         </motion.div>
-      ))}
-    </motion.div>
+      </div>
+    </div>
   );
 }

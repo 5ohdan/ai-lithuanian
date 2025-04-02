@@ -12,12 +12,16 @@ import { useEffect } from "react";
 
 export function Word({
   word,
+  topic,
+  index,
   nextCard,
   previousCard,
   nextAvailable,
   prevAvailable,
 }: {
   word: Word;
+  topic: string;
+  index: number;
   nextCard: () => void;
   previousCard: () => void;
   nextAvailable: boolean;
@@ -45,68 +49,46 @@ export function Word({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4 }}
-      className="flex h-full"
+      className="flex max-h-96 w-full max-w-[640px] flex-col"
     >
-      <Card className="grid h-full w-full grid-rows-[auto_1fr_auto]">
-        <CardHeader>
+      <Card className="grid h-full w-full grid-rows-[auto_1fr_auto] rounded-[20px] border border-neutral-400/50">
+        <CardHeader className="mt-[-1px] w-fit justify-self-center rounded-b-md bg-neutral-900 px-5 py-2 text-center text-white">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.4 }}
           >
-            <CardTitle className="text-4xl underline underline-offset-2">
-              {word.original}
-            </CardTitle>
+            <CardTitle>{topic}</CardTitle>
           </motion.div>
         </CardHeader>
-        <CardContent className="space-y-4 overflow-y-auto">
+        <CardContent className="mx-16 my-6 w-full max-w-[520px] rounded-2xl border border-neutral-300/50 px-7 py-12">
           <motion.div
-            className="flex flex-col space-y-1"
+            className="space-x-2 text-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
-            <span className="text-sm font-medium text-neutral-400">
-              Translation:
+            <span className="text-2xl font-semibold text-neutral-800">
+              {word.original}
             </span>
-            <p className="text-lg text-neutral-800">{word.translation}</p>
-          </motion.div>
-          <motion.div
-            className="flex flex-col space-y-1"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.4 }}
-          >
-            <span className="text-sm font-medium text-neutral-400">
-              Transcription:
+            <span className="text-xl text-neutral-800/75">
+              [{word.transcription}]
             </span>
-            <p className="text-lg text-neutral-800">{word.transcription}</p>
           </motion.div>
+
+          <hr className="mx-7 my-6 w-full place-self-center border-neutral-300/75" />
+
           <motion.div
-            className="flex flex-col space-y-1"
+            className="text-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.4 }}
           >
-            <span className="text-sm font-medium text-neutral-400">
-              Usage context:
-            </span>
-            <p className="text-lg text-neutral-800">{word.context}</p>
-          </motion.div>
-          <motion.div
-            className="mt-4 flex flex-col space-y-1 rounded-lg bg-neutral-300/50 p-4"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.4 }}
-          >
-            <span className="text-sm">Example:</span>
-            <p className="text-lg font-semibold">{word.example}</p>
-            <p className="text-neutral-500 opacity-40 hover:text-neutral-800 hover:opacity-100">
-              {word.exampleTranslation}
-            </p>
+            <p className="text-xl text-neutral-800">{word.translation}</p>
           </motion.div>
         </CardContent>
-        <CardFooter className="items-end justify-between">
+
+        <CardFooter className="items-center justify-center gap-4">
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -115,11 +97,19 @@ export function Word({
             <Button
               onClick={previousCard}
               disabled={!prevAvailable}
-              className="w-24"
+              variant="outline"
             >
-              Previous
+              ←
             </Button>
           </motion.div>
+          <motion.span
+            className="text-center text-lg font-bold text-neutral-800"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+          >
+            {index}
+          </motion.span>
           <motion.div
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -128,9 +118,9 @@ export function Word({
             <Button
               onClick={nextCard}
               disabled={!nextAvailable}
-              className="w-24"
+              variant="outline"
             >
-              Next
+              →
             </Button>
           </motion.div>
         </CardFooter>

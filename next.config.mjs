@@ -4,11 +4,15 @@
  */
 import "./src/env.js";
 
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+initOpenNextCloudflareForDev();
+
 /** @type {import("next").NextConfig} */
 const config = {
   experimental: {
-    reactCompiler: true
-  }
+    reactCompiler: true,
+  },
 };
 
 export default config;
