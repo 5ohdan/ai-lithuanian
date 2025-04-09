@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamObject } from "ai";
 import { API_KEY_COOKIE_NAME, DEFAULT_SYSTEM_PROMPT } from "~/constants";
@@ -14,11 +13,6 @@ import { getCookie } from "~/utils/cookies";
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  const { userId } = await auth();
-  if (!userId) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
   const context = (await req.json()) as CreateWordSet;
   const parsedContext = createWordSetSchema.safeParse(context);
   if (!parsedContext.success) {
