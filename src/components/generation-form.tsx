@@ -110,8 +110,8 @@ export function GenerationForm({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: !isLoading ? 1.02 : 1 }}
+        whileTap={{ scale: !isLoading ? 0.98 : 1 }}
       >
         <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading ? "Generating..." : "Generate a word set"}

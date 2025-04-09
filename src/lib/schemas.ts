@@ -85,3 +85,40 @@ export const storageSchema = z.object({
   wordSets: z.array(storedWordSetSchema),
 });
 export type Storage = z.infer<typeof storageSchema>;
+
+// TODO: Implement this
+
+// // Brief version - only what's shown in the Word card component
+// export const briefWordSchema = z.object({
+//   original: z.string()
+//     .describe("Lithuanian word"),
+//   translation: z.string()
+//     .describe("Primary English translation"),
+//   transcription: z.string()
+//     .describe("Basic pronunciation guide"),
+// });
+
+// // Detailed version - everything else needed for the detailed view
+// export const detailedWordSchema = briefWordSchema.extend({
+//   context: z.string()
+//     .describe("Usage context"),
+//   example: z.string()
+//     .describe("Example sentence"),
+//   exampleTranslation: z.string()
+//     .describe("Example translation"),
+//   partOfSpeech: z.object({
+//     type: z.string(),
+//     gender: z.string().optional(),
+//   }),
+//   meanings: z.array(z.object({
+//     label: z.string(),
+//     definition: z.string(),
+//     example: z.string().optional(),
+//     exampleTranslation: z.string().optional(),
+//   })),
+//   relatedForms: z.array(z.object({
+//     word: z.string(),
+//     translation: z.string(),
+//     note: z.string().optional(),
+//   })).optional(),
+// });
