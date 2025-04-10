@@ -29,7 +29,7 @@ export function WordSetsList() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="rounded-lg bg-white/60 p-4 text-center text-neutral-900"
+        className="rounded-lg bg-white/75 p-4 text-center text-neutral-900"
       >
         No word sets found. Create some words to get started!
       </motion.p>

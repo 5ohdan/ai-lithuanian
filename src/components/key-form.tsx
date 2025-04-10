@@ -7,7 +7,7 @@ import { Input } from "./ui/input";
 export function KeyForm({ error }: { error?: ValidationError }) {
   return (
     <form
-      className="flex w-2/3 flex-col gap-6 rounded-md border border-neutral-500/40 bg-white p-4 md:p-10"
+      className="flex w-2/3 flex-col gap-6 rounded-xl border border-neutral-500/40 bg-white p-4 md:p-10"
       action={submitApiKey}
     >
       {error && (

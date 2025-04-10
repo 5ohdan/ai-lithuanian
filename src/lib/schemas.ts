@@ -12,23 +12,57 @@ export const DIFFICULTY_LEVELS = [
 export const DifficultyEnum = z.enum(DIFFICULTY_LEVELS);
 export type Difficulty = z.infer<typeof DifficultyEnum>;
 
+const partOfSpeechEnum = z.enum([
+  "noun",
+  "verb",
+  "adjective",
+  "adverb",
+  "pronoun",
+  "numeral",
+  "preposition",
+  "particle",
+  "conjunction",
+  "interjection",
+  "verbal interjection",
+]);
+export const PartOfSpeechEnum = partOfSpeechEnum;
+export type PartOfSpeech = z.infer<typeof PartOfSpeechEnum>;
+
+const genderEnum = z.enum(["masculine", "feminine", "neuter"]);
+export const GenderEnum = genderEnum;
+export type Gender = z.infer<typeof GenderEnum>;
+
 /**
  * Base schemas
  * Define the core data structures for the application
  */
 export const wordSchema = z.object({
-  original: z.string(),
-  translation: z.string(),
+  original: z
+    .string()
+    .describe(
+      "The word in its dictionary form (e.g., nominative singular for nouns, infinitive for verbs) in Lithuanian.",
+    ),
+  translation: z
+    .string()
+    .describe(
+      "The most common and accurate English translation for the given context.",
+    ),
+  partOfSpeech: partOfSpeechEnum.describe("The grammatical part of speech."),
+  gender: genderEnum.describe("The gender of the word."),
   transcription: z
     .string()
     .describe(
-      "Transcription of the word (in English) to help to understand pronounciation",
+      "Phonetic transcription using the International Phonetic Alphabet (IPA).",
     ),
-  context: z.string().describe("Usage context of the word (in English)"),
-  example: z.string().describe("Example of usage in original language"),
+  context: z.string().describe("Description of the typical usage context"),
+  example: z
+    .string()
+    .describe(
+      "A simple, clear example sentence in Lithuanian demonstrating the word's usage in its provided form.",
+    ),
   exampleTranslation: z
     .string()
-    .describe("Translation of the example of usage (in English)"),
+    .describe("Accurate English translation of the example sentence."),
 });
 export type Word = z.infer<typeof wordSchema>;
 

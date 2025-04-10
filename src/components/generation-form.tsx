@@ -27,7 +27,9 @@ export function GenerationForm({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      action={async (formData: FormData) => {
+      onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.target as HTMLFormElement);
         const inputTopic = formData.get("topic") as CreateWordSet["topic"];
         const inputDifficulty = formData.get(
           "difficulty",

@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         content: [
           {
             type: "text",
-            text: `Generate ${context.count} ${context.difficulty}-level Lithuanian words suitable for '${context.topic}' topic.`,
+            text: `Generate data for ${context.count} ${context.difficulty}-level Lithuanian words suitable for the topic '${context.topic}'.`,
           },
         ],
       },

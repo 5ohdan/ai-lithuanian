@@ -68,7 +68,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
   if (!wordset) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="flex flex-col items-center justify-center rounded-lg bg-neutral-50 p-8 text-center shadow-sm">
+        <div className="flex flex-col items-center justify-center rounded-lg bg-white/75 p-4 text-center text-neutral-900 shadow-sm">
           <h2 className="mb-2 text-xl font-semibold text-neutral-900">
             Wordset Not Found
           </h2>
@@ -100,12 +100,12 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mx-auto mt-[-1px] w-fit rounded-b-md bg-neutral-900 px-5 py-2 text-center text-white"
+          className="mx-auto mt-[-1px] w-fit rounded-b-md bg-neutral-900 px-5 py-2 text-center text-2xl font-bold text-white"
         >
           {wordset.topic}
         </motion.h1>
         <div className="flex-1 overflow-hidden px-10 py-6">
-          <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[250px,1fr]">
+          <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[1fr,1fr]">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -121,15 +121,30 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                     className={`cursor-pointer rounded-lg p-3 transition-colors ${
                       index === activeWordIndex
                         ? "bg-neutral-900 text-white"
-                        : "bg-neutral-50 hover:bg-neutral-100"
+                        : "bg-neutral-100/80 hover:bg-neutral-200/80"
                     }`}
                   >
-                    <div className="font-medium">{word.original}</div>
-                    <div
-                      className={`text-sm ${index === activeWordIndex ? "text-neutral-300" : "text-neutral-500"}`}
+                    <p className="flex items-center gap-2">
+                      <span
+                        className={`flex h-5 w-7 items-center justify-center rounded-sm border bg-neutral-900 text-xs text-white ${index === activeWordIndex ? "border-white" : "border-transparent"}`}
+                      >
+                        lt
+                      </span>
+                      <span
+                        className={`text-xl font-medium ${
+                          index === activeWordIndex
+                            ? "text-white"
+                            : "text-neutral-900"
+                        }`}
+                      >
+                        {word.original}
+                      </span>
+                    </p>
+                    <p
+                      className={`text-sm ${index === activeWordIndex ? "text-white" : "text-neutral-900"}`}
                     >
                       {word.translation}
-                    </div>
+                    </p>
                   </motion.div>
                 ))}
               </div>
@@ -143,65 +158,36 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                 exit={{ opacity: 0, y: -5 }}
                 className="flex h-full flex-col overflow-y-auto rounded-xl border border-neutral-200 bg-white transition-all duration-300 hover:shadow-lg"
               >
-                <div className="flex flex-1 flex-col p-8">
-                  <div className="border-b border-neutral-200 pb-6">
-                    <div className="flex items-baseline gap-3">
-                      <h2 className="text-3xl font-semibold tracking-tight text-neutral-900">
-                        {activeWord.original}
-                      </h2>
-                      <span className="text-lg text-neutral-500">
-                        [{activeWord.transcription}]
-                      </span>
-                      <span className="text-sm text-neutral-500">
-                        — noun, masculine gender
-                      </span>
-                    </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-center gap-2 pb-5">
+                    <span className="text-2xl font-semibold text-neutral-900">
+                      {activeWord.original}
+                    </span>
+                    <span className="text-2xl text-neutral-500">
+                      [{activeWord.transcription}]
+                    </span>{" "}
+                    <span className="text-lg text-neutral-900/85">
+                      — {activeWord.partOfSpeech}, {activeWord.gender}
+                    </span>
                   </div>
 
-                  <div className="mt-8 space-y-8">
-                    <section>
-                      <h3 className="text-xl text-neutral-500">Context</h3>
-                      <div className="mt-3 space-y-2">
-                        <p className="text-lg text-neutral-900">
-                          {activeWord.context}
-                        </p>
-                        <p className="text-neutral-600">
-                          {activeWord.translation}
-                        </p>
-                      </div>
+                  <div className="flex flex-col">
+                    <section className="flex flex-col gap-1 border-t border-neutral-200 py-5">
+                      <span className="text-neutral-500">Context</span>
+                      <span className="font-medium text-neutral-900">
+                        {activeWord.context}
+                      </span>
                     </section>
 
-                    <section>
-                      <h3 className="text-xl text-neutral-500">
-                        Meanings of the word
-                      </h3>
-                      <div className="mt-3 space-y-4">
-                        <div>
-                          <p className="text-lg">
-                            <span className="font-medium text-neutral-900">
-                              Animal
-                            </span>
-                            <span className="text-neutral-700">
-                              {" "}
-                              — {activeWord.translation}
-                            </span>
-                          </p>
-                          <p className="mt-1 text-neutral-600">
-                            {activeWord.example}
-                          </p>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section>
-                      <h3 className="text-xl text-neutral-500">Example</h3>
-                      <div className="mt-3 rounded-lg bg-neutral-50 p-4">
-                        <p className="text-lg font-medium text-neutral-900">
+                    <section className="flex flex-col gap-1 border-t border-neutral-200 py-5">
+                      <span className="text-neutral-500">Example</span>
+                      <div className="flex flex-col rounded-lg bg-neutral-50 p-2">
+                        <span className="font-medium text-neutral-900">
                           {activeWord.example}
-                        </p>
-                        <p className="mt-1 text-neutral-600">
+                        </span>
+                        <span className="text-neutral-600">
                           {activeWord.exampleTranslation}
-                        </p>
+                        </span>
                       </div>
                     </section>
                   </div>

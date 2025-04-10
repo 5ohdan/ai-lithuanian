@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { getStorage } from "~/lib/storage";
 import { motion } from "motion/react";
 import type { ValidationErrorResponse } from "~/utils/auth";
+
 const storage = getStorage();
 
 export function WordSetGenerator() {
@@ -21,7 +22,6 @@ export function WordSetGenerator() {
     schema: wordSetSchema,
     initialValue: [],
     onError: (error) => {
-      console.log("error", error);
       try {
         const errorData = JSON.parse(error.message) as ValidationErrorResponse;
         if (errorData.keyRemoved) {
@@ -56,7 +56,6 @@ export function WordSetGenerator() {
       const { topic, difficulty } = requestData.current ?? {}; // i know it will not be null
       if (topic && difficulty) {
         const wordSetId = storage.addWordSet(object!, topic, difficulty);
-        console.log("wordSetId", wordSetId);
         router.push(`/cards/${wordSetId}`);
       }
     },
