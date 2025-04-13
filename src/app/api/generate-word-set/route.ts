@@ -1,4 +1,4 @@
-import { createOpenAI } from "@ai-sdk/openai";
+import { createGoogleGenerativeAI, google } from "@ai-sdk/google";
 import { streamObject } from "ai";
 import { API_KEY_COOKIE_NAME, DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import {
@@ -55,12 +55,10 @@ export async function POST(req: Request) {
       },
     });
   }
-  const openai = createOpenAI({
-    apiKey,
-    compatibility: "strict",
-  });
+
+  const model = google("gemini-2.0-flash-001");
   const result = streamObject({
-    model: openai("gpt-4o-mini"),
+    model,
     messages: [
       {
         role: "system",
