@@ -72,9 +72,9 @@ export const validateApiKey = cache(
 );
 
 export const validateExistingToken = async (): Promise<ValidationResult> => {
-  const { exists, token } = await isTokenExists();
+  const token = await getCookie(API_KEY_COOKIE_NAME);
 
-  if (!exists || !token) return { success: false };
+  if (!token) return { success: false };
 
   const tokenIsValid = await validateApiKey(token);
 
@@ -87,12 +87,4 @@ export const validateExistingToken = async (): Promise<ValidationResult> => {
   }
 
   return tokenIsValid;
-};
-
-export const isTokenExists = async (): Promise<{
-  exists: boolean;
-  token?: string;
-}> => {
-  const openaiApiKey = await getCookie(API_KEY_COOKIE_NAME);
-  return { exists: !!openaiApiKey, token: openaiApiKey };
 };
