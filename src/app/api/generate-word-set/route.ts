@@ -9,10 +9,24 @@ import {
 } from "~/lib/schemas";
 import { validateApiKey, type ValidationErrorResponse } from "~/utils/auth";
 import { getCookie } from "~/utils/cookies";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
+  const { env } = await getCloudflareContext({ async: true });
+  const { success } = await env.RATE_LIMITER.limit({
+    key: "generate-word-set",
+  });
+  if (!success) {
+    return new Response(
+      "429 Failure – rate limit exceeded for generate-word-set: You have 1 request per 1 minute",
+      {
+        status: 429,
+      },
+    );
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   const context = (await req.json()) as CreateWordSet;
   const parsedContext = createWordSetSchema.safeParse(context);
   if (!parsedContext.success) {

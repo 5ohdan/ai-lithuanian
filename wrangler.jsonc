@@ -23,4 +23,17 @@
   "observability": {
     "enabled": true,
   },
+  "unsafe": {
+    "bindings": [
+      {
+        "name": "RATE_LIMITER",
+        "type": "ratelimit",
+        "namespace_id": "1001",
+        "simple": {
+          "limit": 1,
+          "period": 60,
+        },
+      },
+    ],
+  },
 }

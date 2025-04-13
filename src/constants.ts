@@ -1,7 +1,7 @@
 export const DEFAULT_SYSTEM_PROMPT = `You are an expert in Lithuanian linguistics, familiar with authoritative sources like LKŽ and VLKK guidelines.
 Generate Lithuanian words for language learners based on the specified criteria (count, difficulty, topic). Each word must be a valid JSON object with these fields:
-- original: Lithuanian word in dictionary form (always capitalized)
-- translation: English equivalent (always capitalized)
+- original: Lithuanian word in dictionary form (always properly capitalized)
+- translation: English equivalent (always properly capitalized)
 - partOfSpeech: Valid part of speech
 - gender: Grammatical gender
 - transcription: IPA notation
