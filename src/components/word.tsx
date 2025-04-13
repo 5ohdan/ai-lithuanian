@@ -72,7 +72,7 @@ export function Word({
               {word.original}
             </span>
             <span className="text-xl text-neutral-800/75">
-              [{word.transcription}]
+              {word.transcription}
             </span>
           </motion.div>
 

@@ -164,7 +164,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                       {activeWord.original}
                     </span>
                     <span className="text-2xl text-neutral-500">
-                      [{activeWord.transcription}]
+                      {activeWord.transcription}
                     </span>{" "}
                     <span className="text-lg text-neutral-900/85">
                       — {activeWord.partOfSpeech}, {activeWord.gender}

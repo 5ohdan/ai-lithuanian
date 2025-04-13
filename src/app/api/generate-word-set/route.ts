@@ -1,14 +1,12 @@
-import { createGoogleGenerativeAI, google } from "@ai-sdk/google";
+import { google } from "@ai-sdk/google";
 import { streamObject } from "ai";
-import { API_KEY_COOKIE_NAME, DEFAULT_SYSTEM_PROMPT } from "~/constants";
+import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import {
   type CreateWordSet,
   createWordSetSchema,
   wordSchema,
   wordSetSchema,
 } from "~/lib/schemas";
-import { validateApiKey, type ValidationErrorResponse } from "~/utils/auth";
-import { getCookie } from "~/utils/cookies";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export const maxDuration = 60;
@@ -34,26 +32,6 @@ export async function POST(req: Request) {
       parsedContext.error.errors.map((e) => e.message).join("\n"),
       { status: 400 },
     );
-  }
-  const apiKey = await getCookie(API_KEY_COOKIE_NAME);
-  if (!apiKey) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
-  const tokenIsValid = await validateApiKey(apiKey);
-  if (!tokenIsValid.success) {
-    const errorResponse: ValidationErrorResponse = {
-      error: tokenIsValid.error?.code ?? "INVALID_KEY",
-      message: tokenIsValid.error?.message ?? "Invalid API key",
-      keyRemoved: tokenIsValid.keyRemoved ?? false,
-    };
-
-    return new Response(JSON.stringify(errorResponse), {
-      status: 401,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
   }
 
   const model = google("gemini-2.0-flash-001");
