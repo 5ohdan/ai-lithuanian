@@ -37,28 +37,19 @@ export function CardStack({ wordset }: { wordset: StoredWordSet }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
     >
-      <AnimatePresence mode="wait">
-        {set[shownCard] && (
-          <motion.div
-            key={set[shownCard].original}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.3 }}
-            className="h-full w-full"
-          >
-            <WordCard
-              nextCard={handleNext}
-              previousCard={handlePrevious}
-              word={set[shownCard]}
-              nextAvailable={nextAvailable}
-              prevAvailable={prevAvailable}
-              index={shownCard + 1}
-              topic={topic}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {set[shownCard] && (
+        <div key={set[shownCard].original} className="h-full w-full">
+          <WordCard
+            nextCard={handleNext}
+            previousCard={handlePrevious}
+            word={set[shownCard]}
+            nextAvailable={nextAvailable}
+            prevAvailable={prevAvailable}
+            index={shownCard + 1}
+            topic={topic}
+          />
+        </div>
+      )}
     </motion.div>
   );
 }

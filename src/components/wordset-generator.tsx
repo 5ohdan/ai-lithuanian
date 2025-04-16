@@ -1,71 +1,14 @@
 "use client";
 
-import { useRef } from "react";
-import { experimental_useObject as useObject } from "ai/react";
-import { toast } from "sonner";
-import { type CreateWordSet, wordSetSchema } from "~/lib/schemas";
-import { GenerationForm } from "~/components/generation-form";
-import { useRouter } from "next/navigation";
-import { getStorage } from "~/lib/storage";
 import { motion } from "motion/react";
-import type { ValidationErrorResponse } from "~/utils/auth";
-
-const storage = getStorage();
+import { useWordGeneration } from "~/hooks/useWordGeneration";
+import { GenerationForm } from "./generation-form";
 
 export function WordSetGenerator() {
-  const requestData = useRef<CreateWordSet | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { handleSubmit, isLoading, partialWordSet } = useWordGeneration();
 
-  const router = useRouter();
-
-  const { submit, isLoading } = useObject({
-    api: "/api/generate-word-set",
-    schema: wordSetSchema,
-    initialValue: [],
-    onError: (error) => {
-      try {
-        const errorData = JSON.parse(error.message) as ValidationErrorResponse;
-        if (errorData.keyRemoved) {
-          toast.error("Your API key was removed because it's invalid", {
-            description: errorData.message,
-            action: {
-              label: "Add New Key",
-              onClick: () => router.push("/key-form"),
-            },
-          });
-        } else {
-          toast.error(
-            "Failed to generate quiz. Please try again. " +
-              (errorData.message ?? error.message),
-          );
-        }
-      } catch {
-        toast.error(
-          "Failed to generate quiz. Please try again. " + error.message,
-        );
-      }
-
-      if (
-        error.message.includes("Token is NOT valid") ||
-        error.message.includes("Unauthorized")
-      ) {
-        router.push("/key-form");
-      }
-    },
-    onFinish: ({ object }) => {
-      toast.success("Successfully generated a word set.");
-      const { topic, difficulty } = requestData.current ?? {}; // i know it will not be null
-      if (topic && difficulty) {
-        const wordSetId = storage.addWordSet(object!, topic, difficulty);
-        router.push(`/cards/${wordSetId}`);
-      }
-    },
-  });
-
-  const handleSubmit = (data: CreateWordSet) => {
-    const { topic, difficulty, count } = data;
-    requestData.current = data;
-    submit({ topic, difficulty, count });
-  };
+  console.log(partialWordSet?.length);
 
   return (
     <motion.div
@@ -86,7 +29,12 @@ export function WordSetGenerator() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <GenerationForm isLoading={isLoading} submit={handleSubmit} />
+          {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+          <GenerationForm
+            isLoading={isLoading}
+            submit={handleSubmit}
+            length={partialWordSet?.length}
+          />
         </motion.div>
       </motion.div>
     </motion.div>

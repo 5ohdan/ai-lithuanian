@@ -17,12 +17,12 @@ export function WordSetsListItem({
       key={wordSet.id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.3 }}
+      transition={{ delay: index * 0.05, duration: 0.2 }}
       whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
       whileTap={{ scale: 0.99 }}
     >
       <Card
-        className="cursor-pointer bg-neutral-100"
+        className="cursor-pointer bg-neutral-100/85"
         onClick={() => router.push(`/wordsets/${wordSet.id}`)}
       >
         <CardContent className="p-4">
@@ -38,8 +38,8 @@ export function WordSetsListItem({
                 key={index}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 + index * 0.05, duration: 0.2 }}
-                className="rounded-md bg-white px-2 py-1 text-sm shadow-sm"
+                transition={{ delay: 0.2 + index * 0.05, duration: 0.2 }}
+                className="rounded-md bg-white px-2 py-1 text-sm"
               >
                 {word.original}
               </motion.span>

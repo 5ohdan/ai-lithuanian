@@ -17,9 +17,11 @@ import { Label } from "./ui/label";
 export function GenerationForm({
   isLoading,
   submit,
+  length,
 }: {
   isLoading: boolean;
   submit: (data: CreateWordSet) => void;
+  length?: number;
 }) {
   return (
     <motion.form
@@ -62,14 +64,18 @@ export function GenerationForm({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.4 }}
+        className="flex flex-col gap-2"
       >
-        <Label htmlFor="topic">Topic</Label>
+        <Label className="font-normal" htmlFor="topic">
+          Topic
+        </Label>
         <Input
           type="text"
           name="topic"
           id="topic"
           placeholder="Example: Animals, Cars, Countries, etc."
           required
+          className="bg-neutral-50"
         />
       </motion.div>
 
@@ -77,10 +83,13 @@ export function GenerationForm({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
+        className="flex flex-col gap-2"
       >
-        <Label htmlFor="difficulty">Difficulty</Label>
+        <Label className="font-normal" htmlFor="difficulty">
+          Difficulty
+        </Label>
         <Select name="difficulty" required>
-          <SelectTrigger>
+          <SelectTrigger className="bg-neutral-50">
             <SelectValue placeholder="Select a difficulty" />
           </SelectTrigger>
           <SelectContent>
@@ -95,8 +104,11 @@ export function GenerationForm({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.4 }}
+        className="flex flex-col gap-2"
       >
-        <Label htmlFor="count">Word Count</Label>
+        <Label className="font-normal" htmlFor="count">
+          Word Count
+        </Label>
         <Input
           type="number"
           name="count"
@@ -105,6 +117,7 @@ export function GenerationForm({
           max={15}
           defaultValue="5"
           required
+          className="bg-neutral-50"
         />
       </motion.div>
 
@@ -116,7 +129,9 @@ export function GenerationForm({
         whileTap={{ scale: !isLoading ? 0.98 : 1 }}
       >
         <Button type="submit" disabled={isLoading} className="w-full">
-          {isLoading ? "Generating..." : "Generate a word set"}
+          {isLoading
+            ? `Almost there, ${length ?? 0} done...`
+            : "Create new set of words"}
         </Button>
       </motion.div>
     </motion.form>
