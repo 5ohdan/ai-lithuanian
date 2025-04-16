@@ -3,7 +3,7 @@
 import { wordSetSchema } from "~/lib/schemas";
 import { toast } from "sonner";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
-import { type CreateWordSet, type WordSet } from "~/lib/schemas";
+import type { CreateWordSet } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";

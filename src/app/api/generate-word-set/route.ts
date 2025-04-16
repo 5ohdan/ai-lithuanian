@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const model = google("gemini-2.0-flash-001");
+  const model = google("gemini-2.0-pro-exp-02-05");
   const result = streamObject({
     model,
     messages: [
