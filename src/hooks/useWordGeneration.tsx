@@ -28,13 +28,9 @@ export function useWordGeneration() {
     },
     onFinish: ({ object }) => {
       toast.success("Successfully generated a word set.");
-      const { topic, difficulty } = requestData.current ?? {}; // i know it will not be null
-      if (topic && difficulty && object) {
-        const wordSetId = storage.addWordSet(
-          object as unknown as WordSet,
-          topic,
-          difficulty,
-        );
+      const { topic, difficulty } = requestData.current!;
+      if (object) {
+        const wordSetId = storage.addWordSet(object, topic, difficulty);
         router.push(`/cards/${wordSetId}`);
       }
     },

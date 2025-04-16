@@ -8,8 +8,6 @@ export function WordSetGenerator() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { handleSubmit, isLoading, partialWordSet } = useWordGeneration();
 
-  console.log(partialWordSet?.length);
-
   return (
     <motion.div
       className="flex max-h-[500px] w-full max-w-[640px] flex-col items-center justify-between space-y-6 rounded-3xl bg-white px-16 pb-16 pt-12"

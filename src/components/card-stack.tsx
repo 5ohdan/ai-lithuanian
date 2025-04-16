@@ -3,7 +3,7 @@
 import type { StoredWordSet } from "~/lib/schemas";
 import { useCallback, useState } from "react";
 import { Word as WordCard } from "./word";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 export function CardStack({ wordset }: { wordset: StoredWordSet }) {
   const [shownCard, setShownCard] = useState(0);

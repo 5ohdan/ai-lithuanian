@@ -30,12 +30,11 @@ export function WordSetsList() {
       if (!containerRef.current || !mainContainerRef.current) return;
 
       const mainContainerHeight = mainContainerRef.current.clientHeight;
-      const wordsetItemsHeight = wordsets.length * 112; // Assuming each wordset item is ~112px
-      const dividerHeight = 20; // Approximate height of the divider
+      const wordsetItemsHeight = wordsets.length * 112;
+      const dividerHeight = 20;
       const availableHeight =
         mainContainerHeight - wordsetItemsHeight - dividerHeight;
 
-      // Only calculate if we have positive available height
       if (availableHeight > 0) {
         const possibleSkeletons = Math.floor(availableHeight / 112);
         setSkeletonCount(Math.max(1, possibleSkeletons));
@@ -47,7 +46,7 @@ export function WordSetsList() {
     calculateSkeletons();
     window.addEventListener("resize", calculateSkeletons);
     return () => window.removeEventListener("resize", calculateSkeletons);
-  }, [wordsets.length]); // Add wordsets.length as dependency
+  }, [wordsets.length]);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -120,7 +119,7 @@ export function WordSetsList() {
             {Array.from({ length: skeletonCount }).map((_, index) => (
               <WordsetItemSkeleton key={index} />
             ))}
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_white_0%,_transparent_100%)]">
+            <div className="absolute inset-0 flex min-h-28 flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_white_0%,_transparent_100%)]">
               <div className="flex flex-col items-center gap-5 rounded-xl bg-white/15 p-8 backdrop-blur-sm">
                 {skeletonCount > 3 && (
                   <p className="text-lg font-medium text-gray-600">

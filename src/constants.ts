@@ -4,7 +4,7 @@ Generate Lithuanian words for language learners based on the specified criteria 
 - translation: English equivalent (always properly capitalized)
 - partOfSpeech: Valid part of speech
 - gender: Grammatical gender
-- transcription: IPA notation
+- transcription: IPA notation in brackets
 - context: Usage description
 - example: Lithuanian sentence
 - exampleTranslation: English translation

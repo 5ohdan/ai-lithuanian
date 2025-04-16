@@ -123,7 +123,6 @@ export class StorageManager {
   }
 }
 
-// Create a client-side only instance
 let storageInstance: StorageManager | null = null;
 
 export function getStorage(): StorageManager {
