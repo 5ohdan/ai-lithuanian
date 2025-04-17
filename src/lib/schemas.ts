@@ -77,9 +77,9 @@ export type WordSets = z.infer<typeof wordSetsSchema>;
  * These define the structure of user inputs for various operations
  */
 export const createWordSetSchema = z.object({
-  topic: z.string(),
-  difficulty: DifficultyEnum,
-  count: z.number(),
+  topic: z.string().min(3, "Topic is required").max(50, "Topic is too long"),
+  difficulty: z.enum(["Beginner", "Intermediate", "Advanced"]),
+  count: z.number().min(5, "Minimum 5 words").max(15, "Maximum 15 words"),
 });
 export type CreateWordSet = z.infer<typeof createWordSetSchema>;
 

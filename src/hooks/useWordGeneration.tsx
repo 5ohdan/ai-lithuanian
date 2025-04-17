@@ -8,8 +8,9 @@ import { getStorage } from "~/lib/storage";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
+const storage = getStorage();
+
 export function useWordGeneration() {
-  const storage = getStorage();
   const requestData = useRef<CreateWordSet | null>(null);
   const router = useRouter();
 

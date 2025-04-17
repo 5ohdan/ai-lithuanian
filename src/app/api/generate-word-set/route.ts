@@ -60,6 +60,12 @@ export async function POST(req: Request) {
         throw new Error(res.error.errors.map((e) => e.message).join("\n"));
       }
     },
+    onError: (error) => {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("Unknown error");
+    },
   });
 
   return result.toTextStreamResponse();
