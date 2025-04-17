@@ -13,19 +13,34 @@ export function WordSetGenerator() {
       className="flex max-h-[500px] w-full max-w-[640px] flex-col items-center justify-between space-y-6 rounded-3xl bg-white px-16 pb-16 pt-12"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+        mass: 0.5,
+      }}
     >
       <h1 className="text-4xl font-semibold">Generate new wordset</h1>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 0.5,
+        }}
         className="flex h-full w-full flex-col"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.5,
+          }}
         >
           {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
           <GenerationForm

@@ -58,7 +58,12 @@ export function WordSetsList() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.5,
+          }}
           className="flex h-full w-full flex-col items-center justify-center gap-4 rounded-2xl bg-white px-8 py-6"
         >
           <NoSetsImg />
@@ -88,7 +93,12 @@ export function WordSetsList() {
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.5,
+          }}
           className="text-3xl font-bold"
         >
           Your wordsets
@@ -97,7 +107,12 @@ export function WordSetsList() {
           ref={mainContainerRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.5,
+          }}
           className="relative flex h-full w-full flex-col gap-4 overflow-y-scroll rounded-xl border border-neutral-300/50 p-6 shadow-md"
         >
           {wordsets.map((wordSet, index) => (

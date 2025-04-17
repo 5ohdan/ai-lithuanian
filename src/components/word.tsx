@@ -44,26 +44,46 @@ export function Word({
   }, [nextCard, previousCard, nextAvailable, prevAvailable]);
 
   return (
-    <div
+    <motion.div
       key={word.original}
       className="flex max-h-96 w-full max-w-[640px] flex-col"
+      layout
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+        mass: 0.5,
+      }}
     >
       <Card className="grid h-full w-full grid-rows-[auto_1fr_auto] rounded-[20px] border border-neutral-400/50">
         <CardHeader className="mt-[-1px] w-fit justify-self-center rounded-b-md bg-neutral-900 px-5 py-2 text-center text-white">
           <CardTitle>{topic}</CardTitle>
         </CardHeader>
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           <motion.div
+            layout
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 20,
+              mass: 0.5,
+            }}
           >
             <CardContent className="mx-16 my-6 w-full max-w-[520px] rounded-2xl border border-neutral-300/50 px-7 py-12 shadow-md">
               <motion.div
+                layout
                 className="space-x-2 text-center"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.4 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  mass: 0.5,
+                }}
               >
                 <span className="text-2xl font-semibold text-neutral-800">
                   {word.original}
@@ -76,10 +96,16 @@ export function Word({
               <hr className="mx-7 my-6 w-full place-self-center border-neutral-300/75" />
 
               <motion.div
+                layout
                 className="text-center"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.4 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  mass: 0.5,
+                }}
               >
                 <p className="text-xl text-neutral-800">{word.translation}</p>
               </motion.div>
@@ -108,6 +134,6 @@ export function Word({
           </Button>
         </CardFooter>
       </Card>
-    </div>
+    </motion.div>
   );
 }

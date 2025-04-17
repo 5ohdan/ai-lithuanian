@@ -28,7 +28,12 @@ export function GenerationForm({
       className="flex min-w-full flex-col gap-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+        mass: 0.5,
+      }}
       onSubmit={async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
@@ -63,7 +68,13 @@ export function GenerationForm({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1, duration: 0.4 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 0.5,
+          delay: 0.1,
+        }}
         className="flex flex-col gap-2"
       >
         <Label className="font-normal" htmlFor="topic">
@@ -82,7 +93,13 @@ export function GenerationForm({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.4 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 0.5,
+          delay: 0.2,
+        }}
         className="flex flex-col gap-2"
       >
         <Label className="font-normal" htmlFor="difficulty">
@@ -103,7 +120,13 @@ export function GenerationForm({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.4 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 0.5,
+          delay: 0.3,
+        }}
         className="flex flex-col gap-2"
       >
         <Label className="font-normal" htmlFor="count">
@@ -124,9 +147,30 @@ export function GenerationForm({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        whileHover={{ scale: !isLoading ? 1.02 : 1 }}
-        whileTap={{ scale: !isLoading ? 0.98 : 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 0.5,
+        }}
+        whileHover={{
+          scale: !isLoading ? 1.02 : 1,
+          transition: {
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.5,
+          },
+        }}
+        whileTap={{
+          scale: !isLoading ? 0.98 : 1,
+          transition: {
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.5,
+          },
+        }}
       >
         <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading

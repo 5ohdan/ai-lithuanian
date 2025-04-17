@@ -17,9 +17,31 @@ export function WordSetsListItem({
       key={wordSet.id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.2 }}
-      whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
-      whileTap={{ scale: 0.99 }}
+      transition={{
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
+        mass: 0.5,
+        delay: index * 0.05,
+      }}
+      whileHover={{
+        scale: 1.01,
+        transition: {
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 0.5,
+        },
+      }}
+      whileTap={{
+        scale: 0.99,
+        transition: {
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+          mass: 0.5,
+        },
+      }}
     >
       <Card
         className="cursor-pointer bg-neutral-100/85"
@@ -38,7 +60,13 @@ export function WordSetsListItem({
                 key={index}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 + index * 0.05, duration: 0.2 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  mass: 0.5,
+                  delay: 0.2 + index * 0.05,
+                }}
                 className="rounded-md bg-white px-2 py-1 text-sm"
               >
                 {word.original}

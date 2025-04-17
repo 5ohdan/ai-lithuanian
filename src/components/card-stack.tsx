@@ -35,10 +35,27 @@ export function CardStack({ wordset }: { wordset: StoredWordSet }) {
       className="h-full w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
+      layout
+      transition={{
+        type: "spring",
+        stiffness: 10,
+        damping: 8,
+        mass: 1.5,
+        opacity: { duration: 0.4 },
+      }}
     >
       {set[shownCard] && (
-        <div key={set[shownCard].original} className="h-full w-full">
+        <motion.div
+          key={set[shownCard].original}
+          className="h-full w-full"
+          layout
+          transition={{
+            type: "spring",
+            stiffness: 10,
+            damping: 8,
+            mass: 1.5,
+          }}
+        >
           <WordCard
             nextCard={handleNext}
             previousCard={handlePrevious}
@@ -48,7 +65,7 @@ export function CardStack({ wordset }: { wordset: StoredWordSet }) {
             index={shownCard + 1}
             topic={topic}
           />
-        </div>
+        </motion.div>
       )}
     </motion.div>
   );

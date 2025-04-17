@@ -100,23 +100,51 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.5,
+          }}
           className="mx-auto mt-[-1px] w-fit rounded-b-md bg-neutral-900 px-5 py-2 text-center text-2xl font-bold text-white"
         >
           {wordset.topic}
         </motion.h1>
         <div className="flex-1 overflow-hidden px-10 py-6">
-          <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[1fr,1fr]">
+          <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[300px,1fr]">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1, x: 0 }}
+              transition={{
+                type: "spring",
+                stiffness: 100,
+                damping: 20,
+                mass: 0.5,
+              }}
               className="max-h-full overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4"
             >
               <div className="flex flex-col gap-4">
                 {wordset.set.map((word, index) => (
                   <motion.div
                     key={word.original}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
+                    whileHover={{
+                      scale: 1.01,
+                      transition: {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 20,
+                        mass: 0.5,
+                      },
+                    }}
+                    whileTap={{
+                      scale: 0.99,
+                      transition: {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 20,
+                        mass: 0.5,
+                      },
+                    }}
                     onClick={() => setActiveWordIndex(index)}
                     className={`cursor-pointer rounded-lg p-3 transition-colors ${
                       index === activeWordIndex
@@ -126,12 +154,12 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                   >
                     <p className="flex items-center gap-2">
                       <span
-                        className={`flex h-5 w-7 items-center justify-center rounded-sm border bg-neutral-900 text-xs text-white ${index === activeWordIndex ? "border-white" : "border-transparent"}`}
+                        className={`flex h-5 w-7 shrink-0 items-center justify-center rounded-sm border bg-neutral-900 text-xs text-white ${index === activeWordIndex ? "border-white" : "border-transparent"}`}
                       >
                         lt
                       </span>
                       <span
-                        className={`text-xl font-medium ${
+                        className={`truncate text-xl font-medium ${
                           index === activeWordIndex
                             ? "text-white"
                             : "text-neutral-900"
@@ -141,7 +169,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                       </span>
                     </p>
                     <p
-                      className={`text-sm ${index === activeWordIndex ? "text-white" : "text-neutral-900"}`}
+                      className={`truncate text-sm ${index === activeWordIndex ? "text-white" : "text-neutral-900"}`}
                     >
                       {word.translation}
                     </p>
@@ -153,10 +181,17 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeWord.original}
-                initial={{ opacity: 0, y: 5 }}
+                initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -5 }}
-                className="flex h-full flex-col overflow-y-auto rounded-xl border border-neutral-200 bg-white transition-all duration-300 hover:shadow-lg"
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 25,
+                  mass: 0.3,
+                  opacity: { duration: 0.15 },
+                }}
+                className="flex h-full flex-col overflow-y-auto rounded-xl border border-neutral-200 bg-white transition-all duration-300 hover:shadow-md"
               >
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center gap-2 pb-5">
