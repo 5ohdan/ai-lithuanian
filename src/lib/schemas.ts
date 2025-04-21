@@ -40,46 +40,56 @@ export const wordSchema = z.object({
   original: z
     .string()
     .describe(
-      "The word in its dictionary form (e.g., nominative singular for nouns, infinitive for verbs) in Lithuanian.",
+      "The Lithuanian word in its canonical dictionary form (e.g., nominative singular for nouns, infinitive for verbs), using proper casing and diacritics.",
     ),
   translation: z
     .string()
     .describe(
-      "The most common and accurate English translation for the given context.",
+      "The most accurate English equivalent for the specified meaning and context (capitalize only proper nouns).",
     ),
-  partOfSpeech: partOfSpeechEnum.describe("The grammatical part of speech."),
-  gender: genderEnum.describe("The gender of the word."),
+  partOfSpeech: PartOfSpeechEnum.describe(
+    "The grammatical category of the word (noun, verb, adjective, etc.).",
+  ),
+  gender: GenderEnum.describe(
+    "The grammatical gender of the word in Lithuanian (masculine, feminine, or neuter); applicable for nouns and pronouns.",
+  ),
   transcription: z
     .string()
     .describe(
-      "Phonetic transcription using the International Phonetic Alphabet (IPA).",
+      "Phonetic transcription in the International Phonetic Alphabet (IPA), enclosed in brackets to indicate pronunciation.",
     ),
-  context: z.string().describe("Description of the typical usage context"),
+  context: z
+    .string()
+    .describe(
+      "A concise semantic domain or usage scenario for the word (e.g., medical terminology, everyday conversation).",
+    ),
   example: z
     .string()
     .describe(
-      "A simple, clear example sentence in Lithuanian demonstrating the word's usage in its provided form.",
+      "A natural Lithuanian sentence demonstrating the word in context, using correct grammar and word order.",
     ),
   exampleTranslation: z
     .string()
-    .describe("Accurate English translation of the example sentence."),
+    .describe(
+      "An accurate English translation of the example sentence, preserving meaning and tone.",
+    ),
 });
 export type Word = z.infer<typeof wordSchema>;
 
 export const wordSetSchema = z.array(wordSchema);
 export type WordSet = z.infer<typeof wordSetSchema>;
 
-export const wordSetsSchema = z.array(wordSetSchema);
-export type WordSets = z.infer<typeof wordSetsSchema>;
-
 /**
  * Input schemas
  * These define the structure of user inputs for various operations
  */
 export const createWordSetSchema = z.object({
-  topic: z.string().min(3, "Topic is required").max(50, "Topic is too long"),
+  topic: z
+    .string()
+    .min(3, "Please enter a topic that’s at least 3 characters long")
+    .max(100, "Please enter a topic that’s less than 100 characters"),
   difficulty: z.enum(["Beginner", "Intermediate", "Advanced"]),
-  count: z.number().min(5, "Minimum 5 words").max(15, "Maximum 15 words"),
+  count: z.number().min(5, "Min. 5 words").max(15, "Max. 15 words"),
 });
 export type CreateWordSet = z.infer<typeof createWordSetSchema>;
 

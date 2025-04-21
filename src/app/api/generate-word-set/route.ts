@@ -47,7 +47,7 @@ export async function POST(req: Request) {
         content: [
           {
             type: "text",
-            text: `Generate data for ${context.count} ${context.difficulty}-level Lithuanian words suitable for the topic '${context.topic}'.`,
+            text: `Generate ${context.count} unique Lithuanian words on the topic “${context.topic}” at ${context.difficulty} difficulty.`,
           },
         ],
       },
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
       if (error instanceof Error) {
         throw new Error(error.message);
       }
-      throw new Error("Unknown error");
+      throw new Error("Unknown error", { cause: error });
     },
   });
 

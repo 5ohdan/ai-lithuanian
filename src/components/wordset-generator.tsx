@@ -1,8 +1,15 @@
 "use client";
 
+import { Alexandria } from "next/font/google";
+import { cn } from "~/lib/utils";
 import { motion } from "motion/react";
 import { useWordGeneration } from "~/hooks/useWordGeneration";
 import { GenerationForm } from "./generation-form";
+
+const alexandria = Alexandria({
+  subsets: ["latin"],
+  weight: ["600"],
+});
 
 export function WordSetGenerator() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -20,7 +27,9 @@ export function WordSetGenerator() {
         mass: 0.5,
       }}
     >
-      <h1 className="text-4xl font-semibold">Generate new wordset</h1>
+      <h1 className={cn("text-4xl font-semibold", alexandria.className)}>
+        Generate new wordset
+      </h1>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
