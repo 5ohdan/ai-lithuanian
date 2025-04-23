@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { createWordSetSchema, type CreateWordSet } from "~/lib/schemas";
@@ -72,16 +71,15 @@ export function GenerationForm({
             name="topic"
             render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel className={cn("text-base font-normal")}>
-                  Topic
-                </FormLabel>
+                <FormLabel className="font-normal">Topic</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     placeholder="Example: Animals, Cars, Countries, etc."
                     className={cn(
                       "bg-neutral-50",
-                      fieldState.error && "border-red-500/50",
+                      fieldState.error &&
+                        "border-red-500/75 focus-visible:ring-red-500/75 focus-visible:ring-offset-0",
                     )}
                   />
                 </FormControl>
@@ -101,15 +99,14 @@ export function GenerationForm({
             name="difficulty"
             render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel className="text-base font-normal">
-                  Difficulty
-                </FormLabel>
+                <FormLabel className="font-normal">Difficulty</FormLabel>
                 <FormControl>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger
                       className={cn(
                         "bg-neutral-50",
-                        fieldState.error && "border-red-500/50",
+                        fieldState.error &&
+                          "border-red-500/75 focus-visible:ring-red-500/75 focus-visible:ring-offset-0",
                       )}
                     >
                       <SelectValue placeholder="Select a difficulty" />
@@ -137,16 +134,15 @@ export function GenerationForm({
             name="count"
             render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel className="text-base font-normal">
-                  Word Count
-                </FormLabel>
+                <FormLabel className="font-normal">Word Count</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="number"
                     className={cn(
                       "bg-neutral-50",
-                      fieldState.error && "border-red-500/50",
+                      fieldState.error &&
+                        "border-red-500/75 focus-visible:ring-red-500/75 focus-visible:ring-offset-0",
                     )}
                     onChange={(e) => {
                       const value = e.target.value;

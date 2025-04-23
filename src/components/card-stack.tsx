@@ -8,7 +8,7 @@ import { motion } from "motion/react";
 export function CardStack({ wordset }: { wordset: StoredWordSet }) {
   const [shownCard, setShownCard] = useState(0);
 
-  const { set, topic } = wordset;
+  const { set, title } = wordset;
   const prevAvailable = shownCard > 0;
   const nextAvailable = shownCard < set.length - 1;
 
@@ -63,7 +63,7 @@ export function CardStack({ wordset }: { wordset: StoredWordSet }) {
             nextAvailable={nextAvailable}
             prevAvailable={prevAvailable}
             index={shownCard + 1}
-            topic={topic}
+            topic={title}
           />
         </motion.div>
       )}

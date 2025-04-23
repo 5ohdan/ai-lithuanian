@@ -106,9 +106,9 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
             damping: 20,
             mass: 0.5,
           }}
-          className="mx-auto mt-[-1px] w-fit rounded-b-md bg-neutral-900 px-5 py-2 text-center text-2xl font-bold text-white"
+          className="mx-auto mt-[-1px] w-fit rounded-b-md bg-neutral-900 px-5 py-2 text-center text-2xl font-semibold text-white"
         >
-          {wordset.topic}
+          {wordset.title}
         </motion.h1>
         <div className="flex-1 overflow-hidden px-10 py-6">
           <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[300px,1fr]">

@@ -76,7 +76,14 @@ export const wordSchema = z.object({
 });
 export type Word = z.infer<typeof wordSchema>;
 
-export const wordSetSchema = z.array(wordSchema);
+export const wordSetSchema = z.object({
+  words: z.array(wordSchema),
+  title: z
+    .string()
+    .describe(
+      "A concise, appropriate title for the word set (3-5 words) that captures the essence of the topic.",
+    ),
+});
 export type WordSet = z.infer<typeof wordSetSchema>;
 
 /**
@@ -86,8 +93,8 @@ export type WordSet = z.infer<typeof wordSetSchema>;
 export const createWordSetSchema = z.object({
   topic: z
     .string()
-    .min(3, "Please enter a topic that’s at least 3 characters long")
-    .max(100, "Please enter a topic that’s less than 100 characters"),
+    .min(3, "Please enter a topic that's at least 3 characters long")
+    .max(100, "Please enter a topic that's less than 100 characters"),
   difficulty: z.enum(["Beginner", "Intermediate", "Advanced"]),
   count: z.number().min(5, "Min. 5 words").max(15, "Max. 15 words"),
 });
@@ -115,9 +122,9 @@ export const storedWordSchema = z.object({
 export type StoredWord = z.infer<typeof storedWordSchema>;
 
 export const storedWordSetSchema = z.object({
-  set: z.custom<WordSet>(),
+  set: z.custom<WordSet["words"]>(),
   id: z.string().uuid(),
-  topic: z.string(),
+  title: z.string(),
   difficulty: DifficultyEnum,
   wordIds: z.array(z.string().uuid()),
   createdAt: z.string().datetime(),

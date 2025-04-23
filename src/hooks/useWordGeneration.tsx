@@ -29,9 +29,9 @@ export function useWordGeneration() {
     },
     onFinish: ({ object }) => {
       toast.success("Successfully generated a word set.");
-      const { topic, difficulty } = requestData.current!;
+      const { difficulty } = requestData.current!;
       if (object) {
-        const wordSetId = storage.addWordSet(object, topic, difficulty);
+        const wordSetId = storage.addWordSet(object, difficulty);
         router.push(`/cards/${wordSetId}`);
       }
     },

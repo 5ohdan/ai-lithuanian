@@ -49,7 +49,7 @@ export function WordSetsListItem({
       >
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
-            <h2 className="mb-2 text-xl font-semibold">{wordSet.topic}</h2>
+            <h2 className="mb-2 text-xl font-semibold">{wordSet.title}</h2>
             <p className="mb-2 text-sm text-gray-500/75">
               Created: {new Date(wordSet.createdAt).toLocaleDateString()}
             </p>

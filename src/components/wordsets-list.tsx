@@ -10,12 +10,16 @@ import { NoSetsImg } from "./no-sets-img";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { WordsetItemSkeleton } from "./wordset-item-skeleton";
+import { Trash } from "lucide-react";
+import { ConfirmationDialog } from "./confirmation-dialog";
+
 const storage = getStorage();
 
 export function WordSetsList() {
   const [wordsets, setWordsets] = useState<Storage["wordSets"]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [skeletonCount, setSkeletonCount] = useState(1);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const mainContainerRef = useRef<HTMLDivElement>(null);
 
@@ -47,6 +51,16 @@ export function WordSetsList() {
     window.addEventListener("resize", calculateSkeletons);
     return () => window.removeEventListener("resize", calculateSkeletons);
   }, [wordsets.length]);
+
+  const handleDeleteAll = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDeleteAll = () => {
+    storage.deleteAllWordSets();
+    setWordsets([]);
+    setIsDeleteDialogOpen(false);
+  };
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -90,19 +104,41 @@ export function WordSetsList() {
   return (
     <div className="h-full w-full flex-col items-center justify-center px-10 pb-9 pt-28 xl:w-4/6">
       <div className="flex h-full w-full flex-col gap-4 rounded-2xl bg-white px-8 py-6">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            type: "spring",
-            stiffness: 100,
-            damping: 20,
-            mass: 0.5,
-          }}
-          className="text-3xl font-bold"
-        >
-          Your wordsets
-        </motion.h1>
+        <div className="flex items-center justify-between">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 20,
+              mass: 0.5,
+            }}
+            className="text-3xl font-bold"
+          >
+            Your wordsets
+          </motion.h1>
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 20,
+              mass: 0.5,
+            }}
+          >
+            <Button
+              title="Delete all wordsets"
+              onClick={handleDeleteAll}
+              variant="ghost"
+              size="icon"
+              className="border shadow-sm"
+            >
+              <Trash />
+            </Button>
+          </motion.span>
+        </div>
         <motion.div
           ref={mainContainerRef}
           initial={{ opacity: 0, y: 20 }}
@@ -151,6 +187,15 @@ export function WordSetsList() {
           </div>
         </motion.div>
       </div>
+      <ConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={confirmDeleteAll}
+        title="Delete All Wordsets"
+        description="Are you sure you want to delete all your wordsets? This action cannot be undone."
+        confirmText="Delete All"
+        cancelText="Cancel"
+      />
     </div>
   );
 }

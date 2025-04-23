@@ -47,28 +47,19 @@ export class StorageManager {
     }
   }
 
-  addWordSet(wordSet: WordSet, topic: string, difficulty: Difficulty): string {
+  addWordSet(wordSet: WordSet, difficulty: Difficulty): string {
     const wordSetId = crypto.randomUUID();
     const storedSet: StoredWordSet = {
-      set: wordSet,
+      set: wordSet.words,
       id: wordSetId,
-      topic,
+      title: wordSet.title,
       difficulty,
-      wordIds: wordSet.map((word) => this.addWord(word, wordSetId).id),
+      wordIds: wordSet.words.map((word) => this.addWord(word, wordSetId).id),
       createdAt: new Date().toISOString(),
     };
     this.storage.wordSets.push(storedSet);
     this.saveStorage();
     return wordSetId;
-  }
-
-  findExistingWordSet(
-    topic: string,
-    difficulty: Difficulty,
-  ): StoredWordSet | undefined {
-    return this.storage.wordSets.find(
-      (set) => set.topic === topic && set.difficulty === difficulty,
-    );
   }
 
   private addWord(word: Word, id: string): StoredWord {
@@ -120,6 +111,11 @@ export class StorageManager {
       this.storage.wordSets.splice(index, 1);
       this.saveStorage();
     }
+  }
+
+  deleteAllWordSets(): void {
+    this.storage.wordSets = [];
+    this.saveStorage();
   }
 }
 

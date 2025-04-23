@@ -55,7 +55,7 @@ export function WordSetGenerator() {
           <GenerationForm
             isLoading={isLoading}
             submit={handleSubmit}
-            length={partialWordSet?.length}
+            length={partialWordSet?.words?.length}
           />
         </motion.div>
       </motion.div>

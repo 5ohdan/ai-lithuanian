@@ -4,7 +4,6 @@ import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import {
   type CreateWordSet,
   createWordSetSchema,
-  wordSchema,
   wordSetSchema,
 } from "~/lib/schemas";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -47,13 +46,12 @@ export async function POST(req: Request) {
         content: [
           {
             type: "text",
-            text: `Generate ${context.count} unique Lithuanian words on the topic “${context.topic}” at ${context.difficulty} difficulty.`,
+            text: `Generate ${context.count} unique Lithuanian words on the topic "${context.topic}" at ${context.difficulty} difficulty. Also provide a concise title for this word set.`,
           },
         ],
       },
     ],
-    schema: wordSchema,
-    output: "array",
+    schema: wordSetSchema,
     onFinish: ({ object }) => {
       const res = wordSetSchema.safeParse(object);
       if (res.error) {
