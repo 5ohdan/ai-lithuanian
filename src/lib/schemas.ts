@@ -40,7 +40,7 @@ export const wordSchema = z.object({
   original: z
     .string()
     .describe(
-      "The Lithuanian word in its canonical dictionary form (e.g., nominative singular for nouns, infinitive for verbs), using proper casing and diacritics.",
+      "A single Lithuanian word in its canonical dictionary form (e.g., nominative singular for nouns, infinitive for verbs), using proper casing and diacritics. Must be a single word, not a phrase.",
     ),
   translation: z
     .string()
@@ -81,7 +81,7 @@ export const wordSetSchema = z.object({
   title: z
     .string()
     .describe(
-      "A concise, appropriate title for the word set (3-5 words) that captures the essence of the topic.",
+      "A concise, appropriate title for the word set (3-5 words) that captures the essence of the topic. Do not include the number of words or difficulty level.",
     ),
 });
 export type WordSet = z.infer<typeof wordSetSchema>;

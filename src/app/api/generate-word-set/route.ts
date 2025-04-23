@@ -46,7 +46,13 @@ export async function POST(req: Request) {
         content: [
           {
             type: "text",
-            text: `Generate ${context.count} unique Lithuanian words on the topic "${context.topic}" at ${context.difficulty} difficulty. Also provide a concise title for this word set.`,
+            text: `Generate a set of unique Lithuanian words with these requirements:
+                  - Topic: "${context.topic}"
+                  - Difficulty: ${context.difficulty}
+                  - Number of words: ${context.count}
+                  - Each word must be a single word (not a phrase)
+                  - If a phrase is relevant, use its main word and include the full phrase in the context field
+                  - Provide a concise title (3-5 words) for the word set.`,
           },
         ],
       },

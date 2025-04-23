@@ -9,6 +9,8 @@ import {
 import { Button } from "./ui/button";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { LayoutList } from "lucide-react";
 
 export function Word({
   word,
@@ -18,6 +20,7 @@ export function Word({
   previousCard,
   nextAvailable,
   prevAvailable,
+  id,
 }: {
   word: Word;
   topic: string;
@@ -26,7 +29,10 @@ export function Word({
   previousCard: () => void;
   nextAvailable: boolean;
   prevAvailable: boolean;
+  id: string;
 }) {
+  const router = useRouter();
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowRight" && nextAvailable) {
@@ -118,6 +124,7 @@ export function Word({
             onClick={previousCard}
             disabled={!prevAvailable}
             variant="outline"
+            title="Previous word"
           >
             ←
           </Button>
@@ -125,13 +132,26 @@ export function Word({
           <span className="text-center text-lg font-bold text-neutral-800">
             {index}
           </span>
-          <Button
-            onClick={nextCard}
-            disabled={!nextAvailable}
-            variant="outline"
-          >
-            →
-          </Button>
+          {nextAvailable ? (
+            <Button
+              onClick={nextCard}
+              disabled={!nextAvailable}
+              variant="outline"
+              title="Next word"
+            >
+              →
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              title="Detailed view"
+              onClick={() => {
+                router.push(`/wordsets/${id}`);
+              }}
+            >
+              <LayoutList className="h-4 w-4" />
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </motion.div>
