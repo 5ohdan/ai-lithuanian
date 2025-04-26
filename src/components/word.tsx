@@ -1,4 +1,4 @@
-import type { Word } from "~/lib/schemas";
+import type { Word, BriefWord } from "~/lib/schemas";
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutList } from "lucide-react";
+import { ListTree } from "lucide-react";
 
 export function Word({
   word,
@@ -22,7 +22,7 @@ export function Word({
   prevAvailable,
   id,
 }: {
-  word: Word;
+  word: Word | BriefWord;
   topic: string;
   index: number;
   nextCard: () => void;
@@ -149,7 +149,7 @@ export function Word({
                 router.push(`/wordsets/${id}`);
               }}
             >
-              <LayoutList className="h-4 w-4" />
+              <ListTree className="h-4 w-4" />
             </Button>
           )}
         </CardFooter>

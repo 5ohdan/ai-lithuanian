@@ -5,6 +5,8 @@ import type {
   WordSet,
   Word,
   Difficulty,
+  BriefWordSet,
+  StoredBriefWordSet,
 } from "./schemas";
 
 import { storageSchema } from "./schemas";
@@ -22,7 +24,7 @@ export class StorageManager {
 
   private loadStorage(): Storage {
     if (!this.isClient) {
-      return { words: [], wordSets: [] };
+      return { words: [], wordSets: [], briefWordSets: [] };
     }
 
     try {
@@ -34,7 +36,7 @@ export class StorageManager {
     } catch (error) {
       console.error("Error loading storage:", error);
     }
-    return { words: [], wordSets: [] };
+    return { words: [], wordSets: [], briefWordSets: [] };
   }
 
   private saveStorage(): void {
@@ -47,7 +49,7 @@ export class StorageManager {
     }
   }
 
-  addWordSet(wordSet: WordSet, difficulty: Difficulty): string {
+  addWordSet(wordSet: WordSet, difficulty: Difficulty, topic: string): string {
     const wordSetId = crypto.randomUUID();
     const storedSet: StoredWordSet = {
       set: wordSet.words,
@@ -56,8 +58,28 @@ export class StorageManager {
       difficulty,
       wordIds: wordSet.words.map((word) => this.addWord(word, wordSetId).id),
       createdAt: new Date().toISOString(),
+      usersTopic: topic,
     };
     this.storage.wordSets.push(storedSet);
+    this.saveStorage();
+    return wordSetId;
+  }
+
+  addBriefWordSet(
+    briefWordSet: BriefWordSet,
+    difficulty: Difficulty,
+    topic: string,
+  ): string {
+    const wordSetId = crypto.randomUUID();
+    const storedSet: StoredBriefWordSet = {
+      set: briefWordSet.words,
+      id: wordSetId,
+      title: briefWordSet.title,
+      usersTopic: topic,
+      difficulty,
+      createdAt: new Date().toISOString(),
+    };
+    this.storage.briefWordSets.push(storedSet);
     this.saveStorage();
     return wordSetId;
   }
@@ -88,11 +110,29 @@ export class StorageManager {
     return this.storage.wordSets.find((s) => s.id === setId);
   }
 
+  getBriefWordSets(): StoredBriefWordSet[] {
+    return this.storage.briefWordSets;
+  }
+
+  getBriefWordSetById(setId: string): StoredBriefWordSet | undefined {
+    return this.storage.briefWordSets.find((s) => s.id === setId);
+  }
+
   getWordsBySetId(setId: string): StoredWord[] {
     const set = this.storage.wordSets.find((s) => s.id === setId);
     if (!set) return [];
     return set.wordIds
       .map((id) => this.storage.words.find((w) => w.id === id))
+      .filter((w): w is StoredWord => w !== undefined);
+  }
+
+  getWordsByBriefSetId(setId: string): StoredWord[] {
+    const set = this.storage.briefWordSets.find((s) => s.id === setId);
+    if (!set) return [];
+    return set.set
+      .map((word) =>
+        this.storage.words.find((w) => w.word.original === word.original),
+      )
       .filter((w): w is StoredWord => w !== undefined);
   }
 
@@ -115,7 +155,42 @@ export class StorageManager {
 
   deleteAllWordSets(): void {
     this.storage.wordSets = [];
+    this.storage.briefWordSets = [];
     this.saveStorage();
+  }
+
+  // Convert a brief word set to a full word set with the same ID
+  convertBriefToFullWordSet(briefSetId: string, wordSet: WordSet): string {
+    // Find and remove the brief word set
+    const briefIndex = this.storage.briefWordSets.findIndex(
+      (s) => s.id === briefSetId,
+    );
+
+    if (briefIndex === -1) {
+      console.error(`Brief word set with ID ${briefSetId} not found`);
+      return this.addWordSet(wordSet, "Beginner", "Unknown"); // Fallback
+    }
+
+    const briefWordSet = this.storage.briefWordSets[briefIndex]!; // Non-null assertion is safe here because we checked index !== -1
+    this.storage.briefWordSets.splice(briefIndex, 1);
+
+    // Create full word set with the same ID
+    const storedSet: StoredWordSet = {
+      set: wordSet.words,
+      id: briefWordSet.id,
+      title: wordSet.title,
+      difficulty: briefWordSet.difficulty,
+      wordIds: wordSet.words.map(
+        (word) => this.addWord(word, briefWordSet.id).id,
+      ),
+      createdAt: briefWordSet.createdAt,
+      usersTopic: briefWordSet.usersTopic,
+    };
+
+    this.storage.wordSets.push(storedSet);
+    this.saveStorage();
+
+    return briefWordSet.id;
   }
 }
 

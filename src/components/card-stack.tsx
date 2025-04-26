@@ -1,11 +1,15 @@
 "use client";
 
-import type { StoredWordSet } from "~/lib/schemas";
+import type { StoredBriefWordSet, StoredWordSet } from "~/lib/schemas";
 import { useCallback, useState } from "react";
 import { Word as WordCard } from "./word";
 import { motion } from "motion/react";
 
-export function CardStack({ wordset }: { wordset: StoredWordSet }) {
+export function CardStack({
+  wordset,
+}: {
+  wordset: StoredWordSet | StoredBriefWordSet;
+}) {
   const [shownCard, setShownCard] = useState(0);
 
   const { set, title, id } = wordset;

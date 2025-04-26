@@ -16,7 +16,9 @@ import { ConfirmationDialog } from "./confirmation-dialog";
 const storage = getStorage();
 
 export function WordSetsList() {
-  const [wordsets, setWordsets] = useState<Storage["wordSets"]>([]);
+  const [wordsets, setWordsets] = useState<
+    (Storage["wordSets"][number] | Storage["briefWordSets"][number])[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [skeletonCount, setSkeletonCount] = useState(1);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -25,7 +27,8 @@ export function WordSetsList() {
 
   useEffect(() => {
     const storedWordsets = storage.getWordSets();
-    setWordsets(storedWordsets);
+    const storedBriefWordsets = storage.getBriefWordSets();
+    setWordsets([...storedWordsets, ...storedBriefWordsets]);
     setIsLoading(false);
   }, []);
 

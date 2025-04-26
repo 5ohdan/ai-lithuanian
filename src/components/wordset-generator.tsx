@@ -12,8 +12,10 @@ const alexandria = Alexandria({
 });
 
 export function WordSetGenerator() {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { handleSubmit, isLoading, partialWordSet } = useWordGeneration();
+  // The hook will return handleSubmitBrief when mode is "brief"
+  const { handleSubmit, isLoading, partialWordSet } = useWordGeneration({
+    mode: "brief",
+  });
 
   return (
     <motion.div
@@ -51,7 +53,6 @@ export function WordSetGenerator() {
             mass: 0.5,
           }}
         >
-          {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
           <GenerationForm
             isLoading={isLoading}
             submit={handleSubmit}

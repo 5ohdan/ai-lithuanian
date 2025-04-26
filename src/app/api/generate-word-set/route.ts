@@ -1,4 +1,3 @@
-import { google } from "@ai-sdk/google";
 import { streamObject } from "ai";
 import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import {
@@ -7,6 +6,7 @@ import {
   wordSetSchema,
 } from "~/lib/schemas";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { model } from "~/lib/model";
 
 export const maxDuration = 60;
 
@@ -33,7 +33,6 @@ export async function POST(req: Request) {
     );
   }
 
-  const model = google("gemini-2.0-flash-001");
   const result = streamObject({
     model,
     messages: [
@@ -52,6 +51,7 @@ export async function POST(req: Request) {
                   - Number of words: ${context.count}
                   - Each word must be a single word (not a phrase)
                   - If a phrase is relevant, use its main word and include the full phrase in the context field
+                  - For each word, provide MULTIPLE meanings in the 'meanings' array, where each meaning has its own context, example, and exampleTranslation. Words often have different contexts or usages, so try to provide at least 2 different meanings/contexts for each word when possible
                   - Provide a concise title (3-5 words) for the word set.`,
           },
         ],

@@ -121,7 +121,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                 damping: 20,
                 mass: 0.5,
               }}
-              className="max-h-full overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4"
+              className="max-h-full overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-md"
             >
               <div className="flex flex-col gap-4">
                 {wordset.set.map((word, index) => (
@@ -191,39 +191,54 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                   mass: 0.3,
                   opacity: { duration: 0.15 },
                 }}
-                className="flex h-full flex-col overflow-y-auto rounded-xl border border-neutral-200 bg-white transition-all duration-300 hover:shadow-md"
+                className="flex h-full flex-col overflow-y-auto rounded-xl border border-neutral-200 bg-white shadow-md transition-all duration-300"
               >
                 <div className="flex flex-1 flex-col p-6">
-                  <div className="flex items-center gap-2 pb-5">
+                  <div className="flex flex-wrap gap-x-2 pb-5">
                     <span className="text-2xl font-semibold text-neutral-900">
                       {activeWord.original}
                     </span>
-                    <span className="text-2xl text-neutral-500">
-                      {activeWord.transcription}
-                    </span>{" "}
-                    <span className="text-lg text-neutral-900/85">
-                      — {activeWord.partOfSpeech}, {activeWord.gender}
+                    <div className="flex items-center gap-2">
+                      {activeWord.transcription && (
+                        <span className="text-2xl text-neutral-500">
+                          {activeWord.transcription}
+                        </span>
+                      )}
+                      <span className="text-lg text-neutral-900/85">
+                        — {activeWord.partOfSpeech}, {activeWord.gender}
+                      </span>
+                    </div>
+                    <span className="w-full text-xl italic text-neutral-700">
+                      {activeWord.translation}
                     </span>
                   </div>
 
                   <div className="flex flex-col">
                     <section className="flex flex-col gap-1 border-t border-neutral-200 py-5">
-                      <span className="text-neutral-500">Context</span>
-                      <span className="font-medium text-neutral-900">
-                        {activeWord.context}
+                      <span className="text-neutral-500">
+                        Meanings of the word
                       </span>
-                    </section>
-
-                    <section className="flex flex-col gap-1 border-t border-neutral-200 py-5">
-                      <span className="text-neutral-500">Example</span>
-                      <div className="flex flex-col rounded-lg bg-neutral-50 p-2">
-                        <span className="font-medium text-neutral-900">
-                          {activeWord.example}
-                        </span>
-                        <span className="text-neutral-600">
-                          {activeWord.exampleTranslation}
-                        </span>
-                      </div>
+                      <ol className="list-inside list-decimal space-y-2">
+                        {activeWord.meanings.map((meaning, index) => (
+                          <li className="text-neutral-900" key={index}>
+                            <span className="font-medium">
+                              {meaning.context}
+                            </span>
+                            {" — "}
+                            <span className="text-neutral-600">
+                              {meaning.translation}
+                            </span>
+                            <div className="mt-1 flex flex-col rounded-lg bg-neutral-50 p-3">
+                              <div className="font-medium">
+                                {meaning.example}
+                              </div>
+                              <div className="text-neutral-500">
+                                {meaning.exampleTranslation}
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                      </ol>
                     </section>
                   </div>
 

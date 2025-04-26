@@ -3,12 +3,6 @@ import logo from "public/logo.svg";
 
 export function Logo() {
   return (
-    <Image
-      src={logo as StaticImageData}
-      alt="Logo"
-      width={216}
-      height={56}
-      unoptimized
-    />
+    <Image src={logo as StaticImageData} alt="Logo" width={200} unoptimized />
   );
 }

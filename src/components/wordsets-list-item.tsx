@@ -1,15 +1,14 @@
 import { motion } from "motion/react";
-import type { StoredWordSet } from "~/lib/schemas";
+import type { StoredWordSet, StoredBriefWordSet } from "~/lib/schemas";
 import { CardContent, Card } from "./ui/card";
 import { useRouter } from "next/navigation";
 
-export function WordSetsListItem({
-  wordSet,
-  index,
-}: {
-  wordSet: StoredWordSet;
+type WordSetItemProps = {
+  wordSet: StoredWordSet | StoredBriefWordSet;
   index: number;
-}) {
+};
+
+export function WordSetsListItem({ wordSet, index }: WordSetItemProps) {
   const router = useRouter();
 
   return (
