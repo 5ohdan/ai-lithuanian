@@ -7,5 +7,5 @@ export default async function CardsPage({
 }) {
   const { id } = await params;
 
-  return <CardsHandler wordSetId={id} />;
+  return <CardsHandler packId={id} />;
 }

@@ -146,7 +146,7 @@ export function Word({
               variant="outline"
               title="Detailed view"
               onClick={() => {
-                router.push(`/wordsets/${id}`);
+                router.push(`/packs/${id}`);
               }}
             >
               <ListTree className="h-4 w-4" />

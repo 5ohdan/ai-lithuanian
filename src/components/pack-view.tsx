@@ -3,24 +3,24 @@
 import { useEffect, useState, useCallback } from "react";
 import { ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import type { StoredWordSet } from "~/lib/schemas";
+import type { StoredPack } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import Link from "next/link";
 import { LoadingScreen } from "./loading-screen";
 
 const storage = getStorage();
 
-export default function WordsetView({ wordsetId }: { wordsetId: string }) {
-  const [wordset, setWordset] = useState<StoredWordSet | undefined>(undefined);
+export default function PackView({ packId }: { packId: string }) {
+  const [pack, setPack] = useState<StoredPack | undefined>(undefined);
   const [activeWordIndex, setActiveWordIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchWordset = async () => {
+    const fetchPack = async () => {
       setIsLoading(true);
       try {
-        const fetchedWordset = storage.getWordSetById(wordsetId);
-        setWordset(fetchedWordset);
+        const fetchedPack = storage.getPackById(packId);
+        setPack(fetchedPack);
       } catch (error) {
         console.error(error);
       } finally {
@@ -28,22 +28,18 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
       }
     };
 
-    void fetchWordset();
-  }, [wordsetId]);
+    void fetchPack();
+  }, [packId]);
 
   const handlePrevious = useCallback(() => {
-    if (!wordset) return;
-    setActiveWordIndex((prev) =>
-      prev === 0 ? wordset.set.length - 1 : prev - 1,
-    );
-  }, [wordset]);
+    if (!pack) return;
+    setActiveWordIndex((prev) => (prev === 0 ? pack.set.length - 1 : prev - 1));
+  }, [pack]);
 
   const handleNext = useCallback(() => {
-    if (!wordset) return;
-    setActiveWordIndex((prev) =>
-      prev === wordset.set.length - 1 ? 0 : prev + 1,
-    );
-  }, [wordset]);
+    if (!pack) return;
+    setActiveWordIndex((prev) => (prev === pack.set.length - 1 ? 0 : prev + 1));
+  }, [pack]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -65,30 +61,30 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
     return <LoadingScreen />;
   }
 
-  if (!wordset) {
+  if (!pack) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="flex flex-col items-center justify-center rounded-lg bg-white/75 p-4 text-center text-neutral-900 shadow-sm">
           <h2 className="mb-2 text-xl font-semibold text-neutral-900">
-            Wordset Not Found
+            Pack Not Found
           </h2>
           <p className="mb-4 text-neutral-900">
-            The wordset you&apos;re looking for doesn&apos;t exist or may have
-            been deleted.
+            The pack you&apos;re looking for doesn&apos;t exist or may have been
+            deleted.
           </p>
           <Link
-            href="/wordsets"
+            href="/packs"
             className="flex w-fit items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Wordsets
+            Back to Packs
           </Link>
         </div>
       </div>
     );
   }
 
-  const activeWord = wordset.set[activeWordIndex];
+  const activeWord = pack.set[activeWordIndex];
 
   if (!activeWord) {
     return <div>Word not found</div>;
@@ -108,7 +104,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
           }}
           className="mx-auto mt-[-1px] w-fit rounded-b-md bg-neutral-900 px-5 py-2 text-center text-2xl font-semibold text-white"
         >
-          {wordset.title}
+          {pack.title}
         </motion.h1>
         <div className="flex-1 overflow-hidden px-10 py-6">
           <div className="grid h-full grid-cols-1 gap-6 md:grid-cols-[300px,1fr]">
@@ -124,7 +120,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
               className="max-h-full overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 shadow-md"
             >
               <div className="flex flex-col gap-4">
-                {wordset.set.map((word, index) => (
+                {pack.set.map((word, index) => (
                   <motion.div
                     key={word.original}
                     whileHover={{
@@ -243,7 +239,7 @@ export default function WordsetView({ wordsetId }: { wordsetId: string }) {
                   </div>
 
                   <div className="mt-auto pt-4 text-sm text-neutral-500">
-                    {activeWordIndex + 1} of {wordset.set.length}
+                    {activeWordIndex + 1} of {pack.set.length}
                   </div>
                 </div>
               </motion.div>

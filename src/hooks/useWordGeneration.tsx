@@ -1,13 +1,13 @@
 "use client";
 
-import { briefWordSetSchema, wordSetSchema } from "~/lib/schemas";
+import { briefPackSchema, packSchema } from "~/lib/schemas";
 import { toast } from "sonner";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
 import type {
-  CreateWordSet,
-  BriefWordSet,
-  WordSet,
-  StoredBriefWordSet,
+  CreatePack,
+  BriefPack,
+  Pack,
+  StoredBriefPack,
 } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import { useRouter } from "next/navigation";
@@ -18,20 +18,20 @@ const storage = getStorage();
 type WordGenerationMode = "brief" | "enrich";
 type WordGenerationOptions = {
   mode: WordGenerationMode;
-  onSuccess?: (wordSetId: string) => void;
+  onSuccess?: (packId: string) => void;
 };
 
 // Define return types for each mode
 type BriefModeReturn = {
-  handleSubmit: (data: CreateWordSet) => void;
+  handleSubmit: (data: CreatePack) => void;
   isLoading: boolean;
-  partialWordSet: BriefWordSet | null;
+  partialPack: BriefPack | null;
 };
 
 type EnrichModeReturn = {
-  handleSubmit: (briefWordSet: StoredBriefWordSet) => void;
+  handleSubmit: (briefPack: StoredBriefPack) => void;
   isLoading: boolean;
-  partialWordSet: WordSet | null;
+  partialPack: Pack | null;
 };
 
 // Function overloads to provide proper typing based on mode
@@ -46,49 +46,46 @@ export function useWordGeneration(
 ): BriefModeReturn | EnrichModeReturn {
   const { mode, onSuccess } = options;
   const requestData = useRef<
-    CreateWordSet | { id: string; words: BriefWordSet["words"] } | null
+    CreatePack | { id: string; words: BriefPack["words"] } | null
   >(null);
   const router = useRouter();
 
   // Choose the appropriate API endpoint and schema based on the mode
   const apiEndpoint =
     mode === "brief" ? "/api/words/brief" : "/api/words/enrich";
-  const responseSchema = mode === "brief" ? briefWordSetSchema : wordSetSchema;
+  const responseSchema = mode === "brief" ? briefPackSchema : packSchema;
 
   const {
     submit,
     isLoading,
-    object: partialWordSet,
+    object: partialPack,
   } = useObject({
     api: apiEndpoint,
     schema: responseSchema,
     onError: (error: Error) => {
       toast.error(
-        `Failed to ${mode === "brief" ? "generate" : "enrich"} word set. Please try again. ${error.message}`,
+        `Failed to ${mode === "brief" ? "generate" : "enrich"} pack. Please try again. ${error.message}`,
       );
     },
     onFinish: ({ object }) => {
       toast.success(
-        `Successfully ${mode === "brief" ? "generated" : "enriched"} a word set.`,
+        `Successfully ${mode === "brief" ? "generated" : "enriched"} a pack.`,
       );
 
       if (object) {
-        let wordSetId: string;
+        let packId: string;
 
         if (mode === "brief" && "topic" in requestData.current!) {
-          // Handle brief word set
-          const createWordSet = requestData.current;
-          const { difficulty, topic } = createWordSet;
-          wordSetId = storage.addBriefWordSet(object, difficulty, topic);
+          // Handle brief pack
+          const createPack = requestData.current;
+          const { difficulty, topic } = createPack;
+          packId = storage.addBriefPack(object, difficulty, topic);
         } else if (mode === "enrich" && "id" in requestData.current!) {
-          // Handle enriched word set - convert the brief word set to a full word set
+          // Handle enriched pack - convert the brief pack to a full pack
           const briefSetId = (requestData.current as { id: string }).id;
 
-          // Use the new method to convert the brief word set to a full word set
-          wordSetId = storage.convertBriefToFullWordSet(
-            briefSetId,
-            object as WordSet,
-          );
+          // Use the new method to convert the brief pack to a full pack
+          packId = storage.convertBriefToFullPack(briefSetId, object as Pack);
         } else {
           console.error("Invalid request data for the current mode");
           return;
@@ -96,17 +93,17 @@ export function useWordGeneration(
 
         // Allow custom success handler or default to navigation
         if (onSuccess) {
-          onSuccess(wordSetId);
+          onSuccess(packId);
         } else {
-          router.push(`/cards/${wordSetId}`);
+          router.push(`/cards/${packId}`);
         }
       }
     },
   });
 
-  // Handle submission for brief word set generation
+  // Handle submission for brief pack generation
   const handleSubmitBrief = useCallback(
-    (data: CreateWordSet) => {
+    (data: CreatePack) => {
       const { topic, difficulty, count } = data;
       requestData.current = data;
       submit({ topic, difficulty, count });
@@ -114,15 +111,15 @@ export function useWordGeneration(
     [submit],
   );
 
-  // Handle submission for word set enrichment
+  // Handle submission for pack enrichment
   const handleSubmitEnrich = useCallback(
-    (wordSet: StoredBriefWordSet) => {
-      requestData.current = { id: wordSet.id, words: wordSet.set };
+    (pack: StoredBriefPack) => {
+      requestData.current = { id: pack.id, words: pack.set };
 
-      // The API expects a BriefWordSet with 'words' and 'title'
+      // The API expects a BriefPack with 'words' and 'title'
       submit({
-        words: wordSet.set,
-        title: wordSet.title,
+        words: pack.set,
+        title: pack.title,
       });
     },
     [submit],
@@ -133,13 +130,13 @@ export function useWordGeneration(
     return {
       handleSubmit: handleSubmitBrief,
       isLoading,
-      partialWordSet: partialWordSet as BriefWordSet | null,
+      partialPack: partialPack as BriefPack | null,
     };
   } else {
     return {
       handleSubmit: handleSubmitEnrich,
       isLoading,
-      partialWordSet: partialWordSet as WordSet | null,
+      partialPack: partialPack as Pack | null,
     };
   }
 }

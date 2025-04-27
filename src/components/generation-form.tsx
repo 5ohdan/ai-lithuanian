@@ -2,7 +2,7 @@
 
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { createWordSetSchema, type CreateWordSet } from "~/lib/schemas";
+import { createPackSchema, type CreatePack } from "~/lib/schemas";
 import {
   Select,
   SelectContent,
@@ -35,11 +35,11 @@ export function GenerationForm({
   length,
 }: {
   isLoading: boolean;
-  submit: (data: CreateWordSet) => void;
+  submit: (data: CreatePack) => void;
   length?: number;
 }) {
-  const form = useForm<CreateWordSet>({
-    resolver: zodResolver(createWordSetSchema),
+  const form = useForm<CreatePack>({
+    resolver: zodResolver(createPackSchema),
     defaultValues: {
       topic: "",
       difficulty: "Beginner",
@@ -77,7 +77,7 @@ export function GenerationForm({
                     {...field}
                     placeholder="Example: Animals, Cars, Countries, etc."
                     className={cn(
-                      "bg-neutral-50",
+                      "bg-neutral-50 autofill:bg-neutral-50 autofill:text-neutral-900/85",
                       fieldState.error &&
                         "border-red-500/75 focus-visible:ring-red-500/75 focus-visible:ring-offset-0",
                     )}
@@ -104,7 +104,7 @@ export function GenerationForm({
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger
                       className={cn(
-                        "bg-neutral-50",
+                        "bg-neutral-50 autofill:bg-neutral-50 autofill:text-neutral-900/85",
                         fieldState.error &&
                           "border-red-500/75 focus-visible:ring-red-500/75 focus-visible:ring-offset-0",
                       )}
@@ -140,7 +140,7 @@ export function GenerationForm({
                     {...field}
                     type="number"
                     className={cn(
-                      "bg-neutral-50",
+                      "bg-neutral-50 autofill:bg-neutral-50 autofill:text-neutral-900/85",
                       fieldState.error &&
                         "border-red-500/75 focus-visible:ring-red-500/75 focus-visible:ring-offset-0",
                     )}
@@ -187,7 +187,7 @@ export function GenerationForm({
           >
             {isLoading
               ? `Almost there, ${length ?? 0} done...`
-              : "Create new set of words"}
+              : "Create new pack of words"}
           </Button>
         </MotionDiv>
       </form>

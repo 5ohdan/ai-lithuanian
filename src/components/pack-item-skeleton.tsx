@@ -3,14 +3,14 @@
 import { Skeleton } from "./ui/skeleton";
 import { useEffect, useState } from "react";
 
-export function WordsetItemSkeleton() {
+export function PackItemSkeleton() {
   const [skeletonsPerRow, setSkeletonsPerRow] = useState(7);
 
   useEffect(() => {
     const calculateSkeletonsPerRow = () => {
       const skeletonWidth = 80;
       const gapWidth = 8;
-      const container = document.querySelector(".wordset-skeleton-container");
+      const container = document.querySelector(".pack-skeleton-container");
       if (container) {
         const containerWidth = container.clientWidth;
         const skeletons = Math.floor(
@@ -26,7 +26,7 @@ export function WordsetItemSkeleton() {
   }, []);
 
   return (
-    <div className="wordset-skeleton-container flex min-h-28 flex-col gap-4 rounded-lg bg-neutral-100/85 p-4">
+    <div className="pack-skeleton-container flex min-h-28 flex-col gap-4 rounded-lg bg-neutral-100/85 p-4">
       <div className="flex items-center justify-between">
         <Skeleton className="h-7 w-[250px] rounded-md bg-neutral-200/75" />
         <Skeleton className="h-7 w-[150px] rounded-md bg-neutral-200/75" />

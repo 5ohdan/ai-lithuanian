@@ -1,12 +1,12 @@
 import type {
   StoredWord,
-  StoredWordSet,
+  StoredPack,
   Storage,
-  WordSet,
+  Pack,
   Word,
   Difficulty,
-  BriefWordSet,
-  StoredBriefWordSet,
+  BriefPack,
+  StoredBriefPack,
 } from "./schemas";
 
 import { storageSchema } from "./schemas";
@@ -24,7 +24,7 @@ export class StorageManager {
 
   private loadStorage(): Storage {
     if (!this.isClient) {
-      return { words: [], wordSets: [], briefWordSets: [] };
+      return { words: [], packs: [], briefPacks: [] };
     }
 
     try {
@@ -36,7 +36,7 @@ export class StorageManager {
     } catch (error) {
       console.error("Error loading storage:", error);
     }
-    return { words: [], wordSets: [], briefWordSets: [] };
+    return { words: [], packs: [], briefPacks: [] };
   }
 
   private saveStorage(): void {
@@ -49,39 +49,39 @@ export class StorageManager {
     }
   }
 
-  addWordSet(wordSet: WordSet, difficulty: Difficulty, topic: string): string {
-    const wordSetId = crypto.randomUUID();
-    const storedSet: StoredWordSet = {
-      set: wordSet.words,
-      id: wordSetId,
-      title: wordSet.title,
+  addPack(pack: Pack, difficulty: Difficulty, topic: string): string {
+    const packId = crypto.randomUUID();
+    const storedPack: StoredPack = {
+      set: pack.words,
+      id: packId,
+      title: pack.title,
       difficulty,
-      wordIds: wordSet.words.map((word) => this.addWord(word, wordSetId).id),
+      wordIds: pack.words.map((word) => this.addWord(word, packId).id),
       createdAt: new Date().toISOString(),
       usersTopic: topic,
     };
-    this.storage.wordSets.push(storedSet);
+    this.storage.packs.push(storedPack);
     this.saveStorage();
-    return wordSetId;
+    return packId;
   }
 
-  addBriefWordSet(
-    briefWordSet: BriefWordSet,
+  addBriefPack(
+    briefPack: BriefPack,
     difficulty: Difficulty,
     topic: string,
   ): string {
-    const wordSetId = crypto.randomUUID();
-    const storedSet: StoredBriefWordSet = {
-      set: briefWordSet.words,
-      id: wordSetId,
-      title: briefWordSet.title,
+    const packId = crypto.randomUUID();
+    const storedBriefPack: StoredBriefPack = {
+      set: briefPack.words,
+      id: packId,
+      title: briefPack.title,
       usersTopic: topic,
       difficulty,
       createdAt: new Date().toISOString(),
     };
-    this.storage.briefWordSets.push(storedSet);
+    this.storage.briefPacks.push(storedBriefPack);
     this.saveStorage();
-    return wordSetId;
+    return packId;
   }
 
   private addWord(word: Word, id: string): StoredWord {
@@ -89,45 +89,45 @@ export class StorageManager {
       (w) => w.word.original === word.original,
     );
     if (existingWord) {
-      existingWord.setIds.push(id);
+      existingWord.packIds.push(id);
       return existingWord;
     }
     const storedWord: StoredWord = {
       word,
       id: crypto.randomUUID(),
-      setIds: [id],
+      packIds: [id],
       createdAt: new Date().toISOString(),
     };
     this.storage.words.push(storedWord);
     return storedWord;
   }
 
-  getWordSets(): StoredWordSet[] {
-    return this.storage.wordSets;
+  getPacks(): StoredPack[] {
+    return this.storage.packs;
   }
 
-  getWordSetById(setId: string): StoredWordSet | undefined {
-    return this.storage.wordSets.find((s) => s.id === setId);
+  getPackById(packId: string): StoredPack | undefined {
+    return this.storage.packs.find((s) => s.id === packId);
   }
 
-  getBriefWordSets(): StoredBriefWordSet[] {
-    return this.storage.briefWordSets;
+  getBriefPacks(): StoredBriefPack[] {
+    return this.storage.briefPacks;
   }
 
-  getBriefWordSetById(setId: string): StoredBriefWordSet | undefined {
-    return this.storage.briefWordSets.find((s) => s.id === setId);
+  getBriefPackById(packId: string): StoredBriefPack | undefined {
+    return this.storage.briefPacks.find((s) => s.id === packId);
   }
 
-  getWordsBySetId(setId: string): StoredWord[] {
-    const set = this.storage.wordSets.find((s) => s.id === setId);
+  getWordsByPackId(packId: string): StoredWord[] {
+    const set = this.storage.packs.find((s) => s.id === packId);
     if (!set) return [];
     return set.wordIds
       .map((id) => this.storage.words.find((w) => w.id === id))
       .filter((w): w is StoredWord => w !== undefined);
   }
 
-  getWordsByBriefSetId(setId: string): StoredWord[] {
-    const set = this.storage.briefWordSets.find((s) => s.id === setId);
+  getWordsByBriefPackId(packId: string): StoredWord[] {
+    const set = this.storage.briefPacks.find((s) => s.id === packId);
     if (!set) return [];
     return set.set
       .map((word) =>
@@ -136,61 +136,59 @@ export class StorageManager {
       .filter((w): w is StoredWord => w !== undefined);
   }
 
-  removeWordSet(id: string): void {
-    const index = this.storage.wordSets.findIndex((s) => s.id === id);
+  removePack(id: string): void {
+    const index = this.storage.packs.findIndex((s) => s.id === id);
     if (index !== -1) {
-      const set = this.storage.wordSets[index]!;
+      const set = this.storage.packs[index]!;
       set.wordIds.forEach((wordId) => {
         const word = this.storage.words.find((w) => w.id === wordId);
-        if (word && word.setIds.length === 1) {
+        if (word && word.packIds.length === 1) {
           this.storage.words = this.storage.words.filter(
             (w) => w.id !== wordId,
           );
         }
       });
-      this.storage.wordSets.splice(index, 1);
+      this.storage.packs.splice(index, 1);
       this.saveStorage();
     }
   }
 
-  deleteAllWordSets(): void {
-    this.storage.wordSets = [];
-    this.storage.briefWordSets = [];
+  deleteAllPacks(): void {
+    this.storage.packs = [];
+    this.storage.briefPacks = [];
     this.saveStorage();
   }
 
-  // Convert a brief word set to a full word set with the same ID
-  convertBriefToFullWordSet(briefSetId: string, wordSet: WordSet): string {
-    // Find and remove the brief word set
-    const briefIndex = this.storage.briefWordSets.findIndex(
-      (s) => s.id === briefSetId,
+  // Convert a brief pack to a full pack with the same ID
+  convertBriefToFullPack(briefpackId: string, pack: Pack): string {
+    // Find and remove the brief pack
+    const briefIndex = this.storage.briefPacks.findIndex(
+      (s) => s.id === briefpackId,
     );
 
     if (briefIndex === -1) {
-      console.error(`Brief word set with ID ${briefSetId} not found`);
-      return this.addWordSet(wordSet, "Beginner", "Unknown"); // Fallback
+      console.error(`Brief pack with ID ${briefpackId} not found`);
+      return this.addPack(pack, "Beginner", "Unknown"); // Fallback
     }
 
-    const briefWordSet = this.storage.briefWordSets[briefIndex]!; // Non-null assertion is safe here because we checked index !== -1
-    this.storage.briefWordSets.splice(briefIndex, 1);
+    const briefPack = this.storage.briefPacks[briefIndex]!; // Non-null assertion is safe here because we checked index !== -1
+    this.storage.briefPacks.splice(briefIndex, 1);
 
-    // Create full word set with the same ID
-    const storedSet: StoredWordSet = {
-      set: wordSet.words,
-      id: briefWordSet.id,
-      title: wordSet.title,
-      difficulty: briefWordSet.difficulty,
-      wordIds: wordSet.words.map(
-        (word) => this.addWord(word, briefWordSet.id).id,
-      ),
-      createdAt: briefWordSet.createdAt,
-      usersTopic: briefWordSet.usersTopic,
+    // Create full pack with the same ID
+    const storedSet: StoredPack = {
+      set: pack.words,
+      id: briefPack.id,
+      title: pack.title,
+      difficulty: briefPack.difficulty,
+      wordIds: pack.words.map((word) => this.addWord(word, briefPack.id).id),
+      createdAt: briefPack.createdAt,
+      usersTopic: briefPack.usersTopic,
     };
 
-    this.storage.wordSets.push(storedSet);
+    this.storage.packs.push(storedSet);
     this.saveStorage();
 
-    return briefWordSet.id;
+    return briefPack.id;
   }
 }
 

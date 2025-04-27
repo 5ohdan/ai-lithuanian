@@ -5,19 +5,19 @@ import type { Storage } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import { motion } from "motion/react";
 import { LoadingScreen } from "./loading-screen";
-import { WordSetsListItem } from "./wordsets-list-item";
-import { NoSetsImg } from "./no-sets-img";
+import { PacksListItem } from "./packs-list-item";
+import { NoPacksImg } from "./no-packs-img";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { WordsetItemSkeleton } from "./wordset-item-skeleton";
+import { PackItemSkeleton } from "./pack-item-skeleton";
 import { Trash } from "lucide-react";
 import { ConfirmationDialog } from "./confirmation-dialog";
 
 const storage = getStorage();
 
-export function WordSetsList() {
-  const [wordsets, setWordsets] = useState<
-    (Storage["wordSets"][number] | Storage["briefWordSets"][number])[]
+export function PacksList() {
+  const [packs, setPacks] = useState<
+    (Storage["packs"][number] | Storage["briefPacks"][number])[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [skeletonCount, setSkeletonCount] = useState(1);
@@ -26,9 +26,9 @@ export function WordSetsList() {
   const mainContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const storedWordsets = storage.getWordSets();
-    const storedBriefWordsets = storage.getBriefWordSets();
-    setWordsets([...storedWordsets, ...storedBriefWordsets]);
+    const storedPacks = storage.getPacks();
+    const storedBriefPacks = storage.getBriefPacks();
+    setPacks([...storedPacks, ...storedBriefPacks]);
     setIsLoading(false);
   }, []);
 
@@ -37,10 +37,10 @@ export function WordSetsList() {
       if (!containerRef.current || !mainContainerRef.current) return;
 
       const mainContainerHeight = mainContainerRef.current.clientHeight;
-      const wordsetItemsHeight = wordsets.length * 112;
+      const packItemsHeight = packs.length * 112;
       const dividerHeight = 20;
       const availableHeight =
-        mainContainerHeight - wordsetItemsHeight - dividerHeight;
+        mainContainerHeight - packItemsHeight - dividerHeight;
 
       if (availableHeight > 0) {
         const possibleSkeletons = Math.floor(availableHeight / 112);
@@ -53,15 +53,15 @@ export function WordSetsList() {
     calculateSkeletons();
     window.addEventListener("resize", calculateSkeletons);
     return () => window.removeEventListener("resize", calculateSkeletons);
-  }, [wordsets.length]);
+  }, [packs.length]);
 
   const handleDeleteAll = () => {
     setIsDeleteDialogOpen(true);
   };
 
   const confirmDeleteAll = () => {
-    storage.deleteAllWordSets();
-    setWordsets([]);
+    storage.deleteAllPacks();
+    setPacks([]);
     setIsDeleteDialogOpen(false);
   };
 
@@ -69,9 +69,9 @@ export function WordSetsList() {
     return <LoadingScreen />;
   }
 
-  if (!wordsets || wordsets.length === 0) {
+  if (!packs || packs.length === 0) {
     return (
-      <div className="h-full w-full items-center justify-center px-10 pb-9 pt-28 xl:w-4/6">
+      <div className="flex h-full w-full items-center justify-center px-10 pb-9 pt-28 xl:w-4/6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -81,24 +81,30 @@ export function WordSetsList() {
             damping: 20,
             mass: 0.5,
           }}
-          className="flex h-full w-full flex-col items-center justify-center gap-4 rounded-2xl bg-white px-8 py-6"
+          className="flex h-full w-full flex-col items-center justify-between gap-4 overflow-auto rounded-2xl bg-white px-8 py-6"
         >
-          <NoSetsImg />
-          <p className="flex flex-col items-center gap-4 pb-7 pt-11 text-neutral-900">
-            <span className="text-2xl font-semibold">
-              🚀 Your word sets will appear here!
-            </span>
-            <span className="text-center text-neutral-900">
-              Start by generating a new word set based on any topic.
-              <br />
-              The more you create, the richer your vocabulary becomes!
-            </span>
-          </p>
-          <Link href="/new-set">
-            <Button className="h-12 bg-neutral-900 p-4 text-lg text-white">
-              New wordset +
-            </Button>
-          </Link>
+          <div className="flex flex-1 flex-col items-center justify-center gap-4">
+            <div className="flex-shrink-1 w-full max-w-[300px]">
+              <NoPacksImg className="h-auto max-h-[300px] w-full object-contain" />
+            </div>
+            <p className="flex flex-col items-center gap-4 text-neutral-900">
+              <span className="text-2xl font-semibold">
+                Your packs will appear here!
+              </span>
+              <span className="text-center text-neutral-900">
+                Pick a topic and{" "}
+                <Link
+                  href="/new-pack"
+                  className="italic text-teal-900 underline transition-all hover:rounded-sm hover:bg-teal-50 hover:p-2 hover:text-teal-900/80 hover:no-underline"
+                >
+                  make
+                </Link>{" "}
+                your first pack.
+                <br />
+                Your vocabulary grows with each one!
+              </span>
+            </p>
+          </div>
         </motion.div>
       </div>
     );
@@ -119,7 +125,7 @@ export function WordSetsList() {
             }}
             className="text-3xl font-bold"
           >
-            Your wordsets
+            Your packs
           </motion.h1>
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -132,7 +138,7 @@ export function WordSetsList() {
             }}
           >
             <Button
-              title="Delete all wordsets"
+              title="Delete all packs"
               onClick={handleDeleteAll}
               variant="ghost"
               size="icon"
@@ -154,12 +160,8 @@ export function WordSetsList() {
           }}
           className="relative flex h-full w-full flex-col gap-4 overflow-y-scroll rounded-xl border border-neutral-300/50 p-6 shadow-md"
         >
-          {wordsets.map((wordSet, index) => (
-            <WordSetsListItem
-              key={wordSet.id}
-              wordSet={wordSet}
-              index={index}
-            />
+          {packs.map((pack, index) => (
+            <PacksListItem key={pack.id} pack={pack} index={index} />
           ))}
           <div className="flex w-full items-center gap-4 py-1">
             <hr className="flex-1 border-t border-neutral-300/50" />
@@ -171,20 +173,22 @@ export function WordSetsList() {
             className="relative flex min-h-28 flex-1 flex-col gap-4 overflow-hidden"
           >
             {Array.from({ length: skeletonCount }).map((_, index) => (
-              <WordsetItemSkeleton key={index} />
+              <PackItemSkeleton key={index} />
             ))}
             <div className="absolute inset-0 flex min-h-28 flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_white_0%,_transparent_100%)]">
               <div className="flex flex-col items-center gap-5 rounded-xl bg-white/15 p-8 backdrop-blur-sm">
                 {skeletonCount > 3 && (
                   <p className="text-lg font-medium text-gray-600">
-                    The more you create, the richer your vocabulary becomes!
+                    The more you{" "}
+                    <Link
+                      href="/new-pack"
+                      className="italic text-teal-900 underline transition-all hover:rounded-sm hover:bg-teal-50 hover:p-2 hover:text-teal-900/80 hover:no-underline"
+                    >
+                      create
+                    </Link>
+                    , the richer your vocabulary becomes!
                   </p>
                 )}
-                <Link href="/new-set">
-                  <Button className="flex items-center gap-2 rounded-md bg-black px-4 py-2 text-base text-white">
-                    New wordset +
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>
@@ -194,8 +198,8 @@ export function WordSetsList() {
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={confirmDeleteAll}
-        title="Delete All Wordsets"
-        description="Are you sure you want to delete all your wordsets? This action cannot be undone."
+        title="Delete All Packs"
+        description="Are you sure you want to delete all your packs? This action cannot be undone."
         confirmText="Delete All"
         cancelText="Cancel"
       />

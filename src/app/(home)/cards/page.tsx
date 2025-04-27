@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default async function CardsPage() {
-  redirect("/new-set");
+  redirect("/new-pack");
 }

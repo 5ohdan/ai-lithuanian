@@ -1,19 +1,19 @@
 import { motion } from "motion/react";
-import type { StoredWordSet, StoredBriefWordSet } from "~/lib/schemas";
+import type { StoredPack, StoredBriefPack } from "~/lib/schemas";
 import { CardContent, Card } from "./ui/card";
 import { useRouter } from "next/navigation";
 
-type WordSetItemProps = {
-  wordSet: StoredWordSet | StoredBriefWordSet;
+type PackItemProps = {
+  pack: StoredPack | StoredBriefPack;
   index: number;
 };
 
-export function WordSetsListItem({ wordSet, index }: WordSetItemProps) {
+export function PacksListItem({ pack, index }: PackItemProps) {
   const router = useRouter();
 
   return (
     <motion.div
-      key={wordSet.id}
+      key={pack.id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -44,17 +44,17 @@ export function WordSetsListItem({ wordSet, index }: WordSetItemProps) {
     >
       <Card
         className="cursor-pointer bg-neutral-100/85"
-        onClick={() => router.push(`/wordsets/${wordSet.id}`)}
+        onClick={() => router.push(`/packs/${pack.id}`)}
       >
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
-            <h2 className="mb-2 text-xl font-semibold">{wordSet.title}</h2>
+            <h2 className="mb-2 text-xl font-semibold">{pack.title}</h2>
             <p className="mb-2 text-sm text-gray-500/75">
-              Created: {new Date(wordSet.createdAt).toLocaleDateString()}
+              Created: {new Date(pack.createdAt).toLocaleDateString()}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {wordSet.set.map((word, index) => (
+            {pack.set.map((word, index) => (
               <motion.span
                 key={index}
                 initial={{ opacity: 0 }}

@@ -60,7 +60,7 @@ const commonMetadataFields = {
 const title = z
   .string()
   .describe(
-    "A concise, appropriate title for the word set (1-5 words) that captures the essence of the topic. Should be a general summary of the topic without mentioning 'vocabulary', 'words', or any other generation-related terms. The title should be in English.",
+    "A concise, appropriate title for the pack (1-5 words) that captures the essence of the topic. Should be a general summary of the topic without mentioning 'vocabulary', 'words', or any other generation-related terms. The title should be in English.",
   );
 
 /**
@@ -74,15 +74,15 @@ export const briefWordSchema = z.object({
 });
 export type BriefWord = z.infer<typeof briefWordSchema>;
 
-export const briefWordSetSchema = z.object({
+export const briefPackSchema = z.object({
   words: z.array(briefWordSchema),
   title: title,
 });
-export type BriefWordSet = z.infer<typeof briefWordSetSchema>;
+export type BriefPack = z.infer<typeof briefPackSchema>;
 
 /**
  * CORE SCHEMAS
- * Complete data structures for words and word sets
+ * Complete data structures for words and packs
  */
 export const wordSchema = briefWordSchema.extend({
   partOfSpeech: PartOfSpeechEnum.describe(
@@ -119,25 +119,25 @@ export const wordSchema = briefWordSchema.extend({
 });
 export type Word = z.infer<typeof wordSchema>;
 
-export const wordSetSchema = z.object({
+export const packSchema = z.object({
   words: z.array(wordSchema),
   title: title,
 });
-export type WordSet = z.infer<typeof wordSetSchema>;
+export type Pack = z.infer<typeof packSchema>;
 
 /**
  * INPUT SCHEMAS
  * Structures for user inputs and form data
  */
-export const createWordSetSchema = z.object({
+export const createPackSchema = z.object({
   topic: z
     .string()
-    .min(3, "Please enter a topic that's at least 3 characters long")
-    .max(100, "Please enter a topic that's less than 100 characters"),
+    .min(3, "Please enter a topic at least 3 characters long")
+    .max(200, "Please enter a topic less than 200 characters"),
   difficulty: DifficultyEnum,
   count: z.number().min(5, "Min. 5 words").max(15, "Max. 15 words"),
 });
-export type CreateWordSet = z.infer<typeof createWordSetSchema>;
+export type CreatePack = z.infer<typeof createPackSchema>;
 
 export const userDataSchema = z.object({
   difficulty: DifficultyEnum,
@@ -152,7 +152,7 @@ export type UserData = z.infer<typeof userDataSchema>;
 export const storedWordSchema = z.object({
   word: wordSchema,
   ...commonMetadataFields,
-  setIds: z.array(z.string().uuid()),
+  packIds: z.array(z.string().uuid()),
 });
 export type StoredWord = z.infer<typeof storedWordSchema>;
 
@@ -163,20 +163,20 @@ const baseStoredSetSchema = z.object({
   usersTopic: z.string(),
 });
 
-export const storedWordSetSchema = baseStoredSetSchema.extend({
-  set: z.custom<WordSet["words"]>(),
+export const storedPackSchema = baseStoredSetSchema.extend({
+  set: z.custom<Pack["words"]>(),
   wordIds: z.array(z.string().uuid()),
 });
-export type StoredWordSet = z.infer<typeof storedWordSetSchema>;
+export type StoredPack = z.infer<typeof storedPackSchema>;
 
-export const storedBriefWordSetSchema = baseStoredSetSchema.extend({
-  set: z.custom<BriefWordSet["words"]>(),
+export const storedBriefPackSchema = baseStoredSetSchema.extend({
+  set: z.custom<BriefPack["words"]>(),
 });
-export type StoredBriefWordSet = z.infer<typeof storedBriefWordSetSchema>;
+export type StoredBriefPack = z.infer<typeof storedBriefPackSchema>;
 
 export const storageSchema = z.object({
   words: z.array(storedWordSchema),
-  wordSets: z.array(storedWordSetSchema),
-  briefWordSets: z.array(storedBriefWordSetSchema),
+  packs: z.array(storedPackSchema),
+  briefPacks: z.array(storedBriefPackSchema),
 });
 export type Storage = z.infer<typeof storageSchema>;

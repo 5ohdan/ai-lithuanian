@@ -1,8 +1,8 @@
 import { streamObject } from "ai";
 import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import {
-  briefWordSetSchema,
-  wordSetSchema,
+  briefPackSchema,
+  packSchema,
   briefWordSchema,
   wordSchema,
 } from "~/lib/schemas";
@@ -32,7 +32,7 @@ function getFieldsToEnrich(): string[] {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const parsed = briefWordSetSchema.safeParse(body);
+    const parsed = briefPackSchema.safeParse(body);
     if (!parsed.success) {
       return new Response(
         parsed.error.errors.map((e) => e.message).join("\n"),
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
         },
       );
     }
-    const briefSet = parsed.data;
+    const briefPack = parsed.data;
 
     const fieldsToEnrich = getFieldsToEnrich();
 
@@ -57,19 +57,19 @@ export async function POST(req: Request) {
           content: [
             {
               type: "text",
-              text: `Enrich the following Lithuanian word set by adding these missing fields for each word: ${fieldsToEnrich.join(", ")}. Use the provided original word, translation, and transcription as given.
+              text: `Enrich the following Lithuanian pack by adding these missing fields for each word: ${fieldsToEnrich.join(", ")}. Use the provided original word, translation, and transcription as given.
               For each word, provide MULTIPLE meanings using the 'meanings' array field, where each meaning has its own context, example, and example translation. Words often have different contexts or usages, so try to provide at least 2 different meanings/contexts for each word when possible.`,
             },
             {
               type: "text",
-              text: `Here is the brief word set:\n${JSON.stringify(briefSet)}`,
+              text: `Here is the brief pack:\n${JSON.stringify(briefPack)}`,
             },
           ],
         },
       ],
-      schema: wordSetSchema,
+      schema: packSchema,
       onFinish: ({ object }) => {
-        const res = wordSetSchema.safeParse(object);
+        const res = packSchema.safeParse(object);
         if (res.error) {
           throw new Error(res.error.errors.map((e) => e.message).join("\n"));
         }

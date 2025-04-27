@@ -9,7 +9,7 @@ export default async function KeyFormPage() {
 
   if (success) {
     return (
-      <Link href={"/new-set"}>
+      <Link href={"/new-pack"}>
         <Button>Go to home page →</Button>
       </Link>
     );

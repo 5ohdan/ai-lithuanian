@@ -11,9 +11,8 @@ const alexandria = Alexandria({
   weight: ["600"],
 });
 
-export function WordSetGenerator() {
-  // The hook will return handleSubmitBrief when mode is "brief"
-  const { handleSubmit, isLoading, partialWordSet } = useWordGeneration({
+export function PackGenerator() {
+  const { handleSubmit, isLoading, partialPack } = useWordGeneration({
     mode: "brief",
   });
 
@@ -30,7 +29,7 @@ export function WordSetGenerator() {
       }}
     >
       <h1 className={cn("text-4xl font-semibold", alexandria.className)}>
-        Generate new wordset
+        Discover Lithuanian
       </h1>
       <motion.div
         initial={{ opacity: 0 }}
@@ -56,7 +55,7 @@ export function WordSetGenerator() {
           <GenerationForm
             isLoading={isLoading}
             submit={handleSubmit}
-            length={partialWordSet?.words?.length}
+            length={partialPack?.words?.length}
           />
         </motion.div>
       </motion.div>

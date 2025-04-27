@@ -3,16 +3,16 @@
 import { getStorage } from "~/lib/storage";
 import { CardStack } from "./card-stack";
 import { useEffect, useState, useRef } from "react";
-import type { StoredWordSet, StoredBriefWordSet } from "~/lib/schemas";
+import type { StoredPack, StoredBriefPack } from "~/lib/schemas";
 import { LoadingScreen } from "./loading-screen";
 import { useWordGeneration } from "~/hooks/useWordGeneration";
 
 const storage = getStorage();
 
-export function CardsHandler({ wordSetId }: { wordSetId: string }) {
-  const [wordSet, setWordSet] = useState<
-    StoredWordSet | StoredBriefWordSet | undefined
-  >(undefined);
+export function CardsHandler({ packId }: { packId: string }) {
+  const [pack, setPack] = useState<StoredPack | StoredBriefPack | undefined>(
+    undefined,
+  );
   const [isLoading, setIsLoading] = useState(true);
   const enrichmentAttempted = useRef(false);
 
@@ -20,10 +20,10 @@ export function CardsHandler({ wordSetId }: { wordSetId: string }) {
     mode: "enrich",
   });
 
-  const triggerEnrichment = (briefWordSet: StoredBriefWordSet) => {
+  const triggerEnrichment = (briefPack: StoredBriefPack) => {
     if (!enrichmentAttempted.current) {
       enrichmentAttempted.current = true;
-      handleEnrich(briefWordSet);
+      handleEnrich(briefPack);
     }
   };
 
@@ -31,34 +31,34 @@ export function CardsHandler({ wordSetId }: { wordSetId: string }) {
     setIsLoading(true);
     enrichmentAttempted.current = false;
 
-    const fullWordSet = storage.getWordSetById(wordSetId);
-    if (fullWordSet) {
-      setWordSet(fullWordSet);
+    const fullPack = storage.getPackById(packId);
+    if (fullPack) {
+      setPack(fullPack);
       setIsLoading(false);
       return;
     }
 
-    const briefResult = storage.getBriefWordSetById(wordSetId);
+    const briefResult = storage.getBriefPackById(packId);
     if (briefResult) {
-      setWordSet(briefResult);
+      setPack(briefResult);
 
       setTimeout(() => triggerEnrichment(briefResult), 0);
     }
 
     setIsLoading(false);
-  }, [wordSetId]);
+  }, [packId]);
 
   if (isLoading) {
     return <LoadingScreen />;
   }
 
-  if (!wordSet) {
-    return <div>Word set not found</div>;
+  if (!pack) {
+    return <div>Pack not found</div>;
   }
 
   return (
     <div className="flex h-full max-h-96 w-full max-w-[640px] flex-col items-center justify-center gap-4">
-      <CardStack wordset={wordSet} />
+      <CardStack pack={pack} />
     </div>
   );
 }

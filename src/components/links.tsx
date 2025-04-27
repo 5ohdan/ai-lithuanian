@@ -2,23 +2,36 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { getStorage } from "~/lib/storage";
+import { useState, useEffect } from "react";
+
+const storage = getStorage();
 
 export function Links() {
   const pathname = usePathname();
+  const [hasPacks, setHasPacks] = useState(false);
+
+  useEffect(() => {
+    setHasPacks(storage.getPacks().length > 0);
+  }, []);
+
   const links = [
     {
-      label: "New wordset +",
-      href: "/new-set",
+      label: "+ New pack",
+      href: "/new-pack",
+      disabled: false,
     },
     {
-      label: "View Word Sets →",
-      href: "/wordsets",
+      label: "Packs →",
+      href: "/packs",
+      disabled: !hasPacks,
     },
   ];
+
   return (
     <div className="flex h-12 gap-2">
       {links
-        .filter((link) => link.href !== pathname)
+        .filter((link) => link.href !== pathname && !link.disabled)
         .map((link) => (
           <Link
             key={link.href}
