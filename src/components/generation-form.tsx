@@ -187,7 +187,7 @@ export function GenerationForm({
           >
             {isLoading
               ? `Almost there, ${length ?? 0} done...`
-              : "Create new pack of words"}
+              : "Create new pack"}
           </Button>
         </MotionDiv>
       </form>

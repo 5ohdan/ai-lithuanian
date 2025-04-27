@@ -16,13 +16,10 @@ export function Links() {
       setHasPacks(storage.getPacks().length > 0);
     };
 
-    // Initial check
     checkPacks();
 
-    // Subscribe to storage changes
     const unsubscribe = storage.subscribe(checkPacks);
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 

@@ -114,7 +114,7 @@ export const wordSchema = briefWordSchema.extend({
     )
     .min(1)
     .describe(
-      "An array of distinct meanings/usages of the same original word, each with its own context and example. Only include truly different semantic meanings or usage contexts, not slight variations or closely related definitions. Each meaning should represent a significantly different way the same original word can be used.",
+      "Array of distinct meanings for the word, each with context and example. Include only significantly different semantic meanings or usage contexts, not minor variations.",
     ),
 });
 export type Word = z.infer<typeof wordSchema>;

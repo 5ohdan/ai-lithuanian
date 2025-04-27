@@ -188,25 +188,16 @@ export function PacksList() {
             ))}
             <div className="absolute inset-0 flex min-h-28 flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_white_0%,_transparent_100%)]">
               <div className="flex flex-col items-center gap-5 rounded-xl bg-white/15 p-8 backdrop-blur-sm">
-                {skeletonCount > 3 ? (
-                  <p className="text-lg font-medium text-gray-600">
-                    The more you{" "}
-                    <Link
-                      href="/new-pack"
-                      className="italic underline transition-all hover:rounded-sm hover:bg-neutral-100 hover:p-2 hover:no-underline"
-                    >
-                      create
-                    </Link>
-                    , the richer your vocabulary becomes!
-                  </p>
-                ) : (
+                <p className="text-lg font-medium text-gray-600">
+                  The more you{" "}
                   <Link
                     href="/new-pack"
-                    className="flex items-center gap-2 rounded-md bg-black px-4 py-2 text-base text-white"
+                    className="italic underline transition-all hover:rounded-sm hover:bg-neutral-100 hover:p-2 hover:no-underline"
                   >
-                    + New pack
+                    create
                   </Link>
-                )}
+                  , the richer your vocabulary becomes!
+                </p>
               </div>
             </div>
           </div>

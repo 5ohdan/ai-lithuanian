@@ -30,7 +30,7 @@ export async function POST(req: Request) {
             text: `Generate a pack of unique Lithuanian words with an appropriate title.
             - Each word must be a single word (not a phrase)
             - If a phrase is relevant, use its main word
-            - Title should be 1-3 words only
+            - Title should be 1-5 words. The title should be in English.
             - DO NOT MENTION "LITHUANIAN", "WORDS" OR "VOCABULARY" in the title`,
           },
           {
