@@ -16,6 +16,7 @@ const STORAGE_KEY = "wordLearningStorage";
 export class StorageManager {
   private storage: Storage;
   private isClient: boolean;
+  private subscribers: Set<() => void> = new Set<() => void>();
 
   constructor() {
     this.isClient = typeof window !== "undefined";
@@ -44,9 +45,21 @@ export class StorageManager {
 
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.storage));
+      this.notifySubscribers();
     } catch (error) {
       console.error("Error saving storage:", error);
     }
+  }
+
+  subscribe(callback: () => void): () => void {
+    this.subscribers.add(callback);
+    return () => {
+      this.subscribers.delete(callback);
+    };
+  }
+
+  private notifySubscribers(): void {
+    this.subscribers.forEach((callback) => callback());
   }
 
   addPack(pack: Pack, difficulty: Difficulty, topic: string): string {

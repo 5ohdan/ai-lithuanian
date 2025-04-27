@@ -12,17 +12,28 @@ export function Links() {
   const [hasPacks, setHasPacks] = useState(false);
 
   useEffect(() => {
-    setHasPacks(storage.getPacks().length > 0);
+    const checkPacks = () => {
+      setHasPacks(storage.getPacks().length > 0);
+    };
+
+    // Initial check
+    checkPacks();
+
+    // Subscribe to storage changes
+    const unsubscribe = storage.subscribe(checkPacks);
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
 
   const links = [
     {
-      label: "+ New pack",
+      label: ["+ ", "New pack"],
       href: "/new-pack",
       disabled: false,
     },
     {
-      label: "Packs →",
+      label: ["Packs", " →"],
       href: "/packs",
       disabled: !hasPacks,
     },
@@ -36,9 +47,11 @@ export function Links() {
           <Link
             key={link.href}
             href={link.href}
-            className="self-center rounded-md bg-primary bg-white px-4 py-2 font-medium text-black hover:text-black/90"
+            className="self-center rounded-md bg-white px-4 py-2 font-medium text-black transition-all hover:text-black/90"
           >
-            {link.label}
+            {link.label.map((label) => (
+              <span key={label}>{label}</span>
+            ))}
           </Link>
         ))}
     </div>
