@@ -47,10 +47,12 @@ export function Links() {
           <Link
             key={link.href}
             href={link.href}
-            className="self-center rounded-md bg-white px-4 py-2 font-medium text-black transition-all hover:text-black/90"
+            className="group self-center rounded-md bg-white px-4 py-2 font-medium transition-all"
           >
             {link.label.map((label) => (
-              <span key={label}>{label}</span>
+              <span key={label} className="transition-all group-hover:mx-0.5">
+                {label}
+              </span>
             ))}
           </Link>
         ))}
