@@ -176,9 +176,11 @@ export function PacksList() {
           }}
           className="relative flex h-full w-full flex-col overflow-y-scroll sm:gap-4 sm:rounded-xl sm:border sm:border-neutral-300/50 sm:p-6 sm:shadow-md"
         >
-          {packs.map((pack, index) => (
-            <PacksListItem key={pack.id} pack={pack} index={index} />
-          ))}
+          <div className="flex flex-col gap-2 sm:gap-4">
+            {packs.map((pack, index) => (
+              <PacksListItem key={pack.id} pack={pack} index={index} />
+            ))}
+          </div>
           <div className="flex w-full items-center gap-4 py-2 sm:py-1">
             <hr className="flex-1 border-t border-neutral-300/50" />
             <span className="size-1 rounded-full bg-neutral-300" />

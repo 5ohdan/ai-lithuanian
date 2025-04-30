@@ -94,8 +94,8 @@ export default function PackView({ packId }: { packId: string }) {
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-center px-6 pb-6 pt-24">
-      <div className="flex h-full w-full max-w-[1024px] flex-col rounded-2xl bg-white">
+    <div className="flex h-full w-full items-center justify-center p-2 pt-16 sm:px-6 sm:pb-6 sm:pt-24">
+      <div className="flex h-full w-full flex-col rounded-xl bg-white p-2 sm:max-w-[1024px] sm:rounded-2xl">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -105,7 +105,7 @@ export default function PackView({ packId }: { packId: string }) {
             damping: 20,
             mass: 0.6,
           }}
-          className="mx-auto mt-[-1px] w-fit rounded-b-md bg-neutral-900 px-5 py-2 text-center text-2xl font-semibold text-white"
+          className="mx-auto w-fit justify-self-center rounded-lg bg-neutral-900 px-4 py-1 text-center text-base text-white sm:text-2xl"
         >
           {pack.title}
         </motion.h1>
@@ -145,7 +145,7 @@ function MainContent({
 
   return (
     <div className="w-full">
-      <div className="relative flex h-full flex-col overflow-y-auto rounded-xl border border-neutral-200 bg-white p-5 shadow-md transition-all duration-300">
+      <div className="relative flex h-full flex-col overflow-y-auto bg-white transition-all duration-300 sm:rounded-xl sm:border sm:border-neutral-200 sm:p-5 sm:shadow-md">
         <div
           className={`fixed z-50 transition-all duration-200 ease-in-out ${state === "collapsed" ? "-mt-8" : "-ml-8 mt-[720px]"}`}
         >

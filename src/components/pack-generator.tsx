@@ -36,7 +36,7 @@ export function PackGenerator() {
           alexandria.className,
         )}
       >
-        Discover Lithuanian
+        Discover Lithuanian Words
       </h1>
 
       <div className="h-full w-full">
