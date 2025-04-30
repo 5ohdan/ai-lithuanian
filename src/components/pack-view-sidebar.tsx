@@ -14,12 +14,23 @@ export function PackViewSidebar({
   words,
   activeWordIndex,
   setActiveWordIndex,
+  isMobile,
 }: {
   words: Pack["words"];
   activeWordIndex: number;
   setActiveWordIndex: (index: number) => void;
+  isMobile?: boolean;
 }) {
-  const { state } = useSidebar();
+  const { state, setOpenMobile } = useSidebar();
+
+  const handleWordSelect = (index: number) => {
+    setActiveWordIndex(index);
+
+    // Close sidebar when selecting a word on mobile
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   return (
     <Sidebar
@@ -32,9 +43,9 @@ export function PackViewSidebar({
           : "w-[250px] translate-x-0 transform opacity-100"
       }`}
     >
-      <SidebarContent className="bg-white">
+      <SidebarContent className="bg-white pt-2 sm:pt-0">
         <SidebarGroup className="bg-white">
-          <SidebarGroupContent className="flex h-full flex-col gap-2 overflow-y-auto px-2">
+          <SidebarGroupContent className="flex h-full flex-col gap-2 overflow-y-auto px-2 sm:px-0 sm:pr-2">
             {words.map((word, index) => (
               <motion.div
                 key={word.original}
@@ -56,7 +67,7 @@ export function PackViewSidebar({
                     mass: 0.5,
                   },
                 }}
-                onClick={() => setActiveWordIndex(index)}
+                onClick={() => handleWordSelect(index)}
                 className={`cursor-pointer rounded-lg p-3 transition-colors ${
                   index === activeWordIndex
                     ? "bg-neutral-900 text-white"

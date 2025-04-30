@@ -10,6 +10,7 @@ import { LoadingScreen } from "./loading-screen";
 import { SidebarProvider, SidebarTrigger, useSidebar } from "./ui/sidebar";
 import { PackViewSidebar } from "./pack-view-sidebar";
 import { cn } from "~/lib/utils";
+import { useIsMobile } from "~/hooks/use-mobile";
 
 const storage = getStorage();
 
@@ -17,6 +18,7 @@ export default function PackView({ packId }: { packId: string }) {
   const [pack, setPack] = useState<StoredPack | undefined>(undefined);
   const [activeWordIndex, setActiveWordIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchPack = async () => {
@@ -94,41 +96,53 @@ export default function PackView({ packId }: { packId: string }) {
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-center p-2 pt-16 sm:px-6 sm:pb-6 sm:pt-24">
-      <div className="flex h-full w-full flex-col rounded-xl bg-white p-2 sm:max-w-[1024px] sm:rounded-2xl">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            type: "spring",
-            stiffness: 250,
-            damping: 20,
-            mass: 0.6,
-          }}
-          className="mx-auto w-fit justify-self-center rounded-lg bg-neutral-900 px-4 py-1 text-center text-base text-white sm:text-2xl"
-        >
-          {pack.title}
-        </motion.h1>
-        <div className="relative h-full w-full overflow-hidden rounded-xl p-3">
-          <SidebarProvider
-            defaultOpen={true}
-            data-state-sidebar="true"
-            className="max-h-full min-h-full"
+    <SidebarProvider
+      defaultOpen={!isMobile}
+      className="h-full max-h-svh min-h-0 w-full overflow-y-auto"
+    >
+      <div className="flex w-full items-center justify-center p-2 pt-16 sm:px-6 sm:pb-6 sm:pt-16">
+        <div className="flex h-full w-full flex-col rounded-xl bg-white p-2 sm:max-h-[80vh] sm:max-w-[1024px] sm:rounded-2xl">
+          <div className="relative mb-3 flex items-center justify-center">
+            <div className="absolute left-1">
+              <SidebarTrigger
+                className={cn("transition-all duration-200 ease-in-out")}
+              />
+            </div>
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                type: "spring",
+                stiffness: 250,
+                damping: 20,
+                mass: 0.6,
+              }}
+              className="mx-auto w-fit justify-self-center rounded-lg bg-neutral-900 px-4 py-1 text-center text-base text-white sm:text-2xl"
+            >
+              {pack.title}
+            </motion.h1>
+          </div>
+          <div
+            className="relative w-full overflow-hidden rounded-xl p-3"
+            style={{ height: "calc(100vh - 200px)" }}
           >
-            <PackViewSidebar
-              words={pack.set}
-              activeWordIndex={activeWordIndex}
-              setActiveWordIndex={setActiveWordIndex}
-            />
-            <MainContent
-              activeWord={activeWord}
-              activeWordIndex={activeWordIndex}
-              packLength={pack.set.length}
-            />
-          </SidebarProvider>
+            <div className="flex h-full">
+              <PackViewSidebar
+                words={pack.set}
+                activeWordIndex={activeWordIndex}
+                setActiveWordIndex={setActiveWordIndex}
+                isMobile={isMobile}
+              />
+              <MainContent
+                activeWord={activeWord}
+                activeWordIndex={activeWordIndex}
+                packLength={pack.set.length}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
 
@@ -141,21 +155,9 @@ function MainContent({
   activeWordIndex: number;
   packLength: number;
 }) {
-  const { state } = useSidebar();
-
   return (
     <div className="w-full">
       <div className="relative flex h-full flex-col overflow-y-auto bg-white transition-all duration-300 sm:rounded-xl sm:border sm:border-neutral-200 sm:p-5 sm:shadow-md">
-        <div
-          className={`fixed z-50 transition-all duration-200 ease-in-out ${state === "collapsed" ? "-mt-8" : "-ml-8 mt-[720px]"}`}
-        >
-          <SidebarTrigger
-            className={cn(
-              `transition-all duration-200 ease-in-out`,
-              state === "collapsed" ? "rotate-[225deg]" : "rotate-45",
-            )}
-          />
-        </div>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeWord.original}
