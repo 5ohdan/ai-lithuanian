@@ -122,10 +122,7 @@ export default function PackView({ packId }: { packId: string }) {
               {pack.title}
             </motion.h1>
           </div>
-          <div
-            className="relative w-full overflow-hidden rounded-xl p-3"
-            style={{ height: "calc(100vh - 200px)" }}
-          >
+          <div className="relative h-full w-full overflow-hidden rounded-xl p-3">
             <div className="flex h-full">
               <PackViewSidebar
                 words={pack.set}
