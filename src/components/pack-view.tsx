@@ -100,8 +100,8 @@ export default function PackView({ packId }: { packId: string }) {
       defaultOpen={!isMobile}
       className="h-full max-h-svh min-h-0 w-full overflow-y-auto"
     >
-      <div className="flex w-full items-center justify-center p-2 pt-16 sm:px-6 sm:pb-6 sm:pt-16">
-        <div className="flex h-full w-full flex-col rounded-xl bg-white p-2 sm:max-h-[80vh] sm:max-w-[1024px] sm:rounded-2xl">
+      <div className="flex w-full items-center justify-center p-2 pt-16 sm:px-6 sm:pb-6 sm:pt-20">
+        <div className="flex h-full w-full flex-col rounded-xl bg-white p-2 sm:max-h-[75vh] sm:max-w-[1024px] sm:rounded-2xl">
           <div className="relative mb-3 flex items-center justify-center">
             <div className="absolute left-1">
               <SidebarTrigger

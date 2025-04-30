@@ -25,12 +25,12 @@ export function Links() {
 
   const links = [
     {
-      label: ["+ ", "New pack"],
+      label: ["+ ", "New wordset"],
       href: "/new-pack",
       disabled: false,
     },
     {
-      label: ["Packs", " →"],
+      label: ["Saved"],
       href: "/packs",
       disabled: !hasPacks,
     },

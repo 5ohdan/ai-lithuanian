@@ -134,7 +134,7 @@ export function GenerationForm({
             name="count"
             render={({ field, fieldState }) => (
               <FormItem>
-                <FormLabel className="font-normal">Word Count</FormLabel>
+                <FormLabel className="font-normal">Words</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -187,7 +187,7 @@ export function GenerationForm({
           >
             {isLoading
               ? `Almost there, ${length ?? 0} done...`
-              : "Create new pack"}
+              : "Create new wordset"}
           </Button>
         </MotionDiv>
       </form>

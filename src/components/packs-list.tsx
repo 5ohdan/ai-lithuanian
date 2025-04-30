@@ -87,7 +87,7 @@ export function PacksList() {
 
   if (!packs || packs.length === 0) {
     return (
-      <div className="flex h-full w-full items-center justify-center px-10 pb-9 pt-28 xl:w-4/6">
+      <div className="flex h-svh w-full items-center justify-center px-2 pb-10 pt-16 sm:h-full sm:px-10 sm:pb-9 sm:pt-28 xl:w-4/6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -105,7 +105,7 @@ export function PacksList() {
             </div>
             <p className="flex flex-col items-center gap-4 text-neutral-900">
               <span className="text-2xl font-semibold">
-                Your packs will appear here!
+                Your wordsets will appear here!
               </span>
               <span className="text-center text-neutral-900">
                 Pick a topic and{" "}
@@ -115,7 +115,7 @@ export function PacksList() {
                 >
                   make
                 </Link>{" "}
-                your first pack.
+                your first wordset.
                 <br />
                 Your vocabulary grows with each one!
               </span>
@@ -141,7 +141,7 @@ export function PacksList() {
             }}
             className="text-xl font-semibold sm:text-3xl sm:font-bold"
           >
-            Your packs
+            Your wordsets
           </motion.h1>
           {/* <motion.span
             initial={{ opacity: 0, y: 20 }}

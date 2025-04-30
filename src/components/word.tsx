@@ -61,7 +61,7 @@ export function Word({
         mass: 0.5,
       }}
     >
-      <Card className="grid h-full w-full grid-rows-[auto_1fr_auto] rounded-2xl border border-neutral-400/50 px-4 py-6 sm:rounded-[20px]">
+      <Card className="grid h-full w-full grid-rows-[auto_1fr_auto] rounded-2xl border border-neutral-400/50 p-4 sm:rounded-[20px]">
         <CardHeader className="w-fit justify-self-center rounded-lg bg-neutral-900 px-5 py-2 text-center text-white">
           <CardTitle className="text-base sm:text-lg">{topic}</CardTitle>
         </CardHeader>
