@@ -12,6 +12,7 @@ import { Button } from "./ui/button";
 import { PackItemSkeleton } from "./pack-item-skeleton";
 import { Trash } from "lucide-react";
 import { ConfirmationDialog } from "./confirmation-dialog";
+import { useIsMobile } from "../hooks/use-mobile";
 
 const storage = getStorage();
 
@@ -24,6 +25,7 @@ export function PacksList() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const mainContainerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const updatePacks = () => {
@@ -33,13 +35,10 @@ export function PacksList() {
       setIsLoading(false);
     };
 
-    // Initial load
     updatePacks();
 
-    // Subscribe to storage changes
     const unsubscribe = storage.subscribe(updatePacks);
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
@@ -47,14 +46,20 @@ export function PacksList() {
     const calculateSkeletons = () => {
       if (!containerRef.current || !mainContainerRef.current) return;
 
+      const deviceIsMobile = !!isMobile;
       const mainContainerHeight = mainContainerRef.current.clientHeight;
-      const packItemsHeight = packs.length * 112;
-      const dividerHeight = 20;
+
+      // Use significantly smaller height for mobile skeletons to fit more
+      const packItemHeight = deviceIsMobile ? 48 : 96; // Much smaller on mobile
+      const dividerHeight = deviceIsMobile ? 8 : 12;
+      const packItemsHeight = packs.length * packItemHeight;
+
       const availableHeight =
         mainContainerHeight - packItemsHeight - dividerHeight;
 
       if (availableHeight > 0) {
-        const possibleSkeletons = Math.floor(availableHeight / 112);
+        const possibleSkeletons = Math.floor(availableHeight / packItemHeight);
+        // No max limit, allow as many as can fit
         setSkeletonCount(Math.max(1, possibleSkeletons));
       } else {
         setSkeletonCount(1);
@@ -64,11 +69,11 @@ export function PacksList() {
     calculateSkeletons();
     window.addEventListener("resize", calculateSkeletons);
     return () => window.removeEventListener("resize", calculateSkeletons);
-  }, [packs.length]);
+  }, [packs.length, isMobile]);
 
-  const handleDeleteAll = () => {
-    setIsDeleteDialogOpen(true);
-  };
+  // const handleDeleteAll = () => {
+  //   setIsDeleteDialogOpen(true);
+  // };
 
   const confirmDeleteAll = () => {
     storage.deleteAllPacks();
@@ -122,8 +127,8 @@ export function PacksList() {
   }
 
   return (
-    <div className="h-full w-full flex-col items-center justify-center px-10 pb-9 pt-28 xl:w-4/6">
-      <div className="flex h-full w-full flex-col gap-4 rounded-2xl bg-white px-8 py-6">
+    <div className="h-full w-full items-center justify-center px-2 pb-2 pt-16 sm:px-10 sm:pb-9 sm:pt-28 xl:w-4/6">
+      <div className="flex h-full w-full flex-col gap-2 rounded-2xl bg-white px-4 py-4 sm:gap-4 sm:px-8 sm:py-6">
         <div className="flex items-center justify-between">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -134,11 +139,11 @@ export function PacksList() {
               damping: 20,
               mass: 0.5,
             }}
-            className="text-3xl font-bold"
+            className="text-xl font-semibold sm:text-3xl sm:font-bold"
           >
             Your packs
           </motion.h1>
-          <motion.span
+          {/* <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -157,7 +162,7 @@ export function PacksList() {
             >
               <Trash />
             </Button>
-          </motion.span>
+          </motion.span> */}
         </div>
         <motion.div
           ref={mainContainerRef}
@@ -169,26 +174,26 @@ export function PacksList() {
             damping: 20,
             mass: 0.5,
           }}
-          className="relative flex h-full w-full flex-col gap-4 overflow-y-scroll rounded-xl border border-neutral-300/50 p-6 shadow-md"
+          className="relative flex h-full w-full flex-col overflow-y-scroll sm:gap-4 sm:rounded-xl sm:border sm:border-neutral-300/50 sm:p-6 sm:shadow-md"
         >
           {packs.map((pack, index) => (
             <PacksListItem key={pack.id} pack={pack} index={index} />
           ))}
-          <div className="flex w-full items-center gap-4 py-1">
+          <div className="flex w-full items-center gap-4 py-2 sm:py-1">
             <hr className="flex-1 border-t border-neutral-300/50" />
             <span className="size-1 rounded-full bg-neutral-300" />
             <hr className="flex-1 border-t border-neutral-300/50" />
           </div>
           <div
             ref={containerRef}
-            className="relative flex min-h-28 flex-1 flex-col gap-4 overflow-hidden"
+            className="relative flex min-h-20 flex-1 flex-col gap-2 overflow-hidden sm:min-h-28 sm:gap-4"
           >
             {Array.from({ length: skeletonCount }).map((_, index) => (
               <PackItemSkeleton key={index} />
             ))}
-            <div className="absolute inset-0 flex min-h-28 flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_white_0%,_transparent_100%)]">
-              <div className="flex flex-col items-center gap-5 rounded-xl bg-white/15 p-8 backdrop-blur-sm">
-                <p className="text-lg font-medium text-gray-600">
+            <div className="absolute inset-0 flex min-h-20 flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_white_0%,_transparent_100%)] sm:min-h-28">
+              <div className="flex flex-col items-center gap-3 rounded-xl bg-white/15 p-4 backdrop-blur-sm sm:gap-5 sm:p-8">
+                <p className="text-wrap text-center text-sm font-medium text-gray-600 sm:text-lg">
                   The more you{" "}
                   <Link
                     href="/new-pack"

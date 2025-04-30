@@ -57,7 +57,7 @@ export function CardsHandler({ packId }: { packId: string }) {
   }
 
   return (
-    <div className="flex h-full max-h-96 w-full max-w-[640px] flex-col items-center justify-center gap-4">
+    <div className="flex h-full max-h-96 w-full max-w-[640px] items-center justify-center">
       <CardStack pack={pack} />
     </div>
   );
