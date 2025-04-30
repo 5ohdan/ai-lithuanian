@@ -5,7 +5,7 @@ import { CardStack } from "./card-stack";
 import { useEffect, useState, useRef } from "react";
 import type { StoredPack, StoredBriefPack } from "~/lib/schemas";
 import { LoadingScreen } from "./loading-screen";
-import { useWordGeneration } from "~/hooks/useWordGeneration";
+import { useWordGeneration } from "~/hooks/use-word-generation";
 
 const storage = getStorage();
 

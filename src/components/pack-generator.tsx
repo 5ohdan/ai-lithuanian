@@ -3,7 +3,7 @@
 import { Alexandria } from "next/font/google";
 import { cn } from "~/lib/utils";
 import { motion } from "motion/react";
-import { useWordGeneration } from "~/hooks/useWordGeneration";
+import { useWordGeneration } from "~/hooks/use-word-generation";
 import { GenerationForm } from "./generation-form";
 
 const alexandria = Alexandria({
