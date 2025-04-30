@@ -11,6 +11,13 @@ const alexandria = Alexandria({
   weight: ["600"],
 });
 
+const springTransition = {
+  type: "spring",
+  stiffness: 100,
+  damping: 20,
+  mass: 0.5,
+};
+
 export function PackGenerator() {
   const { handleSubmit, isLoading, partialPack } = useWordGeneration({
     mode: "brief",
@@ -21,44 +28,19 @@ export function PackGenerator() {
       className="flex max-h-[500px] w-full max-w-[640px] flex-col items-center justify-between space-y-6 rounded-3xl bg-white px-16 pb-16 pt-12"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{
-        type: "spring",
-        stiffness: 100,
-        damping: 20,
-        mass: 0.5,
-      }}
+      transition={springTransition}
     >
       <h1 className={cn("text-4xl font-semibold", alexandria.className)}>
         Discover Lithuanian
       </h1>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-          damping: 20,
-          mass: 0.5,
-        }}
-        className="flex h-full w-full flex-col"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            type: "spring",
-            stiffness: 100,
-            damping: 20,
-            mass: 0.5,
-          }}
-        >
-          <GenerationForm
-            isLoading={isLoading}
-            submit={handleSubmit}
-            length={partialPack?.words?.length}
-          />
-        </motion.div>
-      </motion.div>
+
+      <div className="flex h-full w-full flex-col">
+        <GenerationForm
+          isLoading={isLoading}
+          submit={handleSubmit}
+          length={partialPack?.words?.length}
+        />
+      </div>
     </motion.div>
   );
 }
