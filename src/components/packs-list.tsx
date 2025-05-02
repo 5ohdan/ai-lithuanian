@@ -158,7 +158,7 @@ export function PacksList() {
               onClick={handleDeleteAll}
               variant="ghost"
               size="icon"
-              className="border shadow-sm"
+              className="border shadow-xs"
             >
               <Trash />
             </Button>
@@ -193,8 +193,8 @@ export function PacksList() {
             {Array.from({ length: skeletonCount }).map((_, index) => (
               <PackItemSkeleton key={index} />
             ))}
-            <div className="absolute inset-0 flex min-h-20 flex-col items-center justify-center bg-[radial-gradient(circle_at_center,_white_0%,_transparent_100%)] sm:min-h-28">
-              <div className="flex flex-col items-center gap-3 rounded-xl bg-white/15 p-4 backdrop-blur-sm sm:gap-5 sm:p-8">
+            <div className="absolute inset-0 flex min-h-20 flex-col items-center justify-center bg-[radial-gradient(circle_at_center,white_0%,transparent_100%)] sm:min-h-28">
+              <div className="flex flex-col items-center gap-3 rounded-xl bg-white/15 p-4 backdrop-blur-xs sm:gap-5 sm:p-8">
                 <p className="text-wrap text-center text-sm font-medium text-gray-600 sm:text-lg">
                   The more you{" "}
                   <Link

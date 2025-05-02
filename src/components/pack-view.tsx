@@ -69,7 +69,7 @@ export default function PackView({ packId }: { packId: string }) {
   if (!pack) {
     return (
       <div className="flex min-h-svh items-center justify-center">
-        <div className="flex flex-col items-center justify-center rounded-lg bg-white/75 p-4 text-center text-neutral-900 shadow-sm">
+        <div className="flex flex-col items-center justify-center rounded-lg bg-white/75 p-4 text-center text-neutral-900 shadow-xs">
           <h2 className="mb-2 text-xl font-semibold text-neutral-900">
             Pack Not Found
           </h2>
