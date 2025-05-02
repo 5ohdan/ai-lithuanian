@@ -47,12 +47,8 @@ export function PacksListItem({ pack, index }: PackItemProps) {
               <h2 className="text-sm font-medium sm:mb-2 sm:text-xl sm:font-semibold">
                 {pack.title}
               </h2>
-              {/* <p className="mb-2 text-sm text-gray-500/75">
-                Created: {new Date(pack.createdAt).toLocaleDateString()}
-              </p> */}
             </div>
             <div className="flex flex-wrap gap-1 sm:gap-2">
-              {/* Mobile view: show only 4 words */}
               {pack.set.slice(0, 4).map((word, index) => (
                 <motion.span
                   key={index}

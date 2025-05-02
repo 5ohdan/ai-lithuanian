@@ -7,7 +7,7 @@ import type { StoredPack, Word } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import Link from "next/link";
 import { LoadingScreen } from "./loading-screen";
-import { SidebarProvider, SidebarTrigger, useSidebar } from "./ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { PackViewSidebar } from "./pack-view-sidebar";
 import { cn } from "~/lib/utils";
 import { useIsMobile } from "~/hooks/use-mobile";
