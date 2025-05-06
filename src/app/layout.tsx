@@ -1,6 +1,6 @@
 import "~/styles/globals.css";
 import { Toaster } from "~/components/ui/sonner";
-import { Header } from "~/components/header";
+import { Header } from "~/components/header/header";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import Image from "next/image";

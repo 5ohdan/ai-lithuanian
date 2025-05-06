@@ -79,7 +79,7 @@ export default function PackView({ packId }: { packId: string }) {
           </p>
           <Link
             href="/packs"
-            className="flex w-fit items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex w-fit items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Packs
@@ -100,7 +100,7 @@ export default function PackView({ packId }: { packId: string }) {
       defaultOpen={!isMobile}
       className="h-full max-h-svh min-h-0 w-full overflow-y-auto"
     >
-      <div className="flex w-full items-center justify-center p-2 pt-16 sm:px-6 sm:pb-6 sm:pt-20">
+      <div className="flex w-full items-center justify-center p-2 pt-16 sm:px-6 sm:pt-20 sm:pb-6">
         <div className="flex h-full w-full flex-col rounded-xl bg-white p-2 sm:max-h-[75vh] sm:max-w-[1024px] sm:rounded-2xl">
           <div className="relative mb-3 flex items-center justify-center">
             <div className="absolute left-1">
@@ -183,7 +183,7 @@ function MainContent({
                   — {activeWord.partOfSpeech}, {activeWord.gender}
                 </span>
               </div>
-              <span className="w-full text-xl italic text-neutral-700">
+              <span className="w-full font-serif text-xl text-neutral-700 italic">
                 {activeWord.translation}
               </span>
             </div>

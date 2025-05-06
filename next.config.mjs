@@ -6,7 +6,7 @@ import "./src/env.js";
 
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
-initOpenNextCloudflareForDev();
+void initOpenNextCloudflareForDev();
 
 /** @type {import("next").NextConfig} */
 const config = {

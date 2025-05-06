@@ -8,6 +8,7 @@ import {
 } from "~/lib/schemas";
 import { model } from "~/lib/model";
 import type { z } from "zod";
+import { getUser } from "~/lib/auth-utils";
 
 export const maxDuration = 60;
 
@@ -30,6 +31,11 @@ function getFieldsToEnrich(): string[] {
 }
 
 export async function POST(req: Request) {
+  const user = await getUser();
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const parsed = briefPackSchema.safeParse(body);

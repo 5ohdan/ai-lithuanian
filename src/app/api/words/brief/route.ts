@@ -2,10 +2,17 @@ import { streamObject } from "ai";
 import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import { briefPackSchema, createPackSchema } from "~/lib/schemas";
 import { model } from "~/lib/model";
+import { getUser } from "~/lib/auth-utils";
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
+  const user = await getUser();
+
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   const context = await req.json();
   const parsedContext = createPackSchema.safeParse(context);
   if (!parsedContext.success) {
@@ -28,10 +35,10 @@ export async function POST(req: Request) {
           {
             type: "text",
             text: `Generate a pack of unique Lithuanian words with an appropriate title.
-            - Each word must be a single word (not a phrase)
+            - Each word must be a single capitalized word (not a phrase)
             - If a phrase is relevant, use its main word
             - Title should be 1-5 words. The title should be in English.
-            - DO NOT MENTION "LITHUANIAN", "WORDS" OR "VOCABULARY" in the title`,
+            - DO NOT MENTION LANGUAGE NAME, "WORDS" OR "VOCABULARY" in the title`,
           },
           {
             type: "text",
