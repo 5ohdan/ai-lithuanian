@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
-import { getUser } from "~/lib/auth-utils";
+import { getUserId } from "~/lib/auth-utils";
 
 export default async function CardsPage() {
-  const user = await getUser();
+  const userId = await getUserId();
 
-  if (!user) {
+  if (!userId) {
     redirect("/signin");
   }
 

@@ -141,7 +141,6 @@ export type CreatePack = z.infer<typeof createPackSchema>;
 
 export const userDataSchema = z.object({
   difficulty: DifficultyEnum,
-  knownWords: z.array(z.string()),
 });
 export type UserData = z.infer<typeof userDataSchema>;
 

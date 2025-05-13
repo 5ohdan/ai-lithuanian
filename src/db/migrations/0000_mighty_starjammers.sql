@@ -38,7 +38,9 @@ CREATE TABLE `packs` (
 	`title` text NOT NULL,
 	`difficulty` text NOT NULL,
 	`users_topic` text NOT NULL,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP
+	`created_at` integer DEFAULT CURRENT_TIMESTAMP,
+	`user_id` text,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `session` (
@@ -68,7 +70,6 @@ CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakp
 CREATE TABLE `user_data` (
 	`user_id` text PRIMARY KEY NOT NULL,
 	`difficulty` text NOT NULL,
-	`known_words` text NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -98,7 +99,7 @@ CREATE TABLE `words` (
 	`original` text NOT NULL,
 	`translation` text NOT NULL,
 	`transcription` text NOT NULL,
-	`part_of_speech` text NOT NULL,
+	`part_of_speech` text,
 	`gender` text,
 	`created_at` integer DEFAULT CURRENT_TIMESTAMP
 );

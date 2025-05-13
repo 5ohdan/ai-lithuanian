@@ -5,7 +5,7 @@ import {
   primaryKey,
 } from "drizzle-orm/sqlite-core";
 import { relations, sql } from "drizzle-orm";
-import { type InferSelectModel } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 export const users = sqliteTable("users", {
@@ -32,7 +32,7 @@ export const words = sqliteTable("words", {
   original: text().notNull(),
   translation: text().notNull(),
   transcription: text().notNull(),
-  partOfSpeech: text("part_of_speech").notNull(),
+  partOfSpeech: text("part_of_speech"),
   gender: text(),
   createdAt: integer("created_at", { mode: "timestamp" }).default(
     sql`CURRENT_TIMESTAMP`,
@@ -58,6 +58,7 @@ export const packs = sqliteTable("packs", {
   createdAt: integer("created_at", { mode: "timestamp" }).default(
     sql`CURRENT_TIMESTAMP`,
   ),
+  userId: text("user_id").references(() => users.id),
 });
 
 export const packWords = sqliteTable(
@@ -70,11 +71,7 @@ export const packWords = sqliteTable(
       .references(() => words.id)
       .notNull(),
   },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.packId, table.wordId] }),
-    };
-  },
+  (table) => [primaryKey({ columns: [table.packId, table.wordId] })],
 );
 
 export const userData = sqliteTable("user_data", {
@@ -82,7 +79,6 @@ export const userData = sqliteTable("user_data", {
     .references(() => users.id)
     .primaryKey(),
   difficulty: text().notNull(),
-  knownWords: text("known_words").notNull(), // Stored as JSON string in SQLite
 });
 
 // Relations

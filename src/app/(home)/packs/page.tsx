@@ -1,13 +1,17 @@
 import { PacksList } from "~/components/packs-list";
-import { getUser } from "~/lib/auth-utils";
+import { getUserId } from "~/lib/auth-utils";
 import { redirect } from "next/navigation";
+import { getUserWordSets } from "~/actions/word-sets";
 
 export default async function PacksPage() {
-  const user = await getUser();
+  const userId = await getUserId();
 
-  if (!user) {
+  if (!userId) {
     redirect("/signin");
   }
+
+  const wordsets = await getUserWordSets(userId);
+  console.log(wordsets);
 
   return <PacksList />;
 }

@@ -8,9 +8,9 @@ import { LoadingScreen } from "./loading-screen";
 import { PacksListItem } from "./packs-list-item";
 import { NoPacksImg } from "./no-packs-img";
 import Link from "next/link";
-import { Button } from "./ui/button";
+// import { Button } from "./ui/button";
 import { PackItemSkeleton } from "./pack-item-skeleton";
-import { Trash } from "lucide-react";
+// import { Trash } from "lucide-react";
 import { ConfirmationDialog } from "./confirmation-dialog";
 import { useIsMobile } from "../hooks/use-mobile";
 
@@ -87,7 +87,7 @@ export function PacksList() {
 
   if (!packs || packs.length === 0) {
     return (
-      <div className="flex h-svh w-full items-center justify-center px-2 pb-10 pt-16 sm:h-full sm:px-10 sm:pb-9 sm:pt-28 xl:w-4/6">
+      <div className="flex h-svh w-full items-center justify-center px-2 pt-16 pb-10 sm:h-full sm:px-10 sm:pt-28 sm:pb-9 xl:w-4/6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -100,7 +100,7 @@ export function PacksList() {
           className="flex h-full w-full flex-col items-center justify-between gap-4 overflow-auto rounded-2xl bg-white px-8 py-6"
         >
           <div className="flex flex-1 flex-col items-center justify-center gap-4">
-            <div className="flex-shrink-1 w-full max-w-[300px]">
+            <div className="w-full max-w-[300px] flex-shrink-1">
               <NoPacksImg className="h-auto max-h-[300px] w-full object-contain" />
             </div>
             <p className="flex flex-col items-center gap-4 text-neutral-900">
@@ -127,7 +127,7 @@ export function PacksList() {
   }
 
   return (
-    <div className="h-full w-full items-center justify-center px-2 pb-2 pt-16 sm:px-10 sm:pb-9 sm:pt-28 xl:w-4/6">
+    <div className="h-full w-full items-center justify-center px-2 pt-16 pb-2 sm:px-10 sm:pt-28 sm:pb-9 xl:w-4/6">
       <div className="flex h-full w-full flex-col gap-2 rounded-2xl bg-white px-4 py-4 sm:gap-4 sm:px-8 sm:py-6">
         <div className="flex items-center justify-between">
           <motion.h1
@@ -195,7 +195,7 @@ export function PacksList() {
             ))}
             <div className="absolute inset-0 flex min-h-20 flex-col items-center justify-center bg-[radial-gradient(circle_at_center,white_0%,transparent_100%)] sm:min-h-28">
               <div className="flex flex-col items-center gap-3 rounded-xl bg-white/15 p-4 backdrop-blur-xs sm:gap-5 sm:p-8">
-                <p className="text-wrap text-center text-sm font-medium text-gray-600 sm:text-lg">
+                <p className="text-center text-sm font-medium text-wrap text-gray-600 sm:text-lg">
                   The more you{" "}
                   <Link
                     href="/new-pack"

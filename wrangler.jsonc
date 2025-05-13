@@ -21,7 +21,7 @@
     {
       "database_name": "ai-lithuanian",
       "binding": "DB",
-      "database_id": "8189c53f-0fbd-4868-8aaf-33d4232d1c25",
+      "database_id": "35b33b5a-16a8-4f52-85e1-c28e2701eaa3",
       "migrations_dir": "src/db/migrations",
     },
   ],

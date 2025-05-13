@@ -76,7 +76,7 @@ export function PackViewSidebar({
               >
                 <p className="flex items-center gap-2">
                   <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border bg-neutral-900 text-xs text-white ${index === activeWordIndex ? "border-white" : "border-transparent"}`}
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border bg-neutral-900 font-serif text-xs text-white ${index === activeWordIndex ? "border-white" : "border-transparent"}`}
                   >
                     lt
                   </span>
