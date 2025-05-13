@@ -2,14 +2,14 @@ import { streamObject } from "ai";
 import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import { briefPackSchema, createPackSchema } from "~/lib/schemas";
 import { model } from "~/lib/model";
-import { getUser } from "~/lib/auth-utils";
+import { getUserId } from "~/lib/auth-utils";
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  const user = await getUser();
+  const userId = await getUserId();
 
-  if (!user) {
+  if (!userId) {
     return new Response("Unauthorized", { status: 401 });
   }
 
