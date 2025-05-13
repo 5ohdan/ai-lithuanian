@@ -1,5 +1,5 @@
 import { defineConfig } from "drizzle-kit";
-import { env } from "~/env";
+// import { env } from "~/env";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -31,9 +31,9 @@ export default defineConfig({
     ? {
         driver: "d1-http",
         dbCredentials: {
-          accountId: env.CLOUDFLARE_ACCOUNT_ID,
-          databaseId: env.DATABASE_ID,
-          token: env.CLOUDFLARE_API_TOKEN,
+          accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+          databaseId: process.env.DATABASE_ID,
+          token: process.env.CLOUDFLARE_API_TOKEN,
         },
       }
     : {

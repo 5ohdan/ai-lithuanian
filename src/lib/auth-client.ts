@@ -1,8 +1,7 @@
 import { createAuthClient } from "better-auth/react";
-import { env } from "~/env";
 
 const { useSession, signIn, signOut, getSession } = createAuthClient({
-  baseURL: env.NEXT_PUBLIC_BETTER_AUTH_URL,
+  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
   redirectTo: "/new-pack",
 });
 
