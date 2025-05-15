@@ -26,7 +26,6 @@ export function PackViewSidebar({
   const handleWordSelect = (index: number) => {
     setActiveWordIndex(index);
 
-    // Close sidebar when selecting a word on mobile
     if (isMobile) {
       setOpenMobile(false);
     }
@@ -43,7 +42,7 @@ export function PackViewSidebar({
           : "w-[250px] translate-x-0 transform opacity-100"
       }`}
     >
-      <SidebarContent className="bg-white pt-2 sm:pt-0">
+      <SidebarContent className="bg-white pt-2 [-ms-overflow-style:none] [scrollbar-width:none] sm:pt-0 [&::-webkit-scrollbar]:hidden">
         <SidebarGroup className="bg-white">
           <SidebarGroupContent className="flex h-full flex-col gap-2 overflow-y-auto px-2 sm:px-0 sm:pr-2">
             {words.map((word, index) => (

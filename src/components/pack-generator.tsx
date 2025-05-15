@@ -25,7 +25,7 @@ export function PackGenerator() {
 
   return (
     <motion.div
-      className="mx-2 flex max-h-[500px] w-full max-w-[640px] flex-col items-center justify-between space-y-6 rounded-2xl bg-white px-4 pb-8 pt-6 sm:mx-0 sm:rounded-3xl sm:px-16 sm:pb-16 sm:pt-12"
+      className="mx-2 flex max-h-[500px] w-full max-w-[640px] flex-col items-center justify-between space-y-6 rounded-2xl bg-white px-4 pt-6 pb-8 shadow-md sm:mx-0 sm:rounded-3xl sm:px-16 sm:pt-12 sm:pb-16"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={springTransition}
