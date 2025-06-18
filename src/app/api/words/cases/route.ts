@@ -6,7 +6,7 @@ import {
   briefWordSchema,
   wordSchema,
 } from "~/lib/schemas";
-import { model } from "~/lib/model";
+import { getModel } from "~/lib/model";
 import type { z } from "zod";
 import { getUserId } from "~/lib/auth-utils";
 
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     const fieldsToEnrich = getFieldsToEnrich();
 
     const result = streamObject({
-      model,
+      model: getModel("google"),
       messages: [
         {
           role: "system",
