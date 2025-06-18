@@ -22,12 +22,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MotionDiv } from "~/components/motion-div";
 import { cn } from "~/lib/utils";
-import { Roboto } from "next/font/google";
-
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
 
 export function GenerationForm({
   isLoading,
@@ -52,7 +46,7 @@ export function GenerationForm({
   return (
     <Form {...form}>
       <form
-        className={cn("flex min-w-full flex-col gap-4", roboto.className)}
+        className={cn("flex min-w-full flex-col gap-4")}
         onSubmit={form.handleSubmit(
           async (data) => {
             const isValid = await form.trigger();

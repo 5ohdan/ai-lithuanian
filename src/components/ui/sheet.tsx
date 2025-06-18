@@ -119,7 +119,7 @@ const SheetTitle = ({
 }) => (
   <SheetPrimitive.Title
     ref={ref}
-    className={cn("text-foreground text-lg font-semibold", className)}
+    className={cn("text-foreground text-lg font-bold", className)}
     {...props}
   />
 );

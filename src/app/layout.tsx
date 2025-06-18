@@ -1,9 +1,9 @@
 import "~/styles/globals.css";
 import { Toaster } from "~/components/ui/sonner";
 import { Header } from "~/components/header/header";
-import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import Image from "next/image";
+import { merriweatherSans } from "~/assets/fonts";
 
 export const metadata: Metadata = {
   title: "AI Lithuanian",
@@ -13,7 +13,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang="en" className={`${merriweatherSans.className}`}>
       <head>
         <link rel="preload" href="/bg_smol.jpg" as="image" />
       </head>

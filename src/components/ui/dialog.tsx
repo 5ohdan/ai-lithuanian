@@ -97,10 +97,7 @@ const DialogTitle = ({
 }) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      "text-lg leading-none font-semibold tracking-tight",
-      className,
-    )}
+    className={cn("text-lg leading-none font-bold tracking-tight", className)}
     {...props}
   />
 );

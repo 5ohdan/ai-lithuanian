@@ -104,7 +104,7 @@ export function PacksList() {
               <NoPacksImg className="h-auto max-h-[300px] w-full object-contain" />
             </div>
             <p className="flex flex-col items-center gap-4 text-neutral-900">
-              <span className="text-2xl font-semibold">
+              <span className="text-2xl font-bold">
                 Your wordsets will appear here!
               </span>
               <span className="text-center text-neutral-900">
@@ -139,7 +139,7 @@ export function PacksList() {
               damping: 20,
               mass: 0.5,
             }}
-            className="text-xl font-semibold sm:text-3xl sm:font-bold"
+            className="text-xl font-bold sm:text-3xl sm:font-bold"
           >
             Your wordsets
           </motion.h1>

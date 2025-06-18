@@ -11,6 +11,7 @@ import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { PackViewSidebar } from "./pack-view-sidebar";
 import { cn } from "~/lib/utils";
 import { useIsMobile } from "~/hooks/use-mobile";
+import { merriweather } from "~/assets/fonts";
 
 const storage = getStorage();
 
@@ -70,7 +71,7 @@ export default function PackView({ packId }: { packId: string }) {
     return (
       <div className="flex min-h-svh items-center justify-center">
         <div className="flex flex-col items-center justify-center rounded-lg bg-white/75 p-4 text-center text-neutral-900 shadow-xs">
-          <h2 className="mb-2 text-xl font-semibold text-neutral-900">
+          <h2 className="mb-2 text-xl font-bold text-neutral-900">
             Pack Not Found
           </h2>
           <p className="mb-4 text-neutral-900">
@@ -170,7 +171,7 @@ function MainContent({
             className="flex flex-1 flex-col"
           >
             <div className="flex flex-wrap items-center gap-x-2 pb-5">
-              <span className="text-2xl font-semibold text-neutral-900">
+              <span className="text-2xl font-bold text-neutral-900">
                 {activeWord.original}
               </span>
               <div className="flex items-center gap-2">
@@ -183,7 +184,9 @@ function MainContent({
                   — {activeWord.partOfSpeech}, {activeWord.gender}
                 </span>
               </div>
-              <span className="w-full font-serif text-xl text-neutral-700 italic">
+              <span
+                className={`w-full text-xl font-light text-neutral-700 italic ${merriweather.className}`}
+              >
                 {activeWord.translation}
               </span>
             </div>

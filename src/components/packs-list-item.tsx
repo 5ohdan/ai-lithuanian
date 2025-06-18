@@ -44,7 +44,7 @@ export function PacksListItem({ pack, index }: PackItemProps) {
         <Card className="cursor-default bg-neutral-100/85 sm:cursor-pointer">
           <CardContent className="space-y-1 p-2 sm:p-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-medium sm:mb-2 sm:text-xl sm:font-semibold">
+              <h2 className="text-sm font-medium sm:mb-2 sm:text-xl sm:font-bold">
                 {pack.title}
               </h2>
             </div>

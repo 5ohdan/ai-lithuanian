@@ -1,15 +1,10 @@
 "use client";
 
-import { Alexandria } from "next/font/google";
 import { cn } from "~/lib/utils";
 import { motion } from "motion/react";
 import { useWordGeneration } from "~/hooks/use-word-generation";
 import { GenerationForm } from "./generation-form";
-
-const alexandria = Alexandria({
-  subsets: ["latin"],
-  weight: ["500"],
-});
+import { alexandria } from "~/assets/fonts";
 
 const springTransition = {
   type: "spring",
@@ -32,7 +27,7 @@ export function PackGenerator() {
     >
       <h1
         className={cn(
-          "text-2xl font-medium sm:text-3xl sm:font-semibold",
+          "text-2xl font-medium sm:text-3xl sm:font-bold",
           alexandria.className,
         )}
       >

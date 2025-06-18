@@ -5,7 +5,7 @@ const { useSession, signIn, signOut, getSession } = createAuthClient({
   redirectTo: "/new-pack",
 });
 
-const signInWithGihub = async () => {
+const signInWithGithub = async () => {
   await signIn.social({
     provider: "github",
   });
@@ -17,4 +17,4 @@ const signInWithGoogle = async () => {
   });
 };
 
-export { useSession, signInWithGihub, signInWithGoogle, signOut, getSession };
+export { useSession, signInWithGithub, signInWithGoogle, signOut, getSession };

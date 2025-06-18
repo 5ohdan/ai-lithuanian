@@ -91,7 +91,7 @@ export function Word({
                   mass: 0.5,
                 }}
               >
-                <span className="text-base font-semibold text-neutral-800 sm:text-2xl">
+                <span className="text-base font-bold text-neutral-800 sm:text-2xl">
                   {word.original}
                 </span>
                 <span className="text-sm text-neutral-800/75 sm:text-xl">

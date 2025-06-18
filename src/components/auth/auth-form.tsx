@@ -10,7 +10,7 @@ import {
   CardFooter,
 } from "~/components/ui/card";
 import {
-  signInWithGihub,
+  signInWithGithub,
   signInWithGoogle,
   signOut,
   useSession,
@@ -32,7 +32,7 @@ export default function SignIn() {
     <div className="flex min-h-svh w-full items-center justify-center p-2 sm:max-w-md">
       {data?.user ? (
         <Card className="w-full space-y-3 px-6 py-8 sm:max-w-md sm:min-w-md sm:space-y-0 sm:px-0 sm:py-0">
-          <CardHeader className="p-0 text-xl font-semibold sm:p-6 sm:pb-0 md:text-2xl">
+          <CardHeader className="p-0 text-xl font-bold sm:p-6 sm:pb-0 md:text-2xl">
             Signed in
           </CardHeader>
           <CardContent className="p-0 sm:p-6">
@@ -59,7 +59,7 @@ export default function SignIn() {
       ) : (
         <Card className="w-full space-y-4 px-4 py-6 sm:min-w-md sm:px-0 sm:py-0">
           <CardHeader className="space-y-0 p-0 sm:p-6 sm:pb-0">
-            <CardTitle className="text-2xl font-semibold md:text-3xl">
+            <CardTitle className="text-2xl font-bold md:text-3xl">
               Log In
             </CardTitle>
             <CardDescription className="text-sm md:text-base">
@@ -72,7 +72,11 @@ export default function SignIn() {
                 variant="link"
                 className="w-full cursor-pointer gap-2 border border-neutral-200 bg-neutral-100"
                 onClick={async () => {
-                  await signInWithGihub();
+                  try {
+                    await signInWithGithub();
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}
               >
                 <svg
@@ -96,7 +100,11 @@ export default function SignIn() {
                 variant="link"
                 className="w-full cursor-pointer gap-2 border border-neutral-200 bg-neutral-100"
                 onClick={async () => {
-                  await signInWithGoogle();
+                  try {
+                    await signInWithGoogle();
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}
               >
                 <svg

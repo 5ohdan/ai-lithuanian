@@ -1,7 +1,7 @@
 import { streamObject } from "ai";
 import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
 import { briefPackSchema, createPackSchema } from "~/lib/schemas";
-import { model } from "~/lib/model";
+import { getModel } from "~/lib/model";
 import { getUserId } from "~/lib/auth-utils";
 
 export const maxDuration = 60;
@@ -21,6 +21,8 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
+
+  const model = getModel('google')
 
   const result = streamObject({
     model,
