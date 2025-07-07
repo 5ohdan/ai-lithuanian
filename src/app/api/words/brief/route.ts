@@ -1,6 +1,6 @@
 import { streamObject } from "ai";
 import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
-import { briefPackSchema, createPackSchema } from "~/lib/schemas";
+import { briefPackSchema, packInputSchema } from "~/lib/schemas";
 import { getModel } from "~/lib/model";
 import { getUserId } from "~/lib/auth-utils";
 
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   }
 
   const context = await req.json();
-  const parsedContext = createPackSchema.safeParse(context);
+  const parsedContext = packInputSchema.safeParse(context);
   if (!parsedContext.success) {
     return new Response(
       parsedContext.error.errors.map((e) => e.message).join("\n"),
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const model = getModel('google')
+  const model = getModel("google");
 
   const result = streamObject({
     model,

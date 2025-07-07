@@ -13,7 +13,24 @@ import { storageSchema } from "./schemas";
 
 const STORAGE_KEY = "wordLearningStorage";
 
-export class StorageManager {
+interface StorageManagerInterface {
+  subscribe(callback: () => void): () => void;
+  addPack(pack: Pack, difficulty: Difficulty, topic: string): string;
+  addBriefPack(
+    briefPack: BriefPack,
+    difficulty: Difficulty,
+    topic: string,
+  ): string;
+  getPacks(): StoredPack[];
+  getPackById(packId: string): StoredPack | undefined;
+  getBriefPacks(): StoredBriefPack[];
+  getBriefPackById(packId: string): StoredBriefPack | undefined;
+  getWordsByPackId(packId: string): StoredWord[];
+  getWordsByBriefPackId(packId: string): StoredWord[];
+  removePack(id: string): void;
+}
+
+export class StorageManager implements StorageManagerInterface {
   private storage: Storage;
   private isClient: boolean;
   private subscribers: Set<() => void> = new Set<() => void>();

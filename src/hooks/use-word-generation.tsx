@@ -4,7 +4,7 @@ import { briefPackSchema, packSchema } from "~/lib/schemas";
 import { toast } from "sonner";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
 import type {
-  CreatePack,
+  PackInput,
   BriefPack,
   Pack,
   StoredBriefPack,
@@ -23,7 +23,7 @@ type WordGenerationOptions = {
 
 // Define return types for each mode
 type BriefModeReturn = {
-  handleSubmit: (data: CreatePack) => void;
+  handleSubmit: (data: PackInput) => void;
   isLoading: boolean;
   partialPack: BriefPack | null;
 };
@@ -46,7 +46,7 @@ export function useWordGeneration(
 ): BriefModeReturn | EnrichModeReturn {
   const { mode, onSuccess } = options;
   const requestData = useRef<
-    CreatePack | { id: string; words: BriefPack["words"] } | null
+    PackInput | { id: string; words: BriefPack["words"] } | null
   >(null);
   const router = useRouter();
 
@@ -103,7 +103,7 @@ export function useWordGeneration(
 
   // Handle submission for brief pack generation
   const handleSubmitBrief = useCallback(
-    (data: CreatePack) => {
+    (data: PackInput) => {
       const { topic, difficulty, count } = data;
       requestData.current = data;
       submit({ topic, difficulty, count });

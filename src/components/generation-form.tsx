@@ -2,7 +2,7 @@
 
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { createPackSchema, type CreatePack } from "~/lib/schemas";
+import { packInputSchema, type PackInput } from "~/lib/schemas";
 import {
   Select,
   SelectContent,
@@ -29,11 +29,11 @@ export function GenerationForm({
   length,
 }: {
   isLoading: boolean;
-  submit: (data: CreatePack) => void;
+  submit: (data: PackInput) => void;
   length?: number;
 }) {
-  const form = useForm<CreatePack>({
-    resolver: zodResolver(createPackSchema),
+  const form = useForm<PackInput>({
+    resolver: zodResolver(packInputSchema),
     defaultValues: {
       topic: "",
       difficulty: "Beginner",

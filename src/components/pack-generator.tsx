@@ -1,12 +1,12 @@
 "use client";
 
 import { cn } from "~/lib/utils";
-import { motion } from "motion/react";
+import { motion, type Transition } from "motion/react";
 import { useWordGeneration } from "~/hooks/use-word-generation";
 import { GenerationForm } from "./generation-form";
 import { alexandria } from "~/assets/fonts";
 
-const springTransition = {
+const springTransition: Transition = {
   type: "spring",
   stiffness: 100,
   damping: 20,
