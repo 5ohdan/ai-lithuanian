@@ -9,7 +9,7 @@ export const originalWord = z
 export const translation = z
   .string()
   .describe(
-    "The most accurate English equivalent for the specified meaning and context (capitalize only proper nouns).",
+    "The most accurate English equivalent for the specified meaning and context, properly capitalized.",
   );
 
 export const transcription = z

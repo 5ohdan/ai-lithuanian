@@ -4,6 +4,7 @@ import { title } from "./atom-fields";
 
 export const briefPackSchema = z.object({
   words: z.array(briefWordSchema),
+  enriched: z.boolean().default(false),
   title,
 });
 export type BriefPack = z.infer<typeof briefPackSchema>;

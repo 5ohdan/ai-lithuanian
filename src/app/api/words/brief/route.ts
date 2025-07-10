@@ -1,5 +1,5 @@
 import { streamObject } from "ai";
-import { DEFAULT_SYSTEM_PROMPT } from "~/constants";
+import { getSystemPrompt } from "~/constants";
 import { briefPackSchema, packInputSchema } from "~/lib/schemas";
 import { getModel } from "~/lib/model";
 import { getUserId } from "~/lib/auth-utils";
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: DEFAULT_SYSTEM_PROMPT,
+        content: getSystemPrompt(),
       },
       {
         role: "user",

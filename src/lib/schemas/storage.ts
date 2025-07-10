@@ -19,7 +19,6 @@ const baseStoredSetSchema = z.object({
 
 export const storedPackSchema = baseStoredSetSchema.extend({
   set: wordSchema.array(),
-  wordIds: z.array(z.string().uuid()),
 });
 export type StoredPack = z.infer<typeof storedPackSchema>;
 

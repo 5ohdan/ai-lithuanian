@@ -1,9 +1,7 @@
 import type {
-  StoredWord,
   StoredPack,
   Storage,
   Pack,
-  Word,
   Difficulty,
   BriefPack,
   StoredBriefPack,
@@ -25,8 +23,6 @@ interface StorageManagerInterface {
   getPackById(packId: string): StoredPack | undefined;
   getBriefPacks(): StoredBriefPack[];
   getBriefPackById(packId: string): StoredBriefPack | undefined;
-  getWordsByPackId(packId: string): StoredWord[];
-  getWordsByBriefPackId(packId: string): StoredWord[];
   removePack(id: string): void;
 }
 
@@ -86,7 +82,6 @@ export class StorageManager implements StorageManagerInterface {
       id: packId,
       title: pack.title,
       difficulty,
-      wordIds: pack.words.map((word) => this.addWord(word, packId).id),
       createdAt: new Date().toISOString(),
       usersTopic: topic,
     };
@@ -114,24 +109,6 @@ export class StorageManager implements StorageManagerInterface {
     return packId;
   }
 
-  private addWord(word: Word, id: string): StoredWord {
-    const existingWord = this.storage.words.find(
-      (w) => w.word.original === word.original,
-    );
-    if (existingWord) {
-      existingWord.packIds.push(id);
-      return existingWord;
-    }
-    const storedWord: StoredWord = {
-      word,
-      id: crypto.randomUUID(),
-      packIds: [id],
-      createdAt: new Date().toISOString(),
-    };
-    this.storage.words.push(storedWord);
-    return storedWord;
-  }
-
   getPacks(): StoredPack[] {
     return this.storage.packs;
   }
@@ -148,36 +125,9 @@ export class StorageManager implements StorageManagerInterface {
     return this.storage.briefPacks.find((s) => s.id === packId);
   }
 
-  getWordsByPackId(packId: string): StoredWord[] {
-    const set = this.storage.packs.find((s) => s.id === packId);
-    if (!set) return [];
-    return set.wordIds
-      .map((id) => this.storage.words.find((w) => w.id === id))
-      .filter((w): w is StoredWord => w !== undefined);
-  }
-
-  getWordsByBriefPackId(packId: string): StoredWord[] {
-    const set = this.storage.briefPacks.find((s) => s.id === packId);
-    if (!set) return [];
-    return set.set
-      .map((word) =>
-        this.storage.words.find((w) => w.word.original === word.original),
-      )
-      .filter((w): w is StoredWord => w !== undefined);
-  }
-
   removePack(id: string): void {
     const index = this.storage.packs.findIndex((s) => s.id === id);
     if (index !== -1) {
-      const set = this.storage.packs[index]!;
-      set.wordIds.forEach((wordId) => {
-        const word = this.storage.words.find((w) => w.id === wordId);
-        if (word && word.packIds.length === 1) {
-          this.storage.words = this.storage.words.filter(
-            (w) => w.id !== wordId,
-          );
-        }
-      });
       this.storage.packs.splice(index, 1);
       this.saveStorage();
     }
@@ -210,7 +160,6 @@ export class StorageManager implements StorageManagerInterface {
       id: briefPack.id,
       title: pack.title,
       difficulty: briefPack.difficulty,
-      wordIds: pack.words.map((word) => this.addWord(word, briefPack.id).id),
       createdAt: briefPack.createdAt,
       usersTopic: briefPack.usersTopic,
     };
