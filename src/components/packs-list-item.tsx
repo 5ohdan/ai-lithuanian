@@ -8,7 +8,9 @@ type PackItemProps = {
   index: number;
 };
 
-export function PacksListItem({ pack, index }: PackItemProps) {
+export function PacksListItem(props: PackItemProps) {
+  const { pack, index } = props;
+
   return (
     <motion.div
       key={pack.id}

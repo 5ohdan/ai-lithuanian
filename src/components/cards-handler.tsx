@@ -9,7 +9,13 @@ import { useWordGeneration } from "~/hooks/use-word-generation";
 
 const storage = getStorage();
 
-export function CardsHandler({ packId }: { packId: string }) {
+type CardsHandlerProps = {
+  packId: string;
+};
+
+export function CardsHandler(props: CardsHandlerProps) {
+  const { packId } = props;
+
   const [pack, setPack] = useState<StoredPack | StoredBriefPack | undefined>(
     undefined,
   );

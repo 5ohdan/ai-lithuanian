@@ -23,15 +23,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MotionDiv } from "~/components/motion-div";
 import { cn } from "~/lib/utils";
 
-export function GenerationForm({
-  isLoading,
-  submit,
-  length,
-}: {
+type GenerationFormProps = {
   isLoading: boolean;
   submit: (data: PackInput) => void;
   length?: number;
-}) {
+};
+
+export function GenerationForm(props: GenerationFormProps) {
+  const { isLoading, submit, length } = props;
+
   const form = useForm<PackInput>({
     resolver: zodResolver(packInputSchema),
     defaultValues: {
@@ -75,6 +75,7 @@ export function GenerationForm({
                       fieldState.error &&
                         "border-red-500/75 focus-visible:ring-red-500/75 focus-visible:ring-offset-0",
                     )}
+                    autoComplete="off"
                   />
                 </FormControl>
                 {fieldState.error && (

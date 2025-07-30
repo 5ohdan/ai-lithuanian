@@ -5,10 +5,16 @@ import { useCallback, useState } from "react";
 import { Word as WordCard } from "./word";
 import { motion } from "motion/react";
 
-export function CardStack({ pack }: { pack: StoredPack | StoredBriefPack }) {
+type CardStackProps = {
+  pack: StoredPack | StoredBriefPack;
+};
+
+export function CardStack(props: CardStackProps) {
+  const { pack } = props;
+  const { set, title, id } = pack;
+
   const [shownCard, setShownCard] = useState(0);
 
-  const { set, title, id } = pack;
   const prevAvailable = shownCard > 0;
   const nextAvailable = shownCard < set.length - 1;
 

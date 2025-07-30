@@ -21,15 +21,17 @@ interface ConfirmationDialogProps {
   cancelText?: string;
 }
 
-export function ConfirmationDialog({
-  isOpen,
-  onClose,
-  onConfirm,
-  title,
-  description,
-  confirmText = "Confirm",
-  cancelText = "Cancel",
-}: ConfirmationDialogProps) {
+export function ConfirmationDialog(props: ConfirmationDialogProps) {
+  const {
+    isOpen,
+    onClose,
+    onConfirm,
+    title,
+    description,
+    confirmText,
+    cancelText,
+  } = props;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>

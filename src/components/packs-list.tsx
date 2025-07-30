@@ -77,7 +77,6 @@ export function PacksList() {
 
   const confirmDeleteAll = () => {
     storage.deleteAllPacks();
-    setPacks([]);
     setIsDeleteDialogOpen(false);
   };
 

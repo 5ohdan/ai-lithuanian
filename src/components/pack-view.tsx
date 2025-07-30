@@ -15,7 +15,13 @@ import { merriweather } from "~/assets/fonts";
 
 const storage = getStorage();
 
-export default function PackView({ packId }: { packId: string }) {
+type PackViewProps = {
+  packId: string;
+};
+
+export default function PackView(props: PackViewProps) {
+  const { packId } = props;
+
   const [pack, setPack] = useState<StoredPack | undefined>(undefined);
   const [activeWordIndex, setActiveWordIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);

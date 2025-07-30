@@ -12,16 +12,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ListTree } from "lucide-react";
 
-export function Word({
-  word,
-  topic,
-  index,
-  nextCard,
-  previousCard,
-  nextAvailable,
-  prevAvailable,
-  id,
-}: {
+type WordProps = {
   word: Word | BriefWord;
   topic: string;
   index: number;
@@ -30,7 +21,19 @@ export function Word({
   nextAvailable: boolean;
   prevAvailable: boolean;
   id: string;
-}) {
+};
+export function Word(props: WordProps) {
+  const {
+    word,
+    topic,
+    index,
+    nextCard,
+    previousCard,
+    nextAvailable,
+    prevAvailable,
+    id,
+  } = props;
+
   const router = useRouter();
 
   useEffect(() => {

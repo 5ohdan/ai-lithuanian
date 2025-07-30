@@ -10,17 +10,15 @@ import {
 } from "~/components/ui/sidebar";
 import type { Pack } from "~/lib/schemas";
 
-export function PackViewSidebar({
-  words,
-  activeWordIndex,
-  setActiveWordIndex,
-  isMobile,
-}: {
+type PackViewSidebarProps = {
   words: Pack["words"];
   activeWordIndex: number;
   setActiveWordIndex: (index: number) => void;
   isMobile?: boolean;
-}) {
+};
+
+export function PackViewSidebar(props: PackViewSidebarProps) {
+  const { words, activeWordIndex, setActiveWordIndex, isMobile } = props;
   const { state, setOpenMobile } = useSidebar();
 
   const handleWordSelect = (index: number) => {
