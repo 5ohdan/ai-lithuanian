@@ -20,6 +20,8 @@ import { LoadingScreen } from "../loading-screen";
 export default function SignIn() {
   const { data, isPending, error } = useSession();
 
+  const { user } = data ?? {};
+
   if (isPending) {
     return <LoadingScreen />;
   }
@@ -30,7 +32,7 @@ export default function SignIn() {
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-2 sm:max-w-md">
-      {data?.user ? (
+      {user ? (
         <Card className="w-full space-y-3 px-6 py-8 sm:max-w-md sm:min-w-md sm:space-y-0 sm:px-0 sm:py-0">
           <CardHeader className="p-0 text-xl font-bold sm:p-6 sm:pb-0 md:text-2xl">
             Signed in
@@ -38,13 +40,13 @@ export default function SignIn() {
           <CardContent className="p-0 sm:p-6">
             <div className="flex items-center justify-between gap-4">
               <p className="flex flex-col">
-                <span className="font-medium">{data.user.name}</span>
-                <span className="italic">{data.user.email}</span>
+                <span className="font-medium">{user.name}</span>
+                <span className="italic">{user.email}</span>
               </p>
-              {data.user.image && (
+              {user.image && (
                 <img
-                  src={data.user.image}
-                  alt={data.user.name ?? ""}
+                  src={user.image}
+                  alt={user.name ?? ""}
                   className="h-10 w-10 rounded-full"
                 />
               )}
