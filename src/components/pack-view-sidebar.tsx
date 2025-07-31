@@ -40,7 +40,7 @@ export function PackViewSidebar(props: PackViewSidebarProps) {
           : "w-[250px] translate-x-0 transform opacity-100"
       }`}
     >
-      <SidebarContent className="bg-white pt-2 [-ms-overflow-style:none] [scrollbar-width:none] sm:pt-0 [&::-webkit-scrollbar]:hidden">
+      <SidebarContent className="scrollbar-hide bg-white pt-2 sm:pt-0">
         <SidebarGroup className="bg-white">
           <SidebarGroupContent className="flex h-full flex-col gap-2 overflow-y-auto px-2 sm:px-0 sm:pr-2">
             {words.map((word, index) => (

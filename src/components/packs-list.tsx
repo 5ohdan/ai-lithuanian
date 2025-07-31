@@ -173,7 +173,7 @@ export function PacksList() {
             damping: 20,
             mass: 0.5,
           }}
-          className="relative flex h-full w-full flex-col overflow-y-scroll sm:gap-4 sm:rounded-xl sm:border sm:border-neutral-300/50 sm:p-6 sm:shadow-md"
+          className="scrollbar-hide relative flex h-full w-full flex-col overflow-y-scroll sm:gap-4 sm:rounded-xl sm:border sm:border-neutral-300/50 sm:p-6 sm:shadow-md"
         >
           <div className="flex flex-col gap-2 sm:gap-4">
             {packs.map((pack, index) => (
