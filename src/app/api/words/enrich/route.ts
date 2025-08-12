@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     const parsed = briefPackSchema.safeParse(body);
     if (!parsed.success) {
       return new Response(
-        parsed.error.errors.map((e) => e.message).join("\n"),
+        parsed.error.issues.map((e) => e.message).join("\n"),
         {
           status: 400,
         },
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       onFinish: ({ object }) => {
         const res = packSchema.safeParse(object);
         if (res.error) {
-          throw new Error(res.error.errors.map((e) => e.message).join("\n"));
+          throw new Error(res.error.issues.map((e) => e.message).join("\n"));
         }
       },
       onError: (error) => {

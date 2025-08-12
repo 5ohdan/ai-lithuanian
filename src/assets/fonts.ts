@@ -1,5 +1,9 @@
-import { Merriweather, Merriweather_Sans } from "next/font/google";
-import { Alexandria } from "next/font/google";
+import {
+  Merriweather,
+  Merriweather_Sans,
+  Alexandria,
+  Voces,
+} from "next/font/google";
 
 const alexandria = Alexandria({
   subsets: ["latin"],
@@ -20,4 +24,10 @@ const merriweatherSans = Merriweather_Sans({
   variable: "--font-merriweather-sans",
 });
 
-export { merriweather, merriweatherSans, alexandria };
+const voces = Voces({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-voces",
+});
+
+export { merriweather, merriweatherSans, alexandria, voces };

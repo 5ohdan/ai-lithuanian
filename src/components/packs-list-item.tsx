@@ -51,7 +51,7 @@ export function PacksListItem(props: PackItemProps) {
               </h2>
             </div>
             <div className="flex flex-wrap gap-1 sm:gap-2">
-              {pack.set.slice(0, 4).map((word, index) => (
+              {pack.words.slice(0, 4).map((word, index) => (
                 <motion.span
                   key={index}
                   initial={{ opacity: 0 }}
@@ -68,7 +68,7 @@ export function PacksListItem(props: PackItemProps) {
                   {word.original}
                 </motion.span>
               ))}
-              {pack.set.length > 4 && (
+              {pack.words.length > 4 && (
                 <motion.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -81,12 +81,12 @@ export function PacksListItem(props: PackItemProps) {
                   }}
                   className="rounded-md border border-neutral-200/85 bg-white px-2 py-1 text-xs sm:hidden"
                 >
-                  {pack.set.length - 4}+
+                  {pack.words.length - 4}+
                 </motion.span>
               )}
 
               {/* Desktop view: show up to 10 words */}
-              {pack.set.slice(0, 10).map((word, index) => (
+              {pack.words.slice(0, 10).map((word, index) => (
                 <motion.span
                   key={`desktop-${index}`}
                   initial={{ opacity: 0 }}
@@ -103,7 +103,7 @@ export function PacksListItem(props: PackItemProps) {
                   {word.original}
                 </motion.span>
               ))}
-              {pack.set.length > 10 && (
+              {pack.words.length > 10 && (
                 <motion.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -116,7 +116,7 @@ export function PacksListItem(props: PackItemProps) {
                   }}
                   className="hidden rounded-md border border-neutral-200/85 bg-white px-2 py-1 text-sm sm:inline-block"
                 >
-                  {pack.set.length - 10}+
+                  {pack.words.length - 10}+
                 </motion.span>
               )}
             </div>

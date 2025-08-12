@@ -11,7 +11,7 @@ import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { PackViewSidebar } from "./pack-view-sidebar";
 import { cn } from "~/lib/utils";
 import { useIsMobile } from "~/hooks/use-mobile";
-import { merriweather } from "~/assets/fonts";
+import { merriweather, voces } from "~/assets/fonts";
 
 const storage = getStorage();
 
@@ -45,12 +45,16 @@ export default function PackView(props: PackViewProps) {
 
   const handlePrevious = useCallback(() => {
     if (!pack) return;
-    setActiveWordIndex((prev) => (prev === 0 ? pack.set.length - 1 : prev - 1));
+    setActiveWordIndex((prev) =>
+      prev === 0 ? pack.words.length - 1 : prev - 1,
+    );
   }, [pack]);
 
   const handleNext = useCallback(() => {
     if (!pack) return;
-    setActiveWordIndex((prev) => (prev === pack.set.length - 1 ? 0 : prev + 1));
+    setActiveWordIndex((prev) =>
+      prev === pack.words.length - 1 ? 0 : prev + 1,
+    );
   }, [pack]);
 
   useEffect(() => {
@@ -96,7 +100,7 @@ export default function PackView(props: PackViewProps) {
     );
   }
 
-  const activeWord = pack.set[activeWordIndex];
+  const activeWord = pack.words[activeWordIndex];
 
   if (!activeWord) {
     return <div>Word not found</div>;
@@ -132,7 +136,7 @@ export default function PackView(props: PackViewProps) {
           <div className="relative h-full w-full overflow-hidden rounded-xl p-3">
             <div className="flex h-full">
               <PackViewSidebar
-                words={pack.set}
+                words={pack.words}
                 activeWordIndex={activeWordIndex}
                 setActiveWordIndex={setActiveWordIndex}
                 isMobile={isMobile}
@@ -140,7 +144,7 @@ export default function PackView(props: PackViewProps) {
               <MainContent
                 activeWord={activeWord}
                 activeWordIndex={activeWordIndex}
-                packLength={pack.set.length}
+                packLength={pack.words.length}
               />
             </div>
           </div>
@@ -181,11 +185,11 @@ function MainContent({
                 {activeWord.original}
               </span>
               <div className="flex items-center gap-2">
-                {activeWord.transcription && (
-                  <span className="text-2xl text-neutral-500">
-                    {activeWord.transcription}
-                  </span>
-                )}
+                <span
+                  className={`text-2xl tracking-wide text-neutral-500 ${voces.className}`}
+                >
+                  {activeWord.transcription}
+                </span>
                 <span className="text-lg text-neutral-900/85">
                   — {activeWord.partOfSpeech}, {activeWord.gender}
                 </span>

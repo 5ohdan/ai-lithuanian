@@ -114,11 +114,14 @@ export function useWordGeneration(
   // Handle submission for pack enrichment
   const handleSubmitEnrich = useCallback(
     (pack: StoredBriefPack) => {
-      requestData.current = { id: pack.id, words: pack.set };
+      requestData.current = {
+        id: pack.id,
+        words: pack.words,
+      };
 
       // The API expects a BriefPack with 'words' and 'title'
       submit({
-        words: pack.set,
+        words: pack.words,
         title: pack.title,
       });
     },

@@ -18,12 +18,12 @@ const baseStoredSetSchema = z.object({
 });
 
 export const storedPackSchema = baseStoredSetSchema.extend({
-  set: wordSchema.array(),
+  words: wordSchema.array(),
 });
 export type StoredPack = z.infer<typeof storedPackSchema>;
 
 export const storedBriefPackSchema = baseStoredSetSchema.extend({
-  set: briefWordSchema.array(),
+  words: briefWordSchema.array(),
 });
 export type StoredBriefPack = z.infer<typeof storedBriefPackSchema>;
 

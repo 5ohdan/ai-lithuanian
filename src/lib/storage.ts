@@ -78,7 +78,7 @@ export class StorageManager implements StorageManagerInterface {
   addPack(pack: Pack, difficulty: Difficulty, topic: string): string {
     const packId = crypto.randomUUID();
     const storedPack: StoredPack = {
-      set: pack.words,
+      words: pack.words,
       id: packId,
       title: pack.title,
       difficulty,
@@ -97,7 +97,7 @@ export class StorageManager implements StorageManagerInterface {
   ): string {
     const packId = crypto.randomUUID();
     const storedBriefPack: StoredBriefPack = {
-      set: briefPack.words,
+      words: briefPack.words,
       id: packId,
       title: briefPack.title,
       usersTopic: topic,
@@ -156,7 +156,7 @@ export class StorageManager implements StorageManagerInterface {
 
     // Create full pack with the same ID
     const storedSet: StoredPack = {
-      set: pack.words,
+      words: pack.words,
       id: briefPack.id,
       title: pack.title,
       difficulty: briefPack.difficulty,

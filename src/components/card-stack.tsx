@@ -11,19 +11,19 @@ type CardStackProps = {
 
 export function CardStack(props: CardStackProps) {
   const { pack } = props;
-  const { set, title, id } = pack;
+  const { words, title, id } = pack;
 
   const [shownCard, setShownCard] = useState(0);
 
   const prevAvailable = shownCard > 0;
-  const nextAvailable = shownCard < set.length - 1;
+  const nextAvailable = shownCard < words.length - 1;
 
   const handleNext = useCallback(() => {
-    if (shownCard === set.length - 1) {
+    if (shownCard === words.length - 1) {
       return;
     }
     setShownCard(shownCard + 1);
-  }, [shownCard, set]);
+  }, [shownCard, words]);
 
   const handlePrevious = useCallback(() => {
     if (shownCard === 0) {
@@ -32,7 +32,7 @@ export function CardStack(props: CardStackProps) {
     setShownCard(shownCard - 1);
   }, [shownCard]);
 
-  if (set.length === 0) {
+  if (words.length === 0) {
     return null;
   }
 
@@ -50,9 +50,9 @@ export function CardStack(props: CardStackProps) {
         opacity: { duration: 0.4 },
       }}
     >
-      {set[shownCard] && (
+      {words[shownCard] && (
         <motion.div
-          key={set[shownCard].original}
+          key={words[shownCard].original}
           className="h-full w-full"
           layout
           transition={{
@@ -65,7 +65,7 @@ export function CardStack(props: CardStackProps) {
           <WordCard
             nextCard={handleNext}
             previousCard={handlePrevious}
-            word={set[shownCard]}
+            word={words[shownCard]}
             nextAvailable={nextAvailable}
             prevAvailable={prevAvailable}
             index={shownCard + 1}
