@@ -19,8 +19,8 @@ export const transcription = z
   );
 
 export const commonMetadataFields = {
-  id: z.string().uuid(),
-  createdAt: z.string().datetime(),
+  id: z.uuid(),
+  createdAt: z.coerce.date(),
 };
 
 export const title = z
@@ -54,5 +54,5 @@ export const meanings = z
   .array(meaning)
   .min(1)
   .describe(
-    "Array of distinct meanings for the word, each with context and example. Include only significantly different semantic meanings or usage contexts, not minor variations.",
+    "Array of distinct meanings for the word, each with context and example. Include all different semantic meanings or usage contexts, but exclude similar contexts that are essentially the same meaning with only slight differences.",
   );

@@ -44,12 +44,7 @@ export async function POST(req: Request) {
         },
         {
           role: "user",
-          content: [
-            {
-              type: "text",
-              text: getEnrichedPrompt(briefPack),
-            },
-          ],
+          content: getEnrichedPrompt(briefPack),
         },
       ],
       schema: packSchema,

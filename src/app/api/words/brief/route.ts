@@ -33,22 +33,15 @@ export async function POST(req: Request) {
       },
       {
         role: "user",
-        content: [
-          {
-            type: "text",
-            text: `Generate a pack of unique Lithuanian words with an appropriate title.
-            - Each word must be a single capitalized word (not a phrase)
-            - If a phrase is relevant, use its main word
-            - Title should be 1-5 words. The title should be in English.
-            - DO NOT MENTION LANGUAGE NAME, "WORDS" OR "VOCABULARY" in the title`,
-          },
-          {
-            type: "text",
-            text: `- Topic: "${parsedContext.data.topic}"
-            - Difficulty: ${parsedContext.data.difficulty}
-            - Number of words: ${parsedContext.data.count}`,
-          },
-        ],
+        content:
+          `Generate a pack of unique Lithuanian words with an appropriate title.\n` +
+          `- Each word must be a single capitalized word (not a phrase)\n` +
+          `- If a phrase is relevant, use its main word\n` +
+          `- Title should be 1-5 words. The title should be in English.\n` +
+          `- DO NOT MENTION LANGUAGE NAME, "WORDS" OR "VOCABULARY" in the title\n` +
+          `- Topic: "${parsedContext.data.topic}"\n` +
+          `- Difficulty: ${parsedContext.data.difficulty}\n` +
+          `- Number of words: ${parsedContext.data.count}`,
       },
     ],
     schema: briefPackSchema,

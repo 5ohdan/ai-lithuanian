@@ -60,17 +60,10 @@ export async function POST(req: Request) {
         },
         {
           role: "user",
-          content: [
-            {
-              type: "text",
-              text: `Enrich the following Lithuanian pack by adding these missing fields for each word: ${fieldsToEnrich.join(", ")}. Use the provided original word, translation, and transcription as given.
-              For each word, provide MULTIPLE meanings using the 'meanings' array field, where each meaning has its own context, example, and example translation. Words often have different contexts or usages, so try to provide at least 2 different meanings/contexts for each word when possible.`,
-            },
-            {
-              type: "text",
-              text: `Here is the brief pack:\n${JSON.stringify(briefPack)}`,
-            },
-          ],
+          content:
+            `Enrich the following Lithuanian pack by adding these missing fields for each word: ${fieldsToEnrich.join(", ")}. Use the provided original word, translation, and transcription as given.\n` +
+            `For each word, provide MULTIPLE meanings using the 'meanings' array field, where each meaning has its own context, example, and example translation. Words often have different contexts or usages, so try to provide at least 2 different meanings/contexts for each word when possible.\n` +
+            `Here is the brief pack:\n${JSON.stringify(briefPack)}`,
         },
       ],
       schema: packSchema,

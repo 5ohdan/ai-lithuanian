@@ -1,7 +1,5 @@
-"use client";
-
 import SignIn from "~/components/auth/auth-form";
 
-export default function SignInPage() {
+export default async function SignInPage() {
   return <SignIn />;
 }
