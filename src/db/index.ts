@@ -4,7 +4,7 @@ import type { DrizzleD1Database } from "drizzle-orm/d1";
 
 import * as schema from "./schema";
 
-export let db: DrizzleD1Database<typeof schema> | null = null;
+let db: DrizzleD1Database<typeof schema> | null = null;
 
 export const getDB = async () => {
   if (db) {

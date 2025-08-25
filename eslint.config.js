@@ -12,6 +12,11 @@ export default [
       "build/**",
       ".git/**",
       "src/components/ui/**",
+      ".open-next/**",
+      ".wrangler/**",
+      "*.config.mjs",
+      "*.config.js",
+      "*.config.ts",
     ],
   },
 
