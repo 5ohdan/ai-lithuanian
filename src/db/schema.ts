@@ -8,23 +8,6 @@ import { relations, sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
-export const users = sqliteTable("users", {
-  id: text()
-    .$defaultFn(() => nanoid())
-    .primaryKey(),
-  email: text().notNull().unique(),
-  name: text(),
-  image: text(),
-  provider: text().notNull(),
-  providerId: text("provider_id").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
-});
-
 export const words = sqliteTable("words", {
   id: text()
     .$defaultFn(() => nanoid())
@@ -58,7 +41,7 @@ export const packs = sqliteTable("packs", {
   createdAt: integer("created_at", { mode: "timestamp" }).default(
     sql`CURRENT_TIMESTAMP`,
   ),
-  userId: text("user_id").references(() => users.id),
+  userId: text("user_id").references(() => user.id),
 });
 
 export const packWords = sqliteTable(
@@ -76,7 +59,7 @@ export const packWords = sqliteTable(
 
 export const userData = sqliteTable("user_data", {
   userId: text("user_id")
-    .references(() => users.id)
+    .references(() => user.id)
     .primaryKey(),
   difficulty: text().notNull(),
 });
@@ -101,14 +84,7 @@ export const meaningsRelations = relations(meanings, ({ one }) => ({
 }));
 
 export const userDataRelations = relations(userData, ({ one }) => ({
-  user: one(users, { fields: [userData.userId], references: [users.id] }),
-}));
-
-export const usersRelations = relations(users, ({ one }) => ({
-  userData: one(userData, {
-    fields: [users.id],
-    references: [userData.userId],
-  }),
+  user: one(user, { fields: [userData.userId], references: [user.id] }),
 }));
 
 export const user = sqliteTable("user", {
@@ -165,7 +141,7 @@ export const verification = sqliteTable("verification", {
   updatedAt: integer("updated_at", { mode: "timestamp" }),
 });
 
-export type User = InferSelectModel<typeof users>;
+export type User = InferSelectModel<typeof user>;
 export type Word = InferSelectModel<typeof words>;
 export type Meaning = InferSelectModel<typeof meanings>;
 export type Pack = InferSelectModel<typeof packs>;

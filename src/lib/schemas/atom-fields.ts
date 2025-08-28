@@ -20,7 +20,7 @@ export const transcription = z
 
 export const commonMetadataFields = {
   id: z.uuid(),
-  createdAt: z.coerce.date(),
+  createdAt: z.iso.date(),
 };
 
 export const title = z
