@@ -6,7 +6,7 @@ export default async function PacksPage() {
   const userId = await getUserId();
 
   if (!userId) {
-    redirect("/signin");
+    redirect("/login");
   }
 
   return <PacksList />;

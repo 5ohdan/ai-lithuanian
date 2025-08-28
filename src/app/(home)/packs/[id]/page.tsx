@@ -9,7 +9,7 @@ export default async function PackPage({
   const userId = await getUserId();
 
   if (!userId) {
-    redirect("/signin");
+    redirect("/login");
   }
 
   const packId = (await params).id;
