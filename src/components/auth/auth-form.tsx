@@ -71,6 +71,7 @@ function SignInForm() {
     await signIn.social(
       {
         provider,
+        callbackURL: "/new-pack",
       },
       {
         onRequest: () => setIsLoading(true),
