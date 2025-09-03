@@ -55,4 +55,6 @@ yarn-error.log*
 .dev.vars.*
 
 
-PLAN.md
+# Documentation files
+WORKFLOW.md
+PRIORITIES.md
