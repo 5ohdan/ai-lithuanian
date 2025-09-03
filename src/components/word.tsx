@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ListTree } from "lucide-react";
+import { voces } from "~/assets/fonts";
 
 type WordProps = {
   word: Word | BriefWord;
@@ -97,7 +98,9 @@ export function Word(props: WordProps) {
                 <span className="text-base font-bold text-neutral-800 sm:text-2xl">
                   {word.original}
                 </span>
-                <span className="text-sm text-neutral-800/75 sm:text-xl">
+                <span
+                  className={`text-sm tracking-wide text-neutral-800/75 sm:text-xl ${voces.className}`}
+                >
                   {word.transcription}
                 </span>
               </motion.div>
