@@ -4,15 +4,15 @@ import { useEffect, useState, useRef } from "react";
 import type { Storage } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import { motion } from "motion/react";
-import { LoadingScreen } from "./loading-screen";
+import { LoadingScreen } from "../loading-screen";
 import { PacksListItem } from "./packs-list-item";
 import { NoPacksImg } from "./no-packs-img";
 import Link from "next/link";
 // import { Button } from "./ui/button";
 import { PackItemSkeleton } from "./pack-item-skeleton";
 // import { Trash } from "lucide-react";
-import { ConfirmationDialog } from "./confirmation-dialog";
-import { useIsMobile } from "../hooks/use-mobile";
+import { ConfirmationDialog } from "../confirmation-dialog";
+import { useIsMobile } from "../../hooks/use-mobile";
 
 const storage = getStorage();
 

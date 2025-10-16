@@ -17,7 +17,7 @@ export const getDB = async () => {
     throw new Error("D1 database not found");
   }
 
-  db = drizzle(env.DB, { schema, logger: true, casing: "snake_case" });
+  db = drizzle(env.DB, { schema, casing: "snake_case" });
 
   return db;
 };

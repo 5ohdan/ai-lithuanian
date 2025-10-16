@@ -1,8 +1,8 @@
 "use client";
 
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
 import { useEffect, useState } from "react";
-import { useIsMobile } from "../hooks/use-mobile";
+import { useIsMobile } from "../../hooks/use-mobile";
 
 export function PackItemSkeleton() {
   const [skeletonsPerRow, setSkeletonsPerRow] = useState(4);

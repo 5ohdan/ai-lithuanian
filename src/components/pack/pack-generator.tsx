@@ -3,7 +3,7 @@
 import { cn } from "~/lib/utils";
 import { motion, type Transition } from "motion/react";
 import { useWordGeneration } from "~/hooks/use-word-generation";
-import { GenerationForm } from "./generation-form";
+import { GenerationForm } from "../generation-form";
 import { alexandria } from "~/assets/fonts";
 
 const springTransition: Transition = {

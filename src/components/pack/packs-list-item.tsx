@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import type { StoredPack, StoredBriefPack } from "~/lib/schemas";
-import { CardContent, Card } from "./ui/card";
+import { CardContent, Card } from "../ui/card";
 import Link from "next/link";
 
 type PackItemProps = {

@@ -1,4 +1,4 @@
-import PackView from "~/components/pack-view";
+import PackView from "~/components/pack/pack-view";
 import { getUserId } from "~/lib/auth-utils";
 import { redirect } from "next/navigation";
 export default async function PackPage({

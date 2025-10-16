@@ -1,4 +1,4 @@
-import { PacksList } from "~/components/packs-list";
+import { PacksList } from "~/components/pack/packs-list";
 import { getUserId } from "~/lib/auth-utils";
 import { redirect } from "next/navigation";
 
