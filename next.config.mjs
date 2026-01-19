@@ -4,9 +4,7 @@ void initOpenNextCloudflareForDev();
 
 /** @type {import("next").NextConfig} */
 const config = {
-  experimental: {
-    reactCompiler: true,
-  },
+  reactCompiler: true,
 };
 
 export default config;
