@@ -1,5 +1,4 @@
 import { defineConfig } from "drizzle-kit";
-// import { env } from "~/env";
 import fs from "node:fs";
 import path from "node:path";
 
