@@ -4,7 +4,7 @@ import {
   text,
   primaryKey,
 } from "drizzle-orm/sqlite-core";
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
@@ -63,29 +63,6 @@ export const userData = sqliteTable("user_data", {
     .primaryKey(),
   difficulty: text().notNull(),
 });
-
-// Relations
-export const wordsRelations = relations(words, ({ many }) => ({
-  meanings: many(meanings),
-  packWords: many(packWords),
-}));
-
-export const packsRelations = relations(packs, ({ many }) => ({
-  packWords: many(packWords),
-}));
-
-export const packWordsRelations = relations(packWords, ({ one }) => ({
-  pack: one(packs, { fields: [packWords.packId], references: [packs.id] }),
-  word: one(words, { fields: [packWords.wordId], references: [words.id] }),
-}));
-
-export const meaningsRelations = relations(meanings, ({ one }) => ({
-  word: one(words, { fields: [meanings.wordId], references: [words.id] }),
-}));
-
-export const userDataRelations = relations(userData, ({ one }) => ({
-  user: one(user, { fields: [userData.userId], references: [user.id] }),
-}));
 
 export const user = sqliteTable("user", {
   id: text().primaryKey(),

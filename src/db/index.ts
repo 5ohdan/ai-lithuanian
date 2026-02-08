@@ -3,8 +3,9 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
 
 import * as schema from "./schema";
+import { relations } from "./relations";
 
-let db: DrizzleD1Database<typeof schema> | null = null;
+let db: DrizzleD1Database<typeof schema, typeof relations> | null = null;
 
 export const getDB = async () => {
   if (db) {
@@ -17,7 +18,7 @@ export const getDB = async () => {
     throw new Error("D1 database not found");
   }
 
-  db = drizzle(env.DB, { schema, casing: "snake_case" });
+  db = drizzle(env.DB, { schema, relations, casing: "snake_case" });
 
   return db;
 };
