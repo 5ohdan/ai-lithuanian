@@ -3,12 +3,7 @@
 import { briefPackSchema, packSchema } from "~/lib/schemas";
 import { toast } from "sonner";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
-import type {
-  PackInput,
-  BriefPack,
-  Pack,
-  StoredBriefPack,
-} from "~/lib/schemas";
+import type { PackInput, BriefPack, Pack, StoredBriefPack } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import { useRouter } from "next/navigation";
 import { useRef, useCallback } from "react";
@@ -45,14 +40,11 @@ export function useWordGeneration(
   options: WordGenerationOptions = { mode: "brief" },
 ): BriefModeReturn | EnrichModeReturn {
   const { mode, onSuccess } = options;
-  const requestData = useRef<
-    PackInput | { id: string; words: BriefPack["words"] } | null
-  >(null);
+  const requestData = useRef<PackInput | { id: string; words: BriefPack["words"] } | null>(null);
   const router = useRouter();
 
   // Choose the appropriate API endpoint and schema based on the mode
-  const apiEndpoint =
-    mode === "brief" ? "/api/words/brief" : "/api/words/enrich";
+  const apiEndpoint = mode === "brief" ? "/api/words/brief" : "/api/words/enrich";
   const responseSchema = mode === "brief" ? briefPackSchema : packSchema;
 
   const {
@@ -68,9 +60,7 @@ export function useWordGeneration(
       );
     },
     onFinish: ({ object }) => {
-      toast.success(
-        `Successfully ${mode === "brief" ? "generated" : "enriched"} a pack.`,
-      );
+      toast.success(`Successfully ${mode === "brief" ? "generated" : "enriched"} a pack.`);
 
       if (object) {
         let packId: string;

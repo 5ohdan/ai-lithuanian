@@ -20,9 +20,7 @@ export function PackItemSkeleton() {
       if (container) {
         const containerWidth = container.clientWidth;
         const availableWidth = containerWidth - containerPadding * 2;
-        const skeletons = Math.floor(
-          (availableWidth + gapWidth) / (skeletonWidth + gapWidth),
-        );
+        const skeletons = Math.floor((availableWidth + gapWidth) / (skeletonWidth + gapWidth));
         setSkeletonsPerRow(Math.max(1, skeletons));
       }
     };
@@ -39,10 +37,7 @@ export function PackItemSkeleton() {
       </div>
       <div className="flex flex-wrap gap-2">
         {Array.from({ length: skeletonsPerRow }).map((_, index) => (
-          <Skeleton
-            key={index}
-            className="h-5 w-16 rounded-md bg-neutral-200/75 sm:h-7 sm:w-20"
-          />
+          <Skeleton key={index} className="h-5 w-16 rounded-md bg-neutral-200/75 sm:h-7 sm:w-20" />
         ))}
       </div>
     </div>

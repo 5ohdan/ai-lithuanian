@@ -25,12 +25,7 @@ export function PackGenerator() {
       animate={{ opacity: 1, y: 0 }}
       transition={springTransition}
     >
-      <h1
-        className={cn(
-          "text-2xl font-medium sm:text-3xl sm:font-bold",
-          alexandria.className,
-        )}
-      >
+      <h1 className={cn("text-2xl font-medium sm:text-3xl sm:font-bold", alexandria.className)}>
         Discover Lithuanian Words
       </h1>
 

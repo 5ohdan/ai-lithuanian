@@ -1,9 +1,4 @@
-import {
-  Merriweather,
-  Merriweather_Sans,
-  Alexandria,
-  Voces,
-} from "next/font/google";
+import { Merriweather, Merriweather_Sans, Alexandria, Voces } from "next/font/google";
 
 const alexandria = Alexandria({
   subsets: ["latin"],

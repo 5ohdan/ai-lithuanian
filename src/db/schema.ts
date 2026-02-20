@@ -1,9 +1,4 @@
-import {
-  sqliteTable,
-  integer,
-  text,
-  primaryKey,
-} from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, text, primaryKey } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -17,9 +12,7 @@ export const words = sqliteTable("words", {
   transcription: text().notNull(),
   partOfSpeech: text("part_of_speech"),
   gender: text(),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const meanings = sqliteTable("meanings", {
@@ -38,9 +31,7 @@ export const packs = sqliteTable("packs", {
   title: text().notNull(),
   difficulty: text().notNull(),
   usersTopic: text("users_topic").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(
-    sql`CURRENT_TIMESTAMP`,
-  ),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`),
   userId: text("user_id").references(() => user.id),
 });
 

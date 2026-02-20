@@ -1,10 +1,5 @@
 import { z } from "zod";
-import {
-  originalWord,
-  translation,
-  transcription,
-  meanings,
-} from "./atom-fields";
+import { originalWord, translation, transcription, meanings } from "./atom-fields";
 import { GenderEnum, PartOfSpeechEnum } from "./language";
 
 export const briefWordSchema = z.object({

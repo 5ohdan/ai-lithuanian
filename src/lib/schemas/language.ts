@@ -14,9 +14,7 @@ export const PartOfSpeechEnum = z
     "interjection",
     "verbal interjection",
   ])
-  .describe(
-    "The grammatical category of the word (noun, verb, adjective, etc.).",
-  );
+  .describe("The grammatical category of the word (noun, verb, adjective, etc.).");
 export type PartOfSpeech = z.infer<typeof PartOfSpeechEnum>;
 
 export const GenderEnum = z

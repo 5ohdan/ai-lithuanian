@@ -22,15 +22,7 @@ interface ConfirmationDialogProps {
 }
 
 export function ConfirmationDialog(props: ConfirmationDialogProps) {
-  const {
-    isOpen,
-    onClose,
-    onConfirm,
-    title,
-    description,
-    confirmText,
-    cancelText,
-  } = props;
+  const { isOpen, onClose, onConfirm, title, description, confirmText, cancelText } = props;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

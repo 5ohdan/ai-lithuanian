@@ -9,9 +9,7 @@ export const metadata: Metadata = {
   title: "AI Lithuanian",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${merriweatherSans.className}`}>
       <head>
@@ -33,9 +31,7 @@ export default function RootLayout({
             </div>
             <div className="relative z-10 flex h-full w-full flex-col">
               <Header />
-              <div className="flex h-full w-full items-center justify-center">
-                {children}
-              </div>
+              <div className="flex h-full w-full items-center justify-center">{children}</div>
             </div>
           </main>
         </div>

@@ -26,12 +26,9 @@ export async function POST(req: Request) {
     const body = await req.json();
     const parsed = briefPackSchema.safeParse(body);
     if (!parsed.success) {
-      return new Response(
-        parsed.error.issues.map((e) => e.message).join("\n"),
-        {
-          status: 400,
-        },
-      );
+      return new Response(parsed.error.issues.map((e) => e.message).join("\n"), {
+        status: 400,
+      });
     }
     const briefPack = parsed.data;
 

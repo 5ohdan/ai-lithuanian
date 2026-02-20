@@ -12,16 +12,10 @@ export function getBriefPrompt(topic: string) {
 }
 
 function getFieldsToEnrich(): string {
-  const briefWordFields = Object.keys(
-    (briefWordSchema as z.ZodObject<z.ZodRawShape>).shape,
-  );
-  const wordFields = Object.keys(
-    (wordSchema as z.ZodObject<z.ZodRawShape>).shape,
-  );
+  const briefWordFields = Object.keys((briefWordSchema as z.ZodObject<z.ZodRawShape>).shape);
+  const wordFields = Object.keys((wordSchema as z.ZodObject<z.ZodRawShape>).shape);
 
-  return wordFields
-    .filter((field) => !briefWordFields.includes(field))
-    .join(", ");
+  return wordFields.filter((field) => !briefWordFields.includes(field)).join(", ");
 }
 
 export function getEnrichedPrompt(briefPack: BriefPack) {

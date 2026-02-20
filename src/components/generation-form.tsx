@@ -175,14 +175,8 @@ export function GenerationForm(props: GenerationFormProps) {
             },
           }}
         >
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full font-medium"
-          >
-            {isLoading
-              ? `Almost there, ${length ?? 0} done...`
-              : "Create new wordset"}
+          <Button type="submit" disabled={isLoading} className="w-full font-medium">
+            {isLoading ? `Almost there, ${length ?? 0} done...` : "Create new wordset"}
           </Button>
         </MotionDiv>
       </form>

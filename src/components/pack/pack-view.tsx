@@ -45,16 +45,12 @@ export default function PackView(props: PackViewProps) {
 
   const handlePrevious = useCallback(() => {
     if (!pack) return;
-    setActiveWordIndex((prev) =>
-      prev === 0 ? pack.words.length - 1 : prev - 1,
-    );
+    setActiveWordIndex((prev) => (prev === 0 ? pack.words.length - 1 : prev - 1));
   }, [pack]);
 
   const handleNext = useCallback(() => {
     if (!pack) return;
-    setActiveWordIndex((prev) =>
-      prev === pack.words.length - 1 ? 0 : prev + 1,
-    );
+    setActiveWordIndex((prev) => (prev === pack.words.length - 1 ? 0 : prev + 1));
   }, [pack]);
 
   useEffect(() => {
@@ -81,12 +77,9 @@ export default function PackView(props: PackViewProps) {
     return (
       <div className="flex min-h-svh items-center justify-center">
         <div className="flex flex-col items-center justify-center rounded-lg bg-white/75 p-4 text-center text-neutral-900 shadow-xs">
-          <h2 className="mb-2 text-xl font-bold text-neutral-900">
-            Pack Not Found
-          </h2>
+          <h2 className="mb-2 text-xl font-bold text-neutral-900">Pack Not Found</h2>
           <p className="mb-4 text-neutral-900">
-            The pack you&apos;re looking for doesn&apos;t exist or may have been
-            deleted.
+            The pack you&apos;re looking for doesn&apos;t exist or may have been deleted.
           </p>
           <Link
             href="/packs"
@@ -115,9 +108,7 @@ export default function PackView(props: PackViewProps) {
         <div className="flex h-full w-full flex-col rounded-xl bg-white p-2 sm:max-h-[75vh] sm:max-w-[1024px] sm:rounded-2xl">
           <div className="relative mb-3 flex items-center justify-center">
             <div className="absolute left-1">
-              <SidebarTrigger
-                className={cn("transition-all duration-200 ease-in-out")}
-              />
+              <SidebarTrigger className={cn("transition-all duration-200 ease-in-out")} />
             </div>
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
@@ -181,13 +172,9 @@ function MainContent({
             className="flex flex-1 flex-col"
           >
             <div className="flex flex-wrap items-center gap-x-2 pb-5">
-              <span className="text-2xl font-bold text-neutral-900">
-                {activeWord.original}
-              </span>
+              <span className="text-2xl font-bold text-neutral-900">{activeWord.original}</span>
               <div className="flex items-center gap-2">
-                <span
-                  className={`text-2xl tracking-wide text-neutral-500 ${voces.className}`}
-                >
+                <span className={`text-2xl tracking-wide text-neutral-500 ${voces.className}`}>
                   {activeWord.transcription}
                 </span>
                 <span className="text-lg text-neutral-900/85">
@@ -209,14 +196,10 @@ function MainContent({
                     <li className="text-neutral-900" key={index}>
                       <span className="font-medium">{meaning.context}</span>
                       {" — "}
-                      <span className="text-neutral-600">
-                        {meaning.translation}
-                      </span>
+                      <span className="text-neutral-600">{meaning.translation}</span>
                       <div className="mt-1 flex flex-col rounded-lg bg-neutral-50 p-3">
                         <div className="font-medium">{meaning.example}</div>
-                        <div className="text-neutral-500">
-                          {meaning.exampleTranslation}
-                        </div>
+                        <div className="text-neutral-500">{meaning.exampleTranslation}</div>
                       </div>
                     </li>
                   ))}

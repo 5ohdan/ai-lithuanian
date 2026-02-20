@@ -1,11 +1,4 @@
-import type {
-  StoredPack,
-  Storage,
-  Pack,
-  Difficulty,
-  BriefPack,
-  StoredBriefPack,
-} from "./schemas";
+import type { StoredPack, Storage, Pack, Difficulty, BriefPack, StoredBriefPack } from "./schemas";
 
 import { storageSchema } from "./schemas";
 
@@ -14,11 +7,7 @@ const STORAGE_KEY = "wordLearningStorage";
 interface StorageManagerInterface {
   subscribe(callback: () => void): () => void;
   addPack(pack: Pack, difficulty: Difficulty, topic: string): string;
-  addBriefPack(
-    briefPack: BriefPack,
-    difficulty: Difficulty,
-    topic: string,
-  ): string;
+  addBriefPack(briefPack: BriefPack, difficulty: Difficulty, topic: string): string;
   getPacks(): StoredPack[];
   getPackById(packId: string): StoredPack | undefined;
   getBriefPacks(): StoredBriefPack[];
@@ -90,11 +79,7 @@ export class StorageManager implements StorageManagerInterface {
     return packId;
   }
 
-  addBriefPack(
-    briefPack: BriefPack,
-    difficulty: Difficulty,
-    topic: string,
-  ): string {
+  addBriefPack(briefPack: BriefPack, difficulty: Difficulty, topic: string): string {
     const packId = crypto.randomUUID();
     const storedBriefPack: StoredBriefPack = {
       words: briefPack.words,
@@ -142,9 +127,7 @@ export class StorageManager implements StorageManagerInterface {
   // Convert a brief pack to a full pack with the same ID
   convertBriefToFullPack(briefpackId: string, pack: Pack): string {
     // Find and remove the brief pack
-    const briefIndex = this.storage.briefPacks.findIndex(
-      (s) => s.id === briefpackId,
-    );
+    const briefIndex = this.storage.briefPacks.findIndex((s) => s.id === briefpackId);
 
     if (briefIndex === -1) {
       console.error(`Brief pack with ID ${briefpackId} not found`);

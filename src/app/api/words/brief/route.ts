@@ -16,10 +16,9 @@ export async function POST(req: Request) {
   const context = await req.json();
   const parsedContext = packInputSchema.safeParse(context);
   if (!parsedContext.success) {
-    return new Response(
-      parsedContext.error.issues.map((e) => e.message).join("\n"),
-      { status: 400 },
-    );
+    return new Response(parsedContext.error.issues.map((e) => e.message).join("\n"), {
+      status: 400,
+    });
   }
 
   const model = getModel("google");

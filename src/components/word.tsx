@@ -1,11 +1,5 @@
 import type { Word, BriefWord } from "~/lib/schemas";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
@@ -24,16 +18,7 @@ type WordProps = {
   id: string;
 };
 export function Word(props: WordProps) {
-  const {
-    word,
-    topic,
-    index,
-    nextCard,
-    previousCard,
-    nextAvailable,
-    prevAvailable,
-    id,
-  } = props;
+  const { word, topic, index, nextCard, previousCard, nextAvailable, prevAvailable, id } = props;
 
   const router = useRouter();
 
@@ -119,9 +104,7 @@ export function Word(props: WordProps) {
                   mass: 0.5,
                 }}
               >
-                <p className="text-sm text-neutral-800 sm:text-xl">
-                  {word.translation}
-                </p>
+                <p className="text-sm text-neutral-800 sm:text-xl">{word.translation}</p>
               </motion.div>
             </CardContent>
           </motion.div>
@@ -138,9 +121,7 @@ export function Word(props: WordProps) {
             ←
           </Button>
 
-          <span className="text-center text-sm font-bold text-neutral-800 sm:text-lg">
-            {index}
-          </span>
+          <span className="text-center text-sm font-bold text-neutral-800 sm:text-lg">{index}</span>
           {nextAvailable ? (
             <Button
               onClick={nextCard}

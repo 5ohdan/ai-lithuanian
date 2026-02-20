@@ -55,6 +55,4 @@ yarn-error.log*
 .dev.vars.*
 
 
-# Documentation files
-WORKFLOW.md
-PRIORITIES.md
+.opencode/plans

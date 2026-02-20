@@ -46,9 +46,7 @@ export function PacksListItem(props: PackItemProps) {
         <Card className="cursor-default bg-neutral-100/85 sm:cursor-pointer">
           <CardContent className="space-y-1 p-2 sm:p-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-medium sm:mb-2 sm:text-xl sm:font-bold">
-                {pack.title}
-              </h2>
+              <h2 className="text-sm font-medium sm:mb-2 sm:text-xl sm:font-bold">{pack.title}</h2>
             </div>
             <div className="flex flex-wrap gap-1 sm:gap-2">
               {pack.words.slice(0, 4).map((word, index) => (

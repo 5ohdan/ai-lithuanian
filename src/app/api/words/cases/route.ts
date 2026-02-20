@@ -1,11 +1,6 @@
 import { streamObject } from "ai";
 import { getSystemPrompt } from "~/constants";
-import {
-  briefPackSchema,
-  packSchema,
-  briefWordSchema,
-  wordSchema,
-} from "~/lib/schemas";
+import { briefPackSchema, packSchema, briefWordSchema, wordSchema } from "~/lib/schemas";
 import { getModel } from "~/lib/model";
 import type { z } from "zod";
 import { getUserId } from "~/lib/auth-utils";
@@ -20,12 +15,8 @@ function handleError(error: unknown): Error {
 }
 
 function getFieldsToEnrich(): string[] {
-  const briefWordFields = Object.keys(
-    (briefWordSchema as z.ZodObject<z.ZodRawShape>).shape,
-  );
-  const wordFields = Object.keys(
-    (wordSchema as z.ZodObject<z.ZodRawShape>).shape,
-  );
+  const briefWordFields = Object.keys((briefWordSchema as z.ZodObject<z.ZodRawShape>).shape);
+  const wordFields = Object.keys((wordSchema as z.ZodObject<z.ZodRawShape>).shape);
 
   return wordFields.filter((field) => !briefWordFields.includes(field));
 }
@@ -40,12 +31,9 @@ export async function POST(req: Request) {
     const body = await req.json();
     const parsed = briefPackSchema.safeParse(body);
     if (!parsed.success) {
-      return new Response(
-        parsed.error.issues.map((e) => e.message).join("\n"),
-        {
-          status: 400,
-        },
-      );
+      return new Response(parsed.error.issues.map((e) => e.message).join("\n"), {
+        status: 400,
+      });
     }
     const briefPack = parsed.data;
 

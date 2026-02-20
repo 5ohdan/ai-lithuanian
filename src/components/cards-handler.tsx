@@ -16,9 +16,7 @@ type CardsHandlerProps = {
 export function CardsHandler(props: CardsHandlerProps) {
   const { packId } = props;
 
-  const [pack, setPack] = useState<StoredPack | StoredBriefPack | undefined>(
-    undefined,
-  );
+  const [pack, setPack] = useState<StoredPack | StoredBriefPack | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const enrichmentAttempted = useRef(false);
 

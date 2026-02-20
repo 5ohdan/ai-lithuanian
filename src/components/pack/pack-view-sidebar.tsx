@@ -79,9 +79,7 @@ export function PackViewSidebar(props: PackViewSidebarProps) {
                   </span>
                   <span
                     className={`truncate text-xl font-medium ${
-                      index === activeWordIndex
-                        ? "text-white"
-                        : "text-neutral-900"
+                      index === activeWordIndex ? "text-white" : "text-neutral-900"
                     }`}
                   >
                     {word.original}

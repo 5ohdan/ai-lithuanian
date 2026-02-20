@@ -17,9 +17,9 @@ import { useIsMobile } from "../../hooks/use-mobile";
 const storage = getStorage();
 
 export function PacksList() {
-  const [packs, setPacks] = useState<
-    (Storage["packs"][number] | Storage["briefPacks"][number])[]
-  >([]);
+  const [packs, setPacks] = useState<(Storage["packs"][number] | Storage["briefPacks"][number])[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [skeletonCount, setSkeletonCount] = useState(1);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -54,8 +54,7 @@ export function PacksList() {
       const dividerHeight = deviceIsMobile ? 8 : 12;
       const packItemsHeight = packs.length * packItemHeight;
 
-      const availableHeight =
-        mainContainerHeight - packItemsHeight - dividerHeight;
+      const availableHeight = mainContainerHeight - packItemsHeight - dividerHeight;
 
       if (availableHeight > 0) {
         const possibleSkeletons = Math.floor(availableHeight / packItemHeight);
@@ -103,9 +102,7 @@ export function PacksList() {
               <NoPacksImg className="h-auto max-h-[300px] w-full object-contain" />
             </div>
             <p className="flex flex-col items-center gap-4 text-neutral-900">
-              <span className="text-2xl font-bold">
-                Your wordsets will appear here!
-              </span>
+              <span className="text-2xl font-bold">Your wordsets will appear here!</span>
               <span className="text-center text-neutral-900">
                 Pick a topic and{" "}
                 <Link
