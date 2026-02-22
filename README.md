@@ -4,12 +4,9 @@ An intelligent language learning application that uses AI to generate personaliz
 
 ## 🌟 Features
 
-- **AI-Powered Word Generation**: Create custom word packs using OpenAI
-- **Flashcard Learning**: Interactive study interface with progress tracking
-- **User Authentication**: Secure login with Better Auth
-- **Pack Management**: Create, organize, and share word collections
-- **Responsive Design**: Works seamlessly on desktop and mobile
-- **Cloudflare Deployment**: Scalable infrastructure with edge computing
+- **AI-Powered Word Generation**: Create custom word packs using _Google Gemini_
+- **Flashcard Learning**: Interactive study interface with _progress tracking_
+- **Pack Management**: Create, organize, and _share_ word collections
 
 ## 🚀 Quick Start
 
