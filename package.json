@@ -7,8 +7,8 @@
     "build": "next build",
     "check": "eslint . && tsc --noEmit",
     "dev": "next dev --turbopack",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
@@ -73,6 +73,8 @@
     "eslint-plugin-react-compiler": "19.1.0-rc.2",
     "globals": "^17.3.0",
     "oxfmt": "^0.34.0",
+    "oxlint": "^1.49.0",
+    "oxlint-tsgolint": "^0.14.2",
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
@@ -81,7 +83,7 @@
     "typescript-eslint": "^8.54.0",
     "wrangler": "^4.63.0"
   },
-  "packageManager": "pnpm@10.29.1",
+  "packageManager": "pnpm@10.30.1",
   "pnpm": {
     "overrides": {
       "@types/react": "19.1.10",
