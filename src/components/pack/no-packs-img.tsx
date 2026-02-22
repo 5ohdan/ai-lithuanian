@@ -1,10 +1,9 @@
-import Image, { type StaticImageData } from "next/image";
-import noPacks from "public/no-packs-full.svg";
+import Image from "next/image";
 
 export function NoPacksImg({ className }: { className?: string }) {
   return (
     <Image
-      src={noPacks as StaticImageData}
+      src="/no-packs-full.svg"
       alt="No packs"
       width={300}
       height={280}
