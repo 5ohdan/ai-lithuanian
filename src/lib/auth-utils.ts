@@ -1,10 +1,17 @@
 import { headers } from "next/headers";
-import { auth } from "~/auth";
+import { getAuth } from "~/auth";
 
-export const getUserId = async () => {
+const getUser = async () => {
+  const auth = await getAuth();
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  return session?.user?.id ?? null;
+  return session?.user ?? null;
 };
+
+export const getUserId = async () => {
+  const user = await getUser();
+  return user?.id
+}
+

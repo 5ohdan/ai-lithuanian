@@ -30,8 +30,13 @@ export const packs = sqliteTable("packs", {
     .primaryKey(),
   title: text().notNull(),
   difficulty: text().notNull(),
+  status: text().notNull().default("initial_ready"),
+  errorMessage: text("error_message"),
   usersTopic: text("users_topic").notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .$onUpdateFn(() => new Date()),
   userId: text("user_id").references(() => user.id),
 });
 

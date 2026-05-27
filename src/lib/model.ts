@@ -1,6 +1,6 @@
 import { google } from "@ai-sdk/google";
 
-const googleAI = google("gemini-2.5-flash");
+const googleAI = google("gemini-3.1-flash-lite-preview");
 
 export type Providers = "google";
 
