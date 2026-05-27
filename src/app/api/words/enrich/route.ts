@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const model = getModel("google");
+  const model = await getModel("google");
 
   try {
     const body = await req.json();

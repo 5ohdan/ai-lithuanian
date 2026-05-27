@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 const serverEnvSchema = z.object({
   BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
@@ -11,4 +12,10 @@ const serverEnvSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().min(1, "GOOGLE_CLIENT_SECRET is required"),
 });
 
-export const env = serverEnvSchema.parse(process.env);
+export type ServerEnv = z.infer<typeof serverEnvSchema>;
+
+export async function getServerEnv() {
+  const cloudflareContext = await getCloudflareContext({ async: true });
+
+  return serverEnvSchema.parse(cloudflareContext.env);
+}

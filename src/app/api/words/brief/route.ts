@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     });
   }
 
-  const model = getModel("google");
+  const model = await getModel("google");
 
   const result = streamObject({
     model,

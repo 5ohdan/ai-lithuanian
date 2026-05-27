@@ -1,7 +1,10 @@
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import { getAuth } from "~/auth";
 
 const getUser = async () => {
+  await connection();
+
   const auth = await getAuth();
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -12,6 +15,5 @@ const getUser = async () => {
 
 export const getUserId = async () => {
   const user = await getUser();
-  return user?.id
-}
-
+  return user?.id;
+};

@@ -3,9 +3,9 @@ import { nextCookies } from "better-auth/next-js";
 import { getDB } from "./db";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import * as schema from "./db/schema";
-import { env } from "./lib/env";
+import { getServerEnv, type ServerEnv } from "./lib/env";
 
-function createAuth(db: Awaited<ReturnType<typeof getDB>>) {
+function createAuth(db: Awaited<ReturnType<typeof getDB>>, env: ServerEnv) {
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: "sqlite",
@@ -27,15 +27,9 @@ function createAuth(db: Awaited<ReturnType<typeof getDB>>) {
   });
 }
 
-let authInstance: ReturnType<typeof createAuth> | null = null;
-
 export async function getAuth() {
-  if (authInstance) {
-    return authInstance;
-  }
   const db = await getDB();
+  const env = await getServerEnv();
 
-  authInstance = createAuth(db);
-
-  return authInstance;
+  return createAuth(db, env);
 }

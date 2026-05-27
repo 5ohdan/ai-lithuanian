@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const fieldsToEnrich = getFieldsToEnrich();
 
     const result = streamObject({
-      model: getModel("google"),
+      model: await getModel("google"),
       messages: [
         {
           role: "system",
