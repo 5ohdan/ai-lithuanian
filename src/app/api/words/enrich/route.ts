@@ -51,8 +51,8 @@ export async function POST(req: Request) {
           throw new Error(res.error.issues.map((e) => e.message).join("\n"));
         }
       },
-      onError: (error) => {
-        throw handleError(error);
+      onError: ({ error }) => {
+        console.error(handleError(error));
       },
     });
 

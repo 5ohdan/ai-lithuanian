@@ -8,7 +8,7 @@ export const getModel = async (provider: Providers) => {
   const google = createGoogleGenerativeAI({
     apiKey: env.GOOGLE_GENERATIVE_AI_API_KEY,
   });
-  const googleAI = google("gemini-3.1-flash-lite-preview");
+  const googleAI = google("gemini-3.1-flash-lite");
 
   switch (provider) {
     case "google":
