@@ -11,7 +11,10 @@
     /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "checkJs": true,
+    // Generated artifacts (e.g. cloudflare-env.d.ts's GlobalProps import of
+    // .open-next/worker) land .js build output in the program; checking it
+    // produces hundreds of implicit-any errors. All app code is TS.
+    "checkJs": false,
     /* Bundled projects */
     "lib": ["dom", "dom.iterable", "ES2022"],
     "noEmit": true,
@@ -40,5 +43,5 @@
     "next.config.mjs",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".open-next", ".wrangler"]
 }

@@ -60,39 +60,58 @@ export function useWordGeneration(
       );
     },
     onFinish: ({ object }) => {
+      if (!object) {
+        toast.error(
+          `Failed to ${mode === "brief" ? "generate" : "enrich"} pack. Please try again.`,
+        );
+        return;
+      }
+
+      // Enforce the schema before storing anything — the server cannot reject
+      // an already-streamed response, so this is the actual validation point.
+      const parsed = responseSchema.safeParse(object);
+
+      if (!parsed.success) {
+        console.error(
+          `Generated ${mode} pack failed validation:`,
+          parsed.error.issues.map((e) => e.message).join("\n"),
+        );
+        toast.error(
+          `The ${mode === "brief" ? "generated" : "enriched"} pack was incomplete. Please try again.`,
+        );
+        return;
+      }
       toast.success(`Successfully ${mode === "brief" ? "generated" : "enriched"} a pack.`);
 
-      if (object) {
-        let packId: string;
+      let packId: string;
 
-        if (mode === "brief" && "topic" in requestData.current!) {
-          // Handle brief pack
-          const createPack = requestData.current;
-          const { difficulty, topic } = createPack;
-          packId = storage.addBriefPack(object, difficulty, topic);
-        } else if (mode === "enrich" && "id" in requestData.current!) {
-          // Handle enriched pack - convert the brief pack to a full pack
-          const briefSetId = (requestData.current as { id: string }).id;
+      if (mode === "brief" && "topic" in requestData.current!) {
+        // Handle brief pack
+        const createPack = requestData.current;
+        const { difficulty, topic } = createPack;
+        packId = storage.addBriefPack(parsed.data, difficulty, topic);
+      } else if (mode === "enrich" && "id" in requestData.current!) {
+        // Handle enriched pack - convert the brief pack to a full pack
+        const briefSetId = (requestData.current as { id: string }).id;
 
-          const result = storage.convertBriefToFullPack(briefSetId, object as Pack);
-          if (!result.ok) {
-            toast.error(
-              "The generated pack could not be saved (original not found). Your words are lost — please generate again.",
-            );
-            return;
-          }
-          packId = result.id;
-        } else {
-          console.error("Invalid request data for the current mode");
+        const result = storage.convertBriefToFullPack(briefSetId, parsed.data as Pack);
+        if (!result.ok) {
+          toast.error(
+            "The generated pack could not be saved (original not found). Your words are lost — please generate again.",
+          );
           return;
         }
+        packId = result.id;
+      } else {
+        console.error("Invalid request data for the current mode");
+        return;
+      }
 
-        // Allow custom success handler or default to navigation
-        if (onSuccess) {
-          onSuccess(packId);
-        } else {
-          router.push(`/cards/${packId}`);
-        }
+      // Allow custom success handler or default to navigation
+      if (onSuccess) {
+        onSuccess(packId);
+      } else {
+        router.push(`/cards/${packId}`);
       }
     },
   });

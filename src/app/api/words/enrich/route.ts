@@ -4,8 +4,13 @@ import { briefPackSchema, packSchema } from "~/lib/schemas";
 import { getModel } from "~/lib/model";
 import { getUserId } from "~/lib/auth-utils";
 import { getEnrichedPrompt } from "~/lib/prompts";
+import { checkRateLimit } from "~/lib/api/rate-limit";
 
 export const maxDuration = 60;
+
+// Enrichment input is client-controlled: cap the word count so one request
+// has a bounded API cost ceiling. Brief generation itself is capped at 15.
+const MAX_PACK_WORDS = 50;
 
 function handleError(error: unknown): Error {
   if (error instanceof Error) {
@@ -20,6 +25,11 @@ export async function POST(req: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
+  const rateLimit = await checkRateLimit(`words:${userId}`);
+  if (!rateLimit.ok) {
+    return new Response("Too many requests — please try again in a minute.", { status: 429 });
+  }
+
   const model = await getModel("google");
 
   try {
@@ -31,6 +41,11 @@ export async function POST(req: Request) {
       });
     }
     const briefPack = parsed.data;
+    if (briefPack.words.length === 0 || briefPack.words.length > MAX_PACK_WORDS) {
+      return new Response(`Pack must contain between 1 and ${MAX_PACK_WORDS} words.`, {
+        status: 400,
+      });
+    }
 
     const result = streamObject({
       model,
@@ -48,7 +63,13 @@ export async function POST(req: Request) {
       onFinish: ({ object }) => {
         const res = packSchema.safeParse(object);
         if (res.error) {
-          throw new Error(res.error.issues.map((e) => e.message).join("\n"));
+          // Throwing here cannot change the response (the stream is already
+          // committed); the client validates the final object before storing.
+          // This log exists for observability only.
+          console.error(
+            "Generated pack failed schema validation:",
+            res.error.issues.map((e) => e.message).join("\n"),
+          );
         }
       },
       onError: ({ error }) => {

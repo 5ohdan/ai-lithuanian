@@ -3,6 +3,7 @@ import { getSystemPrompt } from "~/constants";
 import { briefPackSchema, packInputSchema } from "~/lib/schemas";
 import { getModel } from "~/lib/model";
 import { getUserId } from "~/lib/auth-utils";
+import { checkRateLimit } from "~/lib/api/rate-limit";
 
 export const maxDuration = 60;
 
@@ -18,6 +19,11 @@ export async function POST(req: Request) {
 
   if (!userId) {
     return new Response("Unauthorized", { status: 401 });
+  }
+
+  const rateLimit = await checkRateLimit(`words:${userId}`);
+  if (!rateLimit.ok) {
+    return new Response("Too many requests — please try again in a minute.", { status: 429 });
   }
 
   const context = await req.json();
@@ -55,7 +61,13 @@ export async function POST(req: Request) {
       onFinish: ({ object }) => {
         const res = briefPackSchema.safeParse(object);
         if (res.error) {
-          throw new Error(res.error.issues.map((e) => e.message).join("\n"));
+          // Throwing here cannot change the response (the stream is already
+          // committed); the client validates the final object before storing.
+          // This log exists for observability only.
+          console.error(
+            "Generated brief pack failed schema validation:",
+            res.error.issues.map((e) => e.message).join("\n"),
+          );
         }
       },
       onError: ({ error }) => {
