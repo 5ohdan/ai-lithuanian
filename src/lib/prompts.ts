@@ -1,13 +1,15 @@
 import { type BriefPack, briefWordSchema, wordSchema } from "./schemas";
 import type { z } from "zod";
 
-export function getBriefPrompt(topic: string) {
+export function getBriefPrompt(topic: string, difficulty: string, count: number) {
   return `Generate a pack of unique Lithuanian words with an appropriate title.
-  - Each word must be a single capitalized word (not a phrase)
-  - If a phrase is relevant, use its main word
-  - Title should be 1-5 words. The title should be in English.
-  - DO NOT MENTION LANGUAGE NAME, "WORDS" OR "VOCABULARY" in the title
-  - Topic: "${topic}"
+- Each word must be a single capitalized word (not a phrase)
+- If a phrase is relevant, use its main word
+- Title should be 1-5 words. The title should be in English.
+- DO NOT MENTION LANGUAGE NAME, "WORDS" OR "VOCABULARY" in the title
+- Topic: "${topic}"
+- Difficulty: ${difficulty}
+- Number of words: ${count}
   `;
 }
 
