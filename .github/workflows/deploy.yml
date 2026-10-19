@@ -1,0 +1,58 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  # Manual trigger, e.g. to deploy with updated secrets
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & deploy to Cloudflare Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Build-time public vars (see .env.example). Optional — PostHog stays
+      # off if these secrets/vars are not present.
+      NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+      NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Same gates as CI: don't deploy a broken main
+      - name: Lint, typecheck & format
+        run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm fmt:check
+
+      - name: Build Workers bundle
+        run: pnpm build:worker
+
+      # TODO (Phase 4 — D1): apply remote migrations before deploy
+      # - name: Apply D1 migrations
+      #   run: pnpm exec wrangler d1 migrations apply ai-lithuanian --remote
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
