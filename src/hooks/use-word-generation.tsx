@@ -74,8 +74,14 @@ export function useWordGeneration(
           // Handle enriched pack - convert the brief pack to a full pack
           const briefSetId = (requestData.current as { id: string }).id;
 
-          // Use the new method to convert the brief pack to a full pack
-          packId = storage.convertBriefToFullPack(briefSetId, object as Pack);
+          const result = storage.convertBriefToFullPack(briefSetId, object as Pack);
+          if (!result.ok) {
+            toast.error(
+              "The generated pack could not be saved (original not found). Your words are lost — please generate again.",
+            );
+            return;
+          }
+          packId = result.id;
         } else {
           console.error("Invalid request data for the current mode");
           return;

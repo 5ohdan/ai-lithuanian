@@ -3,6 +3,9 @@ import type { StoredPack, Storage, Pack, Difficulty, BriefPack, StoredBriefPack 
 import { storageSchema } from "./schemas";
 
 const STORAGE_KEY = "wordLearningStorage";
+// Preserves the raw payload when the stored data no longer matches the schema,
+// so a schema change (e.g. a renamed field) can never permanently destroy user data.
+const BACKUP_KEY = "wordLearningStorage.backup";
 
 interface StorageManagerInterface {
   subscribe(callback: () => void): () => void;
@@ -13,7 +16,11 @@ interface StorageManagerInterface {
   getBriefPacks(): StoredBriefPack[];
   getBriefPackById(packId: string): StoredBriefPack | undefined;
   removePack(id: string): boolean;
+  convertBriefToFullPack(briefpackId: string, pack: Pack): ConvertBriefResult;
 }
+
+/** Mirrors the operation's outcome instead of failing silently. */
+export type ConvertBriefResult = { ok: true; id: string } | { ok: false };
 
 export class StorageManager implements StorageManagerInterface {
   private storage: Storage;
@@ -37,7 +44,15 @@ export class StorageManager implements StorageManagerInterface {
         return parsed;
       }
     } catch (error) {
-      console.error("Error loading storage:", error);
+      console.error("Error loading storage — stored data kept as backup:", error);
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data) {
+          localStorage.setItem(BACKUP_KEY, data);
+        }
+      } catch (backupError) {
+        console.error("Error backing up storage:", backupError);
+      }
     }
     return { words: [], packs: [], briefPacks: [] };
   }
@@ -110,7 +125,7 @@ export class StorageManager implements StorageManagerInterface {
     return this.storage.briefPacks.find((s) => s.id === packId);
   }
 
-  // how do i know what's the result of the operation?
+  /** @returns `true` if the pack was found and removed, `false` otherwise. */
   removePack(id: string): boolean {
     const index = this.storage.packs.findIndex((s) => s.id === id);
     if (index !== -1) {
@@ -127,14 +142,16 @@ export class StorageManager implements StorageManagerInterface {
     this.saveStorage();
   }
 
-  // Convert a brief pack to a full pack with the same ID
-  convertBriefToFullPack(briefpackId: string, pack: Pack): string {
+  // Convert a brief pack to a full pack with the same ID.
+  // Does NOT fall back to creating an unrelated pack when the brief is missing;
+  // the caller decides how to react to `{ ok: false }`.
+  convertBriefToFullPack(briefpackId: string, pack: Pack): ConvertBriefResult {
     // Find and remove the brief pack
     const briefIndex = this.storage.briefPacks.findIndex((s) => s.id === briefpackId);
 
     if (briefIndex === -1) {
       console.error(`Brief pack with ID ${briefpackId} not found`);
-      return this.addPack(pack, "Beginner", "Unknown"); // Fallback
+      return { ok: false };
     }
 
     const briefPack = this.storage.briefPacks[briefIndex]!; // Non-null assertion is safe here because we checked index !== -1
@@ -153,7 +170,7 @@ export class StorageManager implements StorageManagerInterface {
     this.storage.packs.push(storedSet);
     this.saveStorage();
 
-    return briefPack.id;
+    return { ok: true, id: briefPack.id };
   }
 }
 
