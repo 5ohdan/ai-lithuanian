@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import type { Storage } from "~/lib/schemas";
+import type { StoredPack } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import { motion } from "motion/react";
 import { LoadingScreen } from "../loading-screen";
@@ -17,9 +17,7 @@ import { useIsMobile } from "../../hooks/use-mobile";
 const storage = getStorage();
 
 export function PacksList() {
-  const [packs, setPacks] = useState<(Storage["packs"][number] | Storage["briefPacks"][number])[]>(
-    [],
-  );
+  const [packs, setPacks] = useState<StoredPack[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [skeletonCount, setSkeletonCount] = useState(1);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -29,9 +27,7 @@ export function PacksList() {
 
   useEffect(() => {
     const updatePacks = () => {
-      const storedPacks = storage.getPacks();
-      const storedBriefPacks = storage.getBriefPacks();
-      setPacks([...storedPacks, ...storedBriefPacks]);
+      setPacks(storage.getPacks());
       setIsLoading(false);
     };
 

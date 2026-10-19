@@ -5,12 +5,12 @@ export { packInputSchema, type PackInput, DifficultyEnum, type Difficulty } from
 export { packSchema, type Pack, briefPackSchema, type BriefPack } from "./wordsets";
 
 export {
-  storedWordSchema,
-  type StoredWord,
   storedPackSchema,
   type StoredPack,
   storedBriefPackSchema,
   type StoredBriefPack,
+  storedFullPackSchema,
+  type StoredFullPack,
   storageSchema,
   type Storage,
 } from "./storage";

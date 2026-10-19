@@ -5,7 +5,7 @@ import { CardStack } from "./card-stack";
 import { useEffect, useState, useRef } from "react";
 import type { StoredPack, StoredBriefPack } from "~/lib/schemas";
 import { LoadingScreen } from "./loading-screen";
-import { useWordGeneration } from "~/hooks/use-word-generation";
+import { useEnrichment } from "~/hooks/use-word-generation";
 
 const storage = getStorage();
 
@@ -16,18 +16,16 @@ type CardsHandlerProps = {
 export function CardsHandler(props: CardsHandlerProps) {
   const { packId } = props;
 
-  const [pack, setPack] = useState<StoredPack | StoredBriefPack | undefined>(undefined);
+  const [pack, setPack] = useState<StoredPack | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const enrichmentAttempted = useRef(false);
 
-  const { handleSubmit: handleEnrich } = useWordGeneration({
-    mode: "enrich",
-  });
+  const { handleEnrichment } = useEnrichment();
 
   const triggerEnrichment = (briefPack: StoredBriefPack) => {
     if (!enrichmentAttempted.current) {
       enrichmentAttempted.current = true;
-      handleEnrich(briefPack);
+      handleEnrichment(briefPack);
     }
   };
 
@@ -35,21 +33,24 @@ export function CardsHandler(props: CardsHandlerProps) {
     setIsLoading(true);
     enrichmentAttempted.current = false;
 
-    const fullPack = storage.getPackById(packId);
-    if (fullPack) {
-      setPack(fullPack);
-      setIsLoading(false);
-      return;
-    }
+    const found = storage.getPackById(packId);
 
-    const briefResult = storage.getBriefPackById(packId);
-    if (briefResult) {
-      setPack(briefResult);
-
-      setTimeout(() => triggerEnrichment(briefResult), 0);
+    if (found?.status === "full") {
+      setPack(found);
+    } else if (found?.status === "brief") {
+      setPack(found);
+      setTimeout(() => triggerEnrichment(found), 0);
     }
 
     setIsLoading(false);
+  }, [packId]);
+
+  // Keep the rendered cards in sync with storage: when enrichment completes
+  // the pack object becomes `full` and the stack re-renders with new words.
+  useEffect(() => {
+    return storage.subscribe(() => {
+      setPack(storage.getPackById(packId));
+    });
   }, [packId]);
 
   if (isLoading) {

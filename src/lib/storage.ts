@@ -1,4 +1,12 @@
-import type { StoredPack, Storage, Pack, Difficulty, BriefPack, StoredBriefPack } from "./schemas";
+import type {
+  Storage,
+  StoredBriefPack,
+  StoredFullPack,
+  StoredPack,
+  Pack,
+  Difficulty,
+  BriefPack,
+} from "./schemas";
 
 import { storageSchema } from "./schemas";
 
@@ -7,20 +15,19 @@ const STORAGE_KEY = "wordLearningStorage";
 // so a schema change (e.g. a renamed field) can never permanently destroy user data.
 const BACKUP_KEY = "wordLearningStorage.backup";
 
+export type EnrichPackResult = { ok: true; id: string } | { ok: false };
+
 interface StorageManagerInterface {
   subscribe(callback: () => void): () => void;
-  addPack(pack: Pack, difficulty: Difficulty, topic: string): string;
   addBriefPack(briefPack: BriefPack, difficulty: Difficulty, topic: string): string;
   getPacks(): StoredPack[];
   getPackById(packId: string): StoredPack | undefined;
-  getBriefPacks(): StoredBriefPack[];
-  getBriefPackById(packId: string): StoredBriefPack | undefined;
+  /** Updates a brief pack in place with enriched words, marking it `full`. */
+  enrichPack(packId: string, pack: Pack): EnrichPackResult;
+  /** @returns `true` if the pack was found and removed, `false` otherwise. */
   removePack(id: string): boolean;
-  convertBriefToFullPack(briefpackId: string, pack: Pack): ConvertBriefResult;
+  deleteAllPacks(): void;
 }
-
-/** Mirrors the operation's outcome instead of failing silently. */
-export type ConvertBriefResult = { ok: true; id: string } | { ok: false };
 
 export class StorageManager implements StorageManagerInterface {
   private storage: Storage;
@@ -34,7 +41,7 @@ export class StorageManager implements StorageManagerInterface {
 
   private loadStorage(): Storage {
     if (!this.isClient) {
-      return { words: [], packs: [], briefPacks: [] };
+      return { packs: [] };
     }
 
     try {
@@ -54,7 +61,7 @@ export class StorageManager implements StorageManagerInterface {
         console.error("Error backing up storage:", backupError);
       }
     }
-    return { words: [], packs: [], briefPacks: [] };
+    return { packs: [] };
   }
 
   private saveStorage(): void {
@@ -79,32 +86,18 @@ export class StorageManager implements StorageManagerInterface {
     this.subscribers.forEach((callback) => callback());
   }
 
-  addPack(pack: Pack, difficulty: Difficulty, topic: string): string {
-    const packId = crypto.randomUUID();
-    const storedPack: StoredPack = {
-      words: pack.words,
-      id: packId,
-      title: pack.title,
-      difficulty,
-      createdAt: new Date().toISOString(),
-      usersTopic: topic,
-    };
-    this.storage.packs.push(storedPack);
-    this.saveStorage();
-    return packId;
-  }
-
   addBriefPack(briefPack: BriefPack, difficulty: Difficulty, topic: string): string {
     const packId = crypto.randomUUID();
-    const storedBriefPack: StoredBriefPack = {
-      words: briefPack.words,
+    const storedPack: StoredBriefPack = {
       id: packId,
+      status: "brief",
+      words: briefPack.words,
       title: briefPack.title,
-      usersTopic: topic,
       difficulty,
+      usersTopic: topic,
       createdAt: new Date().toISOString(),
     };
-    this.storage.briefPacks.push(storedBriefPack);
+    this.storage.packs.push(storedPack);
     this.saveStorage();
     return packId;
   }
@@ -117,12 +110,36 @@ export class StorageManager implements StorageManagerInterface {
     return this.storage.packs.find((s) => s.id === packId);
   }
 
-  getBriefPacks(): StoredBriefPack[] {
-    return this.storage.briefPacks;
-  }
+  /**
+   * Updates a brief pack in place with the enriched words and title,
+   * marking it `full`. Keeps the pack's id, difficulty and topic.
+   * Returns `{ ok: false }` if the brief pack was not found — the caller
+   * decides how to react; no fallback packs are fabricated.
+   */
+  enrichPack(packId: string, pack: Pack): EnrichPackResult {
+    const index = this.storage.packs.findIndex((p) => p.id === packId && p.status === "brief");
 
-  getBriefPackById(packId: string): StoredBriefPack | undefined {
-    return this.storage.briefPacks.find((s) => s.id === packId);
+    if (index === -1) {
+      console.error(`Brief pack with ID ${packId} not found`);
+      return { ok: false };
+    }
+
+    const briefPack = this.storage.packs[index] as StoredBriefPack;
+
+    const enrichedPack: StoredFullPack = {
+      id: briefPack.id,
+      words: pack.words,
+      status: "full",
+      title: pack.title,
+      difficulty: briefPack.difficulty,
+      createdAt: briefPack.createdAt,
+      usersTopic: briefPack.usersTopic,
+    };
+
+    this.storage.packs.splice(index, 1, enrichedPack);
+    this.saveStorage();
+
+    return { ok: true, id: briefPack.id };
   }
 
   /** @returns `true` if the pack was found and removed, `false` otherwise. */
@@ -138,39 +155,7 @@ export class StorageManager implements StorageManagerInterface {
 
   deleteAllPacks(): void {
     this.storage.packs = [];
-    this.storage.briefPacks = [];
     this.saveStorage();
-  }
-
-  // Convert a brief pack to a full pack with the same ID.
-  // Does NOT fall back to creating an unrelated pack when the brief is missing;
-  // the caller decides how to react to `{ ok: false }`.
-  convertBriefToFullPack(briefpackId: string, pack: Pack): ConvertBriefResult {
-    // Find and remove the brief pack
-    const briefIndex = this.storage.briefPacks.findIndex((s) => s.id === briefpackId);
-
-    if (briefIndex === -1) {
-      console.error(`Brief pack with ID ${briefpackId} not found`);
-      return { ok: false };
-    }
-
-    const briefPack = this.storage.briefPacks[briefIndex]!; // Non-null assertion is safe here because we checked index !== -1
-    this.storage.briefPacks.splice(briefIndex, 1);
-
-    // Create full pack with the same ID
-    const storedSet: StoredPack = {
-      words: pack.words,
-      id: briefPack.id,
-      title: pack.title,
-      difficulty: briefPack.difficulty,
-      createdAt: briefPack.createdAt,
-      usersTopic: briefPack.usersTopic,
-    };
-
-    this.storage.packs.push(storedSet);
-    this.saveStorage();
-
-    return { ok: true, id: briefPack.id };
   }
 }
 

@@ -2,7 +2,7 @@
 
 import { cn } from "~/lib/utils";
 import { motion, type Transition } from "motion/react";
-import { useWordGeneration } from "~/hooks/use-word-generation";
+import { useBriefGeneration } from "~/hooks/use-word-generation";
 import { GenerationForm } from "../generation-form";
 import { alexandria } from "~/assets/fonts";
 
@@ -14,9 +14,7 @@ const springTransition: Transition = {
 };
 
 export function PackGenerator() {
-  const { handleSubmit, isLoading, partialPack } = useWordGeneration({
-    mode: "brief",
-  });
+  const { handleGenerate, isLoading, partialPack } = useBriefGeneration();
 
   return (
     <motion.div
@@ -32,7 +30,7 @@ export function PackGenerator() {
       <div className="h-full w-full">
         <GenerationForm
           isLoading={isLoading}
-          submit={handleSubmit}
+          submit={handleGenerate}
           length={partialPack?.words?.length}
         />
       </div>

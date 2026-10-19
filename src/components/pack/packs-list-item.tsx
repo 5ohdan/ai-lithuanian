@@ -1,10 +1,10 @@
 import { motion } from "motion/react";
-import type { StoredPack, StoredBriefPack } from "~/lib/schemas";
+import type { StoredPack } from "~/lib/schemas";
 import { CardContent, Card } from "../ui/card";
 import Link from "next/link";
 
 type PackItemProps = {
-  pack: StoredPack | StoredBriefPack;
+  pack: StoredPack;
   index: number;
 };
 

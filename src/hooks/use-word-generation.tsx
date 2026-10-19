@@ -1,113 +1,64 @@
 "use client";
 
 import { briefPackSchema, packSchema } from "~/lib/schemas";
+import type { BriefPack, PackInput, StoredBriefPack } from "~/lib/schemas";
 import { toast } from "sonner";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
-import type { PackInput, BriefPack, Pack, StoredBriefPack } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import { useRouter } from "next/navigation";
 import { useRef, useCallback } from "react";
+import type { z } from "zod";
 
 const storage = getStorage();
 
-type WordGenerationMode = "brief" | "enrich";
-type WordGenerationOptions = {
-  mode: WordGenerationMode;
-  onSuccess?: (packId: string) => void;
-};
+/**
+ * Validates the final streamed object before persistence. The server cannot
+ * reject an already-committed stream, so this is the enforcement point for
+ * generated content. Returns `null` and toasts on invalid output.
+ */
+function validatedFinalPack<O>(schema: z.ZodType<O>, object: unknown): O | null {
+  const parsed = schema.safeParse(object);
+  if (!parsed.success) {
+    console.error(
+      "Final pack failed validation:",
+      parsed.error.issues.map((e) => e.message).join("\n"),
+    );
+    toast.error("The generated pack was incomplete. Please try again.");
+    return null;
+  }
+  return parsed.data;
+}
 
-// Define return types for each mode
-type BriefModeReturn = {
-  handleSubmit: (data: PackInput) => void;
-  isLoading: boolean;
-  partialPack: BriefPack | null;
-};
+type GenerationOutcome = { onSuccess?: (packId: string) => void };
 
-type EnrichModeReturn = {
-  handleSubmit: (briefPack: StoredBriefPack) => void;
-  isLoading: boolean;
-  partialPack: Pack | null;
-};
-
-// Function overloads to provide proper typing based on mode
-export function useWordGeneration(
-  options?: { mode: "brief" } & Omit<WordGenerationOptions, "mode">,
-): BriefModeReturn;
-export function useWordGeneration(
-  options: { mode: "enrich" } & Omit<WordGenerationOptions, "mode">,
-): EnrichModeReturn;
-export function useWordGeneration(
-  options: WordGenerationOptions = { mode: "brief" },
-): BriefModeReturn | EnrichModeReturn {
-  const { mode, onSuccess } = options;
-  const requestData = useRef<PackInput | { id: string; words: BriefPack["words"] } | null>(null);
+/** Generates a brief pack from a topic. */
+export function useBriefGeneration(options: GenerationOutcome = {}) {
+  const { onSuccess } = options;
   const router = useRouter();
-
-  // Choose the appropriate API endpoint and schema based on the mode
-  const apiEndpoint = mode === "brief" ? "/api/words/brief" : "/api/words/enrich";
-  const responseSchema = mode === "brief" ? briefPackSchema : packSchema;
+  const requestData = useRef<PackInput | null>(null);
 
   const {
     submit,
     isLoading,
     object: partialPack,
   } = useObject({
-    api: apiEndpoint,
-    schema: responseSchema,
+    api: "/api/words/brief",
+    schema: briefPackSchema,
     onError: (error: Error) => {
-      toast.error(
-        `Failed to ${mode === "brief" ? "generate" : "enrich"} pack. Please try again. ${error.message}`,
-      );
+      toast.error(`Failed to generate pack. Please try again. ${error.message}`);
     },
     onFinish: ({ object }) => {
-      if (!object) {
-        toast.error(
-          `Failed to ${mode === "brief" ? "generate" : "enrich"} pack. Please try again.`,
-        );
+      const briefPack = validatedFinalPack(briefPackSchema, object);
+      if (!briefPack) return;
+      toast.success("Successfully generated a pack.");
+
+      if (!requestData.current) {
+        console.error("Missing request data for the current mode");
         return;
       }
+      const { difficulty, topic } = requestData.current;
+      const packId = storage.addBriefPack(briefPack, difficulty, topic);
 
-      // Enforce the schema before storing anything — the server cannot reject
-      // an already-streamed response, so this is the actual validation point.
-      const parsed = responseSchema.safeParse(object);
-
-      if (!parsed.success) {
-        console.error(
-          `Generated ${mode} pack failed validation:`,
-          parsed.error.issues.map((e) => e.message).join("\n"),
-        );
-        toast.error(
-          `The ${mode === "brief" ? "generated" : "enriched"} pack was incomplete. Please try again.`,
-        );
-        return;
-      }
-      toast.success(`Successfully ${mode === "brief" ? "generated" : "enriched"} a pack.`);
-
-      let packId: string;
-
-      if (mode === "brief" && "topic" in requestData.current!) {
-        // Handle brief pack
-        const createPack = requestData.current;
-        const { difficulty, topic } = createPack;
-        packId = storage.addBriefPack(parsed.data, difficulty, topic);
-      } else if (mode === "enrich" && "id" in requestData.current!) {
-        // Handle enriched pack - convert the brief pack to a full pack
-        const briefSetId = (requestData.current as { id: string }).id;
-
-        const result = storage.convertBriefToFullPack(briefSetId, parsed.data as Pack);
-        if (!result.ok) {
-          toast.error(
-            "The generated pack could not be saved (original not found). Your words are lost — please generate again.",
-          );
-          return;
-        }
-        packId = result.id;
-      } else {
-        console.error("Invalid request data for the current mode");
-        return;
-      }
-
-      // Allow custom success handler or default to navigation
       if (onSuccess) {
         onSuccess(packId);
       } else {
@@ -116,45 +67,74 @@ export function useWordGeneration(
     },
   });
 
-  // Handle submission for brief pack generation
-  const handleSubmitBrief = useCallback(
+  const handleGenerate = useCallback(
     (data: PackInput) => {
-      const { topic, difficulty, count } = data;
       requestData.current = data;
-      submit({ topic, difficulty, count });
+      submit({ topic: data.topic, difficulty: data.difficulty, count: data.count });
     },
     [submit],
   );
 
-  // Handle submission for pack enrichment
-  const handleSubmitEnrich = useCallback(
+  return {
+    handleGenerate,
+    isLoading,
+    partialPack: partialPack as BriefPack | null,
+  };
+}
+
+/** Enriches a saved brief pack in place (brief → full). */
+export function useEnrichment(options: GenerationOutcome = {}) {
+  const { onSuccess } = options;
+  const router = useRouter();
+  const briefPackId = useRef<string | null>(null);
+
+  const {
+    submit,
+    isLoading,
+    object: partialPack,
+  } = useObject({
+    api: "/api/words/enrich",
+    schema: packSchema,
+    onError: (error: Error) => {
+      toast.error(`Failed to enrich pack. Please try again. ${error.message}`);
+    },
+    onFinish: ({ object }) => {
+      const fullPack = validatedFinalPack(packSchema, object);
+      if (!fullPack) return;
+
+      if (!briefPackId.current) {
+        console.error("Missing brief pack id for enrichment");
+        return;
+      }
+      const result = storage.enrichPack(briefPackId.current, fullPack);
+      if (!result.ok) {
+        toast.error(
+          "The enriched pack could not be saved (original not found). Please generate again.",
+        );
+        return;
+      }
+      toast.success("Successfully enriched a pack.");
+
+      if (onSuccess) {
+        onSuccess(result.id);
+      } else {
+        router.push(`/cards/${result.id}`);
+      }
+    },
+  });
+
+  const handleEnrichment = useCallback(
     (pack: StoredBriefPack) => {
-      requestData.current = {
-        id: pack.id,
-        words: pack.words,
-      };
-
-      // The API expects a BriefPack with 'words' and 'title'
-      submit({
-        words: pack.words,
-        title: pack.title,
-      });
+      briefPackId.current = pack.id;
+      // The API receives the brief pack to enrich as given.
+      submit({ words: pack.words, title: pack.title });
     },
     [submit],
   );
 
-  // Return typed handlers based on mode
-  if (mode === "brief") {
-    return {
-      handleSubmit: handleSubmitBrief,
-      isLoading,
-      partialPack: partialPack as BriefPack | null,
-    };
-  } else {
-    return {
-      handleSubmit: handleSubmitEnrich,
-      isLoading,
-      partialPack: partialPack as Pack | null,
-    };
-  }
+  return {
+    handleEnrichment,
+    isLoading,
+    partialPack,
+  };
 }

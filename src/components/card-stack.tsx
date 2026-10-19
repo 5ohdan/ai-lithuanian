@@ -1,12 +1,12 @@
 "use client";
 
-import type { StoredBriefPack, StoredPack } from "~/lib/schemas";
+import type { StoredPack } from "~/lib/schemas";
 import { useCallback, useState } from "react";
 import { Word as WordCard } from "./word";
 import { motion } from "motion/react";
 
 type CardStackProps = {
-  pack: StoredPack | StoredBriefPack;
+  pack: StoredPack;
 };
 
 export function CardStack(props: CardStackProps) {

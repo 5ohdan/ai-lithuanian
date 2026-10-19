@@ -3,9 +3,10 @@
 import { useEffect, useState, useCallback } from "react";
 import { ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import type { StoredPack, Word } from "~/lib/schemas";
+import type { StoredFullPack, Word } from "~/lib/schemas";
 import { getStorage } from "~/lib/storage";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LoadingScreen } from "../loading-screen";
 import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import { PackViewSidebar } from "./pack-view-sidebar";
@@ -19,10 +20,11 @@ type PackViewProps = {
   packId: string;
 };
 
-export default function PackView(props: PackViewProps) {
+export default function PackResultView(props: PackViewProps) {
   const { packId } = props;
 
-  const [pack, setPack] = useState<StoredPack | undefined>(undefined);
+  const router = useRouter();
+  const [pack, setPack] = useState<StoredFullPack | undefined>(undefined);
   const [activeWordIndex, setActiveWordIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const isMobile = useIsMobile();
@@ -32,7 +34,12 @@ export default function PackView(props: PackViewProps) {
       setIsLoading(true);
       try {
         const fetchedPack = storage.getPackById(packId);
-        setPack(fetchedPack);
+        if (fetchedPack?.status === "brief") {
+          // Brief packs have no detail view; the cards flow enriches on the fly.
+          router.replace(`/cards/${packId}`);
+          return;
+        }
+        setPack(fetchedPack?.status === "full" ? fetchedPack : undefined);
       } catch (error) {
         console.error(error);
       } finally {
@@ -41,7 +48,7 @@ export default function PackView(props: PackViewProps) {
     };
 
     void fetchPack();
-  }, [packId]);
+  }, [packId, router]);
 
   const handlePrevious = useCallback(() => {
     if (!pack) return;
