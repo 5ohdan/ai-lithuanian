@@ -11,12 +11,12 @@ export function getBriefPrompt(topic: string) {
   `;
 }
 
-function getFieldsToEnrich(): string {
+const getFieldsToEnrich = (): string => {
   const briefWordFields = Object.keys((briefWordSchema as z.ZodObject<z.ZodRawShape>).shape);
   const wordFields = Object.keys((wordSchema as z.ZodObject<z.ZodRawShape>).shape);
 
   return wordFields.filter((field) => !briefWordFields.includes(field)).join(", ");
-}
+};
 
 export function getEnrichedPrompt(briefPack: BriefPack) {
   return `Enrich the following Lithuanian pack by adding these missing fields for each word: ${getFieldsToEnrich()}. 

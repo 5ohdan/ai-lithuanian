@@ -12,7 +12,7 @@ interface StorageManagerInterface {
   getPackById(packId: string): StoredPack | undefined;
   getBriefPacks(): StoredBriefPack[];
   getBriefPackById(packId: string): StoredBriefPack | undefined;
-  removePack(id: string): void;
+  removePack(id: string): boolean;
 }
 
 export class StorageManager implements StorageManagerInterface {
@@ -110,12 +110,15 @@ export class StorageManager implements StorageManagerInterface {
     return this.storage.briefPacks.find((s) => s.id === packId);
   }
 
-  removePack(id: string): void {
+  // how do i know what's the result of the operation?
+  removePack(id: string): boolean {
     const index = this.storage.packs.findIndex((s) => s.id === id);
     if (index !== -1) {
       this.storage.packs.splice(index, 1);
       this.saveStorage();
+      return true;
     }
+    return false;
   }
 
   deleteAllPacks(): void {
