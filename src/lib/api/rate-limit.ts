@@ -25,4 +25,3 @@ export async function checkRateLimit(key: string): Promise<RateLimitResult> {
     return { ok: true };
   }
 }
-
