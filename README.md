@@ -34,11 +34,11 @@ pnpm dev
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes
+- **Frontend**: React, TypeScript, Tailwind CSS — served through Next.js APIs on Vite (vinext), deployed to Cloudflare Workers
+- **Backend**: Route handlers
 - **Database**: Drizzle ORM, SQLite/D1
 - **Authentication**: Better Auth
-- **AI**: OpenAI API, Google Gemini
+- **AI**: Google Gemini
 - **Deployment**: Cloudflare Workers
 - **Testing**: Vitest, React Testing Library, Playwright (**WIP**)
 

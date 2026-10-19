@@ -57,3 +57,5 @@ yarn-error.log*
 
 .opencode/plans
 .pnpm-store
+/dist/
+.vinext/

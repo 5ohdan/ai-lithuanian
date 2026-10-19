@@ -1,4 +1,4 @@
-import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { env } from "cloudflare:workers";
 
 type RateLimitResult = { ok: true } | { ok: false };
 
@@ -6,13 +6,12 @@ type RateLimitResult = { ok: true } | { ok: false };
  * Per-key rate limit check backed by the Cloudflare rate limiting binding
  * (5 requests / 60s per namespace, see wrangler.jsonc).
  *
- * Fails open when the binding is unavailable (e.g. local dev without the
- * platform proxy) so the app keeps working; a missing limiter is logged.
+ * Fails open when the binding is unavailable (e.g. without the binding)
+ * so the app keeps working; a missing limiter is logged.
  */
 export async function checkRateLimit(key: string): Promise<RateLimitResult> {
   try {
-    const context = await getCloudflareContext({ async: true });
-    const limiter = context.env.RATE_LIMITER;
+    const limiter = env.RATE_LIMITER;
 
     if (!limiter) {
       console.error("Rate limiter binding missing — allowing request without limit");
@@ -26,3 +25,4 @@ export async function checkRateLimit(key: string): Promise<RateLimitResult> {
     return { ok: true };
   }
 }
+

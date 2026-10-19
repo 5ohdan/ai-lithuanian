@@ -44,7 +44,7 @@ jobs:
           pnpm fmt:check
 
       - name: Build Workers bundle
-        run: pnpm build:worker
+        run: pnpm build
 
       # TODO (Phase 4 — D1): apply remote migrations before deploy
       # - name: Apply D1 migrations
@@ -55,4 +55,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy
+          command: deploy --config dist/server/wrangler.json

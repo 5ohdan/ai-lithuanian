@@ -40,4 +40,4 @@ jobs:
         run: pnpm fmt:check
 
       - name: Build Workers bundle
-        run: pnpm build:worker
+        run: pnpm build
