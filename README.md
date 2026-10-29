@@ -42,6 +42,33 @@ pnpm dev
 - **Deployment**: Cloudflare Workers
 - **Testing**: Vitest, React Testing Library, Playwright (**WIP**)
 
+## CI/CD
+
+GitHub Actions owns CI/CD through `.github/workflows/ci.yml`:
+
+- Pull requests run lint, typecheck, formatting checks, and the Vinext build.
+- Pushes to `main` run the same checks and deploy that build to Cloudflare Workers.
+- Manual runs on `main` can redeploy after updating build-time configuration.
+- Production runs are serialized; superseded pull-request checks are cancelled.
+
+Cloudflare Workers hosts the application. Its separate repository build trigger
+has been removed to prevent duplicate deployments.
+
+Repository secrets:
+
+- `CLOUDFLARE_API_TOKEN`: a deployment token authorized for the target account and
+  the Worker's configured resources.
+- `CLOUDFLARE_ACCOUNT_ID`: the account containing `ai-lithuanian`.
+- `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`: optional public
+  build-time configuration. Fork pull requests build without these secrets.
+
+Runtime secrets (authentication and AI credentials) stay on the Worker, not in the
+build environment. Database migrations are not automatic; review and apply any
+required production migrations separately before deploying code that needs them.
+
+For a local production preview, run `pnpm preview`. `pnpm deploy` builds and
+publishes directly and should be reserved for intentional manual deployments.
+
 ## 🎯 Current Status
 
 - ✅ MVP with basic word generation and authentication
