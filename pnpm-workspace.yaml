@@ -3,6 +3,9 @@ minimumReleaseAge: 0
 verifyDepsBeforeRun: false
 
 overrides:
+  # Security patches within the minor versions used by PostHog and Satori.
+  "fflate@<0.4.9": 0.4.9
+  "fflate@>=0.7.0 <0.7.5": 0.7.5
   "@types/react": 19.3.0
   "@types/react-dom": 19.3.0
 
