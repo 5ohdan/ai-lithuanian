@@ -16,34 +16,40 @@ function getLocalD1DB() {
     const url = path.resolve(basePath, dbFile);
     return url;
   } catch (err) {
-    console.error(err);
-
-    return null;
+    throw new Error("Initialize local D1 with pnpm db:migrate before opening Drizzle Studio", {
+      cause: err,
+    });
   }
 }
 
 // Generating/checking migrations only reads the schema and snapshots.
 const needsConnection = process.argv.some((arg) => ["studio", "push", "pull"].includes(arg));
 
-export default defineConfig({
+const schemaConfig = {
   out: "./src/db/migrations",
   schema: "./src/db/schema.ts",
-  dialect: "sqlite",
-  ...(needsConnection
-    ? process.env.NODE_ENV === "production"
-      ? {
-          driver: "d1-http",
-          dbCredentials: {
-            accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
-            databaseId: process.env.DATABASE_ID,
-            token: process.env.CLOUDFLARE_API_TOKEN,
-          },
-        }
-      : {
-          dbCredentials: {
-            url: getLocalD1DB(),
-          },
-        }
-    : {}),
-  casing: "snake_case",
-});
+  dialect: "sqlite" as const,
+};
+
+function getConfig() {
+  if (!needsConnection) return defineConfig(schemaConfig);
+
+  if (process.env.NODE_ENV === "production") {
+    return defineConfig({
+      ...schemaConfig,
+      driver: "d1-http",
+      dbCredentials: {
+        accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+        databaseId: process.env.DATABASE_ID,
+        token: process.env.CLOUDFLARE_API_TOKEN,
+      },
+    });
+  }
+
+  return defineConfig({
+    ...schemaConfig,
+    dbCredentials: { url: getLocalD1DB() },
+  });
+}
+
+export default getConfig();

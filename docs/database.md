@@ -87,14 +87,21 @@ is for Worker deployments, not direct database management. Confirm the target is
 
 ## Drizzle generator compatibility
 
-The installed Drizzle beta requires v7 snapshots and a nested history layout.
+Drizzle ORM and Kit are pinned together to `1.0.0-rc.5`. This is an explicitly
+approved prerelease, not a stable 1.0 release. It uses v7 snapshots and a nested
+history layout.
 Running `drizzle-kit up` without preserving historical SQL filenames would
 conflict with production's filename-based migration ledger. Do not repeat the
 layout conversion or rename the existing flat SQL files. This repository has now converted snapshots to v7 while retaining the existing
 flat SQL filenames. Historical snapshot directories intentionally contain no
 `migration.sql`, so the same historical SQL cannot be applied twice.
 
-`pnpm db:generate --name describe_change` now works without a database connection.
+RC5 removed the global `casing` option. Database column names must be explicit
+when TypeScript properties use camelCase (for example, `ipAddress` maps to
+`text("ip_address")`). The runtime D1 client accepts `relations`, not the old
+`schema`/`casing` configuration. SQL-mapping tests guard existing auth columns.
+
+`pnpm db:generate --name describe_change` works without a database connection.
 It writes new migrations as timestamped directories containing `snapshot.json`
 and `migration.sql`. Wrangler's `migrations_pattern` discovers both the old flat
 SQL and new nested SQL; D1 continues recording each path relative to
