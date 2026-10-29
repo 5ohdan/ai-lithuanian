@@ -39,6 +39,7 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
+    "scripts/**/*.mjs",
     ".next/types/**/*.ts",
     "next.config.mjs",
     ".next/dev/types/**/*.ts"
