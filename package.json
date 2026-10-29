@@ -77,7 +77,7 @@
     "oxc-transform-react": "^0.152.0",
     "oxfmt": "^0.34.0",
     "oxlint": "^1.62.0",
-    "oxlint-tsgolint": "^0.14.2",
+    "oxlint-tsgolint": "^7.0.2005",
     "postcss": "^8.5.32",
     "tailwindcss": "^4.3.3",
     "typescript": "6.0.0-beta",
