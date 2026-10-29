@@ -12,20 +12,17 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${merriweatherSans.className}`}>
-      <head>
-        <link rel="preload" href="/bg_smol.jpg" as="image" />
-      </head>
       <body>
         <Toaster richColors />
         <div className="flex h-svh w-full justify-self-center sm:p-10">
           <main className="relative flex h-full w-full flex-col justify-self-center bg-neutral-900 sm:rounded-3xl">
             <div className="absolute inset-0 z-0 overflow-hidden sm:rounded-3xl">
               <Image
-                src="/bg_smol.jpg"
-                alt="Background"
+                src="/images/bg-v1.webp"
+                alt=""
                 fill
                 priority
-                quality={75}
+                unoptimized
                 className="object-cover object-center"
               />
             </div>
