@@ -37,6 +37,8 @@
       "binding": "DB",
       "database_id": "35b33b5a-16a8-4f52-85e1-c28e2701eaa3",
       "migrations_dir": "src/db/migrations",
+      // Preserve recorded flat filenames; also discover new Drizzle migrations.
+      "migrations_pattern": "src/db/migrations/**/*.sql",
     },
   ],
 

@@ -22,23 +22,28 @@ function getLocalD1DB() {
   }
 }
 
+// Generating/checking migrations only reads the schema and snapshots.
+const needsConnection = process.argv.some((arg) => ["studio", "push", "pull"].includes(arg));
+
 export default defineConfig({
   out: "./src/db/migrations",
   schema: "./src/db/schema.ts",
   dialect: "sqlite",
-  ...(process.env.NODE_ENV === "production"
-    ? {
-        driver: "d1-http",
-        dbCredentials: {
-          accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
-          databaseId: process.env.DATABASE_ID,
-          token: process.env.CLOUDFLARE_API_TOKEN,
-        },
-      }
-    : {
-        dbCredentials: {
-          url: getLocalD1DB(),
-        },
-      }),
+  ...(needsConnection
+    ? process.env.NODE_ENV === "production"
+      ? {
+          driver: "d1-http",
+          dbCredentials: {
+            accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+            databaseId: process.env.DATABASE_ID,
+            token: process.env.CLOUDFLARE_API_TOKEN,
+          },
+        }
+      : {
+          dbCredentials: {
+            url: getLocalD1DB(),
+          },
+        }
+    : {}),
   casing: "snake_case",
 });
