@@ -114,5 +114,24 @@ especially careful when rebuilding parents of `ON DELETE CASCADE` relationships.
 Run `pnpm db:test` after every schema/migration change. Tests also verify no-op
 generation and that Wrangler discovers a newly generated nested migration.
 
+## Better Auth 1.7 compatibility
+
+Better Auth is updated to `1.7.14`, which explicitly supports Drizzle RC5. We use
+built-in Google/GitHub social providers, not the SSO, OAuth-provider, or other
+plugins that require new 1.7 tables. The account `issuer` requirement from
+1.7.0–1.7.2 was reverted in 1.7.3, so this upgrade needs no new SQL migration.
+
+Before deploying, check that no duplicate `(provider_id, account_id)` pairs exist
+and that no required `issuer` column remains from a 1.7.0–1.7.2 deployment. The
+production preflight for this upgrade found neither condition. Do not log account
+IDs or credentials while checking; aggregate counts are sufficient.
+
+Fast tests exercise the real Better Auth Drizzle adapter against disposable
+in-memory SQLite using the committed migrations. They verify configured auth
+fields, social-account lookups, and session create/read/update/delete. These are
+adapter tests, not proof of a real provider OAuth callback or D1 runtime behavior.
+
+See the [Better Auth 1.7 upgrade guide](https://www.better-auth.com/docs/guides/1-7-upgrade-guide).
+
 See [D1 migrations](https://developers.cloudflare.com/d1/reference/migrations/) and
 [D1 foreign keys](https://developers.cloudflare.com/d1/sql-api/foreign-keys/).
