@@ -49,14 +49,12 @@ export const storageSchema = z.union([
       packs: storedFullPackSchema.array(),
       briefPacks: storedBriefPackSchema.array(),
     })
-    .transform(
-      (legacy): Storage => ({
-        packs: [
-          ...legacy.packs.map((pack) => ({ ...pack, status: "full" as const })),
-          ...legacy.briefPacks.map((pack) => ({ ...pack, status: "brief" as const })),
-        ],
-      }),
-    ),
+    .transform((legacy): Storage => ({
+      packs: [
+        ...legacy.packs.map((pack) => ({ ...pack, status: "full" as const })),
+        ...legacy.briefPacks.map((pack) => ({ ...pack, status: "brief" as const })),
+      ],
+    })),
   // Current shape.
   z.object({ packs: storedPackSchema.array() }),
 ]);
