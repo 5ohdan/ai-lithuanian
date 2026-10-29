@@ -3,7 +3,7 @@
 import { briefPackSchema, packSchema } from "~/lib/schemas";
 import type { BriefPack, PackInput, StoredBriefPack } from "~/lib/schemas";
 import { toast } from "sonner";
-import { experimental_useObject as useObject } from "@ai-sdk/react";
+import { useObject } from "@ai-sdk/react";
 import { getStorage } from "~/lib/storage";
 import { useRouter } from "next/navigation";
 import { useRef, useCallback } from "react";

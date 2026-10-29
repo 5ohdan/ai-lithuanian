@@ -1,4 +1,4 @@
-import { streamObject } from "ai";
+import { createTextStreamResponse, Output, streamText } from "ai";
 import type { z } from "zod";
 import { getSystemPrompt } from "~/constants";
 import { getModel } from "~/lib/model";
@@ -24,7 +24,7 @@ type WordsStreamRouteOptions<TInputSchema extends z.ZodType, TOutputSchema exten
  * Shared shape of every `/api/words/*` route:
  * auth → rate limit → validate input → stream a validated object.
  *
- * Note: `onFinish` validation is log-only — the response is already
+ * Note: `onEnd` validation is log-only — the response is already
  * streaming when it runs; clients must validate the final object
  * themselves before persisting it.
  */
@@ -61,23 +61,15 @@ export function createWordsStreamRoute<
     }
 
     try {
-      const model = await getModel("google");
+      const model = await getModel();
 
-      const result = streamObject({
+      const result = streamText({
         model,
-        messages: [
-          {
-            role: "system",
-            content: getSystemPrompt(),
-          },
-          {
-            role: "user",
-            content: buildUserPrompt(parsedInput.data),
-          },
-        ],
-        schema: outputSchema,
-        onFinish: ({ object }) => {
-          const res = outputSchema.safeParse(object);
+        instructions: getSystemPrompt(),
+        prompt: buildUserPrompt(parsedInput.data),
+        output: Output.object({ schema: outputSchema }),
+        onEnd: ({ output }) => {
+          const res = outputSchema.safeParse(output);
           if (res.error) {
             console.error(
               "Generated object failed schema validation:",
@@ -90,7 +82,7 @@ export function createWordsStreamRoute<
         },
       });
 
-      return result.toTextStreamResponse();
+      return createTextStreamResponse({ stream: result.textStream });
     } catch (error) {
       const formattedError = handleError(error);
       return new Response(formattedError.message, { status: 500 });
