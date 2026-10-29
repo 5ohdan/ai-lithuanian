@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text, primaryKey } from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, text, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -6,7 +6,8 @@ import { nanoid } from "nanoid";
 export const words = sqliteTable("words", {
   id: text()
     .$defaultFn(() => nanoid())
-    .primaryKey(),
+    .primaryKey()
+    .notNull(),
   original: text().notNull(),
   translation: text().notNull(),
   transcription: text().notNull(),
@@ -16,7 +17,7 @@ export const words = sqliteTable("words", {
 });
 
 export const meanings = sqliteTable("meanings", {
-  id: integer().primaryKey({ autoIncrement: true }),
+  id: integer().primaryKey({ autoIncrement: true }).notNull(),
   wordId: text("word_id").references(() => words.id),
   context: text().notNull(),
   translation: text().notNull(),
@@ -27,7 +28,8 @@ export const meanings = sqliteTable("meanings", {
 export const packs = sqliteTable("packs", {
   id: text()
     .$defaultFn(() => nanoid())
-    .primaryKey(),
+    .primaryKey()
+    .notNull(),
   title: text().notNull(),
   difficulty: text().notNull(),
   status: text().notNull().default("initial_ready"),
@@ -56,35 +58,44 @@ export const packWords = sqliteTable(
 export const userData = sqliteTable("user_data", {
   userId: text("user_id")
     .references(() => user.id)
-    .primaryKey(),
+    .primaryKey()
+    .notNull(),
   difficulty: text().notNull(),
 });
 
-export const user = sqliteTable("user", {
-  id: text().primaryKey(),
-  name: text().notNull(),
-  email: text().notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" }).notNull(),
-  image: text(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
-});
+export const user = sqliteTable(
+  "user",
+  {
+    id: text().primaryKey().notNull(),
+    name: text().notNull(),
+    email: text().notNull(),
+    emailVerified: integer("email_verified", { mode: "boolean" }).notNull(),
+    image: text(),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  },
+  (table) => [uniqueIndex("user_email_unique").on(table.email)],
+);
 
-export const session = sqliteTable("session", {
-  id: text().primaryKey(),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
-  token: text().notNull().unique(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
-  ipAddress: text(),
-  userAgent: text(),
-  userId: text()
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-});
+export const session = sqliteTable(
+  "session",
+  {
+    id: text().primaryKey().notNull(),
+    expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+    token: text().notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+    ipAddress: text(),
+    userAgent: text(),
+    userId: text()
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+  },
+  (table) => [uniqueIndex("session_token_unique").on(table.token)],
+);
 
 export const account = sqliteTable("account", {
-  id: text().primaryKey(),
+  id: text().primaryKey().notNull(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
   userId: text("user_id")
@@ -106,7 +117,7 @@ export const account = sqliteTable("account", {
 });
 
 export const verification = sqliteTable("verification", {
-  id: text().primaryKey(),
+  id: text().primaryKey().notNull(),
   identifier: text().notNull(),
   value: text().notNull(),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),

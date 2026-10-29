@@ -47,6 +47,9 @@ jobs:
       - name: Fast unit tests
         run: pnpm test
 
+      - name: Test isolated D1 migrations
+        run: pnpm db:test
+
       - name: Build Workers bundle
         env:
           # Public build-time configuration only; deployment credentials are
