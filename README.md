@@ -46,7 +46,8 @@ pnpm dev
 
 GitHub Actions owns CI/CD through `.github/workflows/ci.yml`:
 
-- Pull requests run lint, typecheck, formatting checks, and the Vinext build.
+- Pull requests run lint, typecheck, formatting checks, isolated D1 migration tests,
+  and the Vinext build.
 - Pushes to `main` run the same checks and deploy that build to Cloudflare Workers.
 - Manual runs on `main` can redeploy after updating build-time configuration.
 - Production runs are serialized; superseded pull-request checks are cancelled.
@@ -65,6 +66,8 @@ Repository secrets:
 Runtime secrets (authentication and AI credentials) stay on the Worker, not in the
 build environment. Database migrations are not automatic; review and apply any
 required production migrations separately before deploying code that needs them.
+See the [database release procedure](docs/database.md) for local tests, backups,
+production migration approval, and Drizzle migration generation.
 
 For a local production preview, run `pnpm preview`. `pnpm deploy` builds and
 publishes directly and should be reserved for intentional manual deployments.
