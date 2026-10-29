@@ -256,8 +256,6 @@ void test("Drizzle generation is a no-op for current schema and new nested SQL i
           schema,
           "--out",
           "./migrations",
-          "--casing",
-          "snake_case",
           "--name",
           "generator_probe",
         ],
