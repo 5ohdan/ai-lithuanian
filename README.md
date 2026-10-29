@@ -40,13 +40,13 @@ pnpm dev
 - **Authentication**: Better Auth
 - **AI**: Google Gemini
 - **Deployment**: Cloudflare Workers
-- **Testing**: Vitest, React Testing Library, Playwright (**WIP**)
+- **Testing**: Vitest for fast storage, schema, and mocked generation-route tests
 
 ## CI/CD
 
 GitHub Actions owns CI/CD through `.github/workflows/ci.yml`:
 
-- Pull requests run lint, typecheck, formatting checks, and the Vinext build.
+- Pull requests run lint, typecheck, formatting checks, fast tests, and the Vinext build.
 - Pushes to `main` run the same checks and deploy that build to Cloudflare Workers.
 - Manual runs on `main` can redeploy after updating build-time configuration.
 - Production runs are serialized; superseded pull-request checks are cancelled.
@@ -68,6 +68,20 @@ required production migrations separately before deploying code that needs them.
 
 For a local production preview, run `pnpm preview`. `pnpm deploy` builds and
 publishes directly and should be reserved for intentional manual deployments.
+
+## Fast tests
+
+```sh
+pnpm test        # Run once (also runs in CI)
+pnpm test:watch  # Watch during development
+```
+
+The suite runs in Node through a separate `vitest.config.ts`, without the
+Cloudflare/Vinext deployment plugins. Browser storage, auth, rate limits, and AI
+are simulated or mocked: no browser install, database, credentials, or real AI
+requests are required. Route tests exercise request validation and response
+handling, not real provider streaming or OAuth. E2E tests are intentionally not
+included.
 
 ## 🎯 Current Status
 
