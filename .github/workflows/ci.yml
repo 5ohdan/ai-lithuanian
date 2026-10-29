@@ -44,6 +44,9 @@ jobs:
       - name: Format check
         run: pnpm fmt:check
 
+      - name: Fast unit tests
+        run: pnpm test
+
       - name: Test isolated D1 migrations
         run: pnpm db:test
 
