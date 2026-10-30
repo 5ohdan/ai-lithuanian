@@ -6,5 +6,5 @@ export const getModel = async () => {
   const google = createGoogle({
     apiKey: env.GOOGLE_GENERATIVE_AI_API_KEY,
   });
-  return google("gemini-3.1-flash-lite");
+  return google("gemini-3.8-flash");
 };
