@@ -8,7 +8,7 @@ Requires Node.js 22 and pnpm 11.
 
 ```sh
 pnpm install
-cp .env.example .dev.vars
+cp .dev.vars.example .dev.vars
 # Fill in the required local secrets in .dev.vars.
 pnpm db:migrate
 pnpm dev
@@ -16,7 +16,7 @@ pnpm dev
 
 Open <http://localhost:5173>.
 
-The server-only variables in `.dev.vars` are listed in `.env.example`. Google and GitHub OAuth credentials need local provider configuration for sign-in.
+Google and GitHub OAuth credentials need local provider configuration for sign-in. Optional public analytics settings are in `.env.example`; see [environment configuration](docs/environment.md).
 
 ## Checks
 

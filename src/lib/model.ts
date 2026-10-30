@@ -1,8 +1,8 @@
 import { createGoogle } from "@ai-sdk/google";
-import { getServerEnv } from "./env";
+import { getAIEnv } from "./env";
 
 export const getModel = async () => {
-  const env = await getServerEnv();
+  const env = await getAIEnv();
   const google = createGoogle({
     apiKey: env.GOOGLE_GENERATIVE_AI_API_KEY,
   });

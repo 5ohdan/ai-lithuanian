@@ -5,6 +5,17 @@
   "name": "ai-lithuanian",
   "compatibility_date": "2025-11-17",
   "compatibility_flags": ["nodejs_compat"],
+  // Names only: values stay in .dev.vars locally and Worker secrets remotely.
+  "secrets": {
+    "required": [
+      "BETTER_AUTH_SECRET",
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET",
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "GOOGLE_GENERATIVE_AI_API_KEY",
+    ],
+  },
   "assets": {
     // produced by `vite build` (build:vinext)
     "directory": "dist/client",
