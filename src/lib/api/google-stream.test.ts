@@ -67,7 +67,7 @@ describe("AI SDK 7 Google structured streams", () => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0]!;
       expect(url).toBe(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:streamGenerateContent?alt=sse",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:streamGenerateContent?alt=sse",
       );
       expect(new Headers(init?.headers).get("x-goog-api-key")).toBe("fake-google-key");
       if (typeof init?.body !== "string") throw new Error("Expected a JSON request body");
