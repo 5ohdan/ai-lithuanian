@@ -2,6 +2,14 @@ import { defineConfig } from "drizzle-kit";
 import fs from "node:fs";
 import path from "node:path";
 
+function requiredAdminEnv(name: string) {
+  const value = process.env[name];
+  if (!value?.trim()) {
+    throw new Error(`Set ${name} in the administrative shell for remote database tooling`);
+  }
+  return value;
+}
+
 function getLocalD1DB() {
   try {
     const basePath = path.resolve(".wrangler/state/v3/d1");
@@ -39,9 +47,9 @@ function getConfig() {
       ...schemaConfig,
       driver: "d1-http",
       dbCredentials: {
-        accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
-        databaseId: process.env.DATABASE_ID,
-        token: process.env.CLOUDFLARE_API_TOKEN,
+        accountId: requiredAdminEnv("CLOUDFLARE_ACCOUNT_ID"),
+        databaseId: requiredAdminEnv("DATABASE_ID"),
+        token: requiredAdminEnv("CLOUDFLARE_API_TOKEN"),
       },
     });
   }
