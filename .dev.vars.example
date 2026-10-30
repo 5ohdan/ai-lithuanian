@@ -1,0 +1,9 @@
+# Local Worker runtime secrets. Copy to .dev.vars and fill in all six values.
+# Use separate development credentials. Never commit the populated file.
+# Production values are managed as encrypted Worker secrets, not in this file.
+BETTER_AUTH_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_GENERATIVE_AI_API_KEY=

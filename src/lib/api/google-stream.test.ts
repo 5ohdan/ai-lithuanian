@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { briefPack, fullPack } from "../../../tests/fixtures";
 
 vi.mock("~/lib/env", () => ({
-  getServerEnv: async () => ({ GOOGLE_GENERATIVE_AI_API_KEY: "fake-google-key" }),
+  getAIEnv: async () => ({ GOOGLE_GENERATIVE_AI_API_KEY: "fake-google-key" }),
 }));
 vi.mock("~/lib/auth-utils", () => ({ getUserId: async () => "test-user" }));
 vi.mock("~/lib/api/rate-limit", () => ({ checkRateLimit: async () => ({ ok: true }) }));
