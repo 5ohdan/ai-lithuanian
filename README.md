@@ -1,97 +1,39 @@
-# 🇱🇹 AI Lithuanian Learning App
+# AI Lithuanian
 
-An intelligent language learning application that uses AI to generate personalized Lithuanian word packs with context, examples, and spaced repetition.
+Generate and study Lithuanian vocabulary packs with AI-powered examples and translations.
 
-## 🌟 Features
+## Development
 
-- **AI-Powered Word Generation**: Create custom word packs using _Google Gemini_
-- **Flashcard Learning**: Interactive study interface with _progress tracking_
-- **Pack Management**: Create, organize, and _share_ word collections
+Requires Node.js 22 and pnpm 11.
 
-## 🚀 Quick Start
-
-```bash
-# Install dependencies
+```sh
 pnpm install
-
-# Set up environment variables
-cp .env.example .env.local
-
-# Run development server
+cp .env.example .dev.vars
+# Fill in the required local secrets in .dev.vars.
+pnpm db:migrate
 pnpm dev
 ```
 
-## 📁 Project Structure
+Open <http://localhost:5173>.
 
-```
-├── src/
-│   ├── app/          # Next.js App Router pages
-│   ├── components/   # React components
-│   ├── lib/          # Utilities and configurations
-│   └── db/           # Database schema and migrations
-└── public/           # Static assets
-```
+The server-only variables in `.dev.vars` are listed in `.env.example`. Google and GitHub OAuth credentials need local provider configuration for sign-in.
 
-## 🛠️ Tech Stack
-
-- **Frontend**: React, TypeScript, Tailwind CSS — served through Next.js APIs on Vite (vinext), deployed to Cloudflare Workers
-- **Backend**: Route handlers
-- **Database**: Drizzle ORM, SQLite/D1
-- **Authentication**: Better Auth
-- **AI**: Google Gemini
-- **Deployment**: Cloudflare Workers
-- **Testing**: Vitest for fast storage, schema, and mocked generation-route tests
-
-## CI/CD
-
-GitHub Actions owns CI/CD through `.github/workflows/ci.yml`:
-
-- Pull requests run lint, typecheck, formatting checks, fast tests, isolated D1
-  migration tests, and the Vinext build.
-- Pushes to `main` run the same checks and deploy that build to Cloudflare Workers.
-- Manual runs on `main` can redeploy after updating build-time configuration.
-- Production runs are serialized; superseded pull-request checks are cancelled.
-
-Cloudflare Workers hosts the application. Its separate repository build trigger
-has been removed to prevent duplicate deployments.
-
-Repository secrets:
-
-- `CLOUDFLARE_API_TOKEN`: a deployment token authorized for the target account and
-  the Worker's configured resources.
-- `CLOUDFLARE_ACCOUNT_ID`: the account containing `ai-lithuanian`.
-- `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`: optional public
-  build-time configuration. Fork pull requests build without these secrets.
-
-Runtime secrets (authentication and AI credentials) stay on the Worker, not in the
-build environment. Database migrations are not automatic; review and apply any
-required production migrations separately before deploying code that needs them.
-See the [database release procedure](docs/database.md) for local tests, backups,
-production migration approval, and Drizzle migration generation.
-
-For a local production preview, run `pnpm preview`. `pnpm deploy` builds and
-publishes directly and should be reserved for intentional manual deployments.
-
-## Fast tests
+## Checks
 
 ```sh
-pnpm test        # Run once (also runs in CI)
-pnpm test:watch  # Watch during development
+pnpm check
+pnpm fmt:check
+pnpm test
+pnpm db:test
+pnpm build
 ```
 
-The suite runs in Node through a separate `vitest.config.ts`, without the
-Cloudflare/Vinext deployment plugins. Browser storage, auth, rate limits, and AI
-are simulated or mocked: no browser install, database, credentials, or real AI
-requests are required. Route tests exercise request validation and response
-handling, not real provider streaming or OAuth. E2E tests are intentionally not
-included.
+Generation requests use Google Gemini. Fast tests mock AI and authentication; they make no provider requests. D1 migration tests use isolated local databases.
 
-## 🎯 Current Status
+## Deployment
 
-- ✅ MVP with basic word generation and authentication
-- 🔄 Production hardening in progress
-- 📅 Advanced features planned
+Pull requests run checks and build the application. Successful CI on `main` deploys to Cloudflare Workers. Production database migrations are not applied automatically; review the procedure in [docs/database.md](docs/database.md).
 
-## 📄 License
+## Storage
 
-MIT License - see LICENSE file for details.
+Authentication data is stored in D1. Vocabulary packs are currently stored in the browser's local storage and are not synchronized between devices.
