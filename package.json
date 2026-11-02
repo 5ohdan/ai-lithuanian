@@ -69,7 +69,7 @@
     "@vitejs/plugin-rsc": "^0.5.38",
     "babel-plugin-react-compiler": "1.0.0",
     "drizzle-kit": "1.0.0-rc.5",
-    "oxc-transform-react": "^0.152.0",
+    "oxc-transform-react": "^0.156.0",
     "oxfmt": "^0.75.0",
     "oxlint": "^1.90.0",
     "oxlint-tsgolint": "^7.0.2005",
